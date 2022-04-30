@@ -9,14 +9,16 @@ toast.configure();
 
 function AjouterEncadrant(props) {
 
-    
+    function getToken() {
+		const tokenString = sessionStorage.getItem('token');
+		const userToken = JSON.parse(tokenString);
+		return userToken?.token
+	  }
     const initialState = {
 		nom: "",
 		prenom: "",
 		email: "",
-		password: "GI123.",
-		profil: "encadrant",
-		filiere: "GI",
+		username:""
 	};
 	const [encadrant, setEncadrant] = useState(initialState);
 
@@ -27,7 +29,7 @@ function AjouterEncadrant(props) {
 		//if (!crud.companyName || !crud.email) return;
 		async function postCrud() {
 			try {
-				const response = await post("https://localhost:7004/api/Authenticate/AjouterProf", encadrant);
+				const response = await post("https://localhost:7004/api/Authenticate/add-encadrant", encadrant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
 				
 				
 			} catch (error) {
@@ -56,6 +58,17 @@ function AjouterEncadrant(props) {
 			<h2>Ajouter un encadrant</h2>
 			<hr />
             <form onSubmit={handleSubmit}>
+			<div className="form-group">
+					<label>Username</label>
+					<input
+						name="username"
+						type="text"
+						required
+						value={encadrant.username}
+						onChange={handleChange}
+						className="form-control"
+					/>
+				</div>
 				<div className="form-group">
 					<label>Nom</label>
 					<input

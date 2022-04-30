@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,7 @@ namespace PFE.Controllers
 
         // GET: api/Etudiants
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<Etudiant>>> GetEtudiants()
         {
             return await _context.Etudiants.ToListAsync();
@@ -56,6 +58,7 @@ namespace PFE.Controllers
 
         // GET: api/Etudiants/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Etudiant>> GetEtudiant(int id)
         {
             var etudiant = await _context.Etudiants.FindAsync(id);
@@ -71,6 +74,7 @@ namespace PFE.Controllers
         // PUT: api/Etudiants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutEtudiant(int id, Etudiant etudiant)
         {
             if (id != etudiant.Id)
@@ -102,6 +106,7 @@ namespace PFE.Controllers
         // POST: api/Etudiants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Etudiant>> PostEtudiant(Etudiant etudiant)
         {
             _context.Etudiants.Add(etudiant);
@@ -112,6 +117,7 @@ namespace PFE.Controllers
 
         // DELETE: api/Etudiants/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteEtudiant(int id)
         {
             var etudiant = await _context.Etudiants.FindAsync(id);

@@ -9,18 +9,23 @@ toast.configure();
 
 function AjouterEtudiant(props) {
 
+	function getToken() {
+		const tokenString = sessionStorage.getItem('token');
+		const userToken = JSON.parse(tokenString);
+		return userToken?.token
+	  }
     
     const initialState = {
 		nom: "",
 		prenom: "",
 		email: "",
+		username:""
 		// emailEncadrant:"",
 		// nomSociete:"",
 		// tech:"",
 		// ville:"",
 		// sujet:"",
-		passwordHash: "GI123.",
-		filiere: "GI",
+		// passwordHash: "GI123.",
 	};
 	const [etudiant, setEtudiant] = useState(initialState);
 
@@ -31,7 +36,7 @@ function AjouterEtudiant(props) {
 		//if (!crud.companyName || !crud.email) return;
 		async function postCrud() {
 			try {
-				const response = await post("https://localhost:7004/api/Authenticate/AjouterEtudiant", etudiant);
+				const response = await post("https://localhost:7004/api/Authenticate/add-etudiant", etudiant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
 				
 				
 			} catch (error) {
@@ -60,6 +65,17 @@ function AjouterEtudiant(props) {
 			<h2>Ajouter un Etudiant</h2>
 			<hr />
             <form onSubmit={handleSubmit}>
+			<div className="form-group">
+					<label>Username</label>
+					<input
+						name="username"
+						type="text"
+						required
+						value={etudiant.username}
+						onChange={handleChange}
+						className="form-control"
+					/>
+				</div>
 				<div className="form-group">
 					<label>Nom</label>
 					<input

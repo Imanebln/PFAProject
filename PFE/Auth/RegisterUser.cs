@@ -2,18 +2,11 @@
 
 namespace PFE.Auth
 {
-    public class RegisterModel
+    public class RegisterUser
     {
+
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; }
-
-        [EmailAddress]
-        [Required(ErrorMessage = "Email is required")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
-
 
         [Required(ErrorMessage = "Nom is required")]
         public string Nom { get; set; }
@@ -21,5 +14,10 @@ namespace PFE.Auth
         [Required(ErrorMessage = "Prenom is required")]
         public string Prenom { get; set; }
 
+
+        [Required(ErrorMessage = "Email is required")]
+        public string Email { get; set; }
+
+        public string Filiere = "GI";
     }
 }

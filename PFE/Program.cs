@@ -18,6 +18,7 @@ builder.Services.AddDbContext<PFEContext>(options =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAuthorization();
 // For Entity Framework  
 /*builder.Services.AddDbContext<PFEContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PFEContext")));*/
 
@@ -48,6 +49,12 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
     };
 });
+//Add authorisation
+/*builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdministratorRole",
+         policy => policy.RequireRole("Admin"));
+});*/
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddCors(options =>
@@ -63,6 +70,7 @@ builder.Services.AddCors(options =>
     });
 
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

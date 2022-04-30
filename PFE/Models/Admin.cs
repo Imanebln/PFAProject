@@ -3,7 +3,7 @@ using PFE.Auth;
 
 namespace PFE.Models
 {
-    public class Encadrant : IdentityUser
+    public class Admin : IdentityUser
 
     {
         public int Id { get; set; }

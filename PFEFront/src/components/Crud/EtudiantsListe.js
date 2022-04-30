@@ -15,9 +15,15 @@ import { CSVLink } from "react-csv";
 
 function EtudiantsListe(props) {
 
+  function getToken() {
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+  }
+
     const [etudiants,setEtudiants]= useState([]);
   useEffect(() => {
-    axios.get('https://localhost:7004/api/Etudiants').then(res => {
+    axios.get('https://localhost:7004/api/Etudiants',{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);
       setEtudiants(res.data);
     })
@@ -30,7 +36,7 @@ function EtudiantsListe(props) {
 		function () {
 			async function deleteCrudById() {
 				try {
-					const response = await axios.get(`https://localhost:7004/api/Authenticate/SuppEtudiant?id=${etudiants.id}`);
+					const response = await axios.get(`https://localhost:7004/api/Authenticate/SuppEtudiant?id=${etudiants.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
 					setEtudiants(response.data);
 				} catch (error) {
 					console.log("error", error);
@@ -45,7 +51,7 @@ function EtudiantsListe(props) {
 		try {
 
       console.log(e)
-			await axios.delete(`https://localhost:7004/api/Authenticate/SuppEtudiant?id=${e.id}`);
+			await axios.delete(`https://localhost:7004/api/Authenticate/SuppEtudiant?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEtudiants(etudiants.filter((ele)=> ele.id !== e.id))
       toast.warning('Etudiant supprime!')
 		} catch (error) {
@@ -57,7 +63,7 @@ function EtudiantsListe(props) {
 		try {
 
       console.log(e)
-			await axios.delete(`https://localhost:7004/api/Etudiants?id=${e.id}`);
+			await axios.delete(`https://localhost:7004/api/Etudiants?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEtudiants(etudiants.filter((ele)=> ele.id !== e.id))
 		} catch (error) {
 			console.error(error);

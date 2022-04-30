@@ -1,4 +1,4 @@
-﻿/*#nullable disable
+﻿#nullable disable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,47 +15,47 @@ namespace PFE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EtudiantsController : ControllerBase
+    public class PFEsController : ControllerBase
     {
         private readonly PFEContext _context;
 
-        public EtudiantsController(PFEContext context)
+        public PFEsController(PFEContext context)
         {
             _context = context;
         }
 
-        // GET: api/Etudiants
+        // GET: api/PFEs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Etudiant>>> GetEtudiants()
+        public async Task<ActionResult<IEnumerable<PFEModel>>> GetPFEs()
         {
-            return await _context.Etudiants.ToListAsync();
+            return await _context.PFEs.ToListAsync();
         }
 
-        // GET: api/Etudiants/5
+        // GET: api/PFEs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Etudiant>> GetEtudiant(int id)
+        public async Task<ActionResult<PFEModel>> GetPFE(int id)
         {
-            var etudiant = await _context.Etudiants.FindAsync(id);
+            var pfe = await _context.PFEs.FindAsync(id);
 
-            if (etudiant == null)
+            if (pfe == null)
             {
                 return NotFound();
             }
 
-            return etudiant;
+            return pfe;
         }
 
-        // PUT: api/Etudiants/5
+        // PUT: api/PFEs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEtudiant(int id, Etudiant etudiant)
+        public async Task<IActionResult> PutPFE(int id, PFEModel pfe)
         {
-            if (id != etudiant.Id)
+            if (id != pfe.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(etudiant).State = EntityState.Modified;
+            _context.Entry(pfe).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +63,7 @@ namespace PFE.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EtudiantExists(id))
+                if (!PFEExists(id))
                 {
                     return NotFound();
                 }
@@ -76,42 +76,42 @@ namespace PFE.Controllers
             return NoContent();
         }
 
-        // POST: api/Etudiants
+        // POST: api/PFEs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Etudiant>> PostEtudiant(Etudiant etudiant)
+        public async Task<ActionResult<PFEModel>> PostPFE(PFEModel pfe)
         {
-            _context.Etudiants.Add(etudiant);
+            _context.PFEs.Add(pfe);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEtudiant", new { id = etudiant.Id }, etudiant);
+            return CreatedAtAction("GetPFE", new { id = pfe.Id }, pfe);
         }
 
-        // DELETE: api/Etudiants/5
+        // DELETE: api/PFEs/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEtudiant(int id)
+        public async Task<IActionResult> DeletePFE(int id)
         {
-            var etudiant = await _context.Etudiants.FindAsync(id);
-            if (etudiant == null)
+            var pfe = await _context.PFEs.FindAsync(id);
+            if (pfe == null)
             {
                 return NotFound();
             }
 
-            _context.Etudiants.Remove(etudiant);
+            _context.PFEs.Remove(pfe);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
         [HttpDelete]
-        [Route("DeleteAllEtudiants")]
-        public async Task<ActionResult<IEnumerable<Etudiant>>> DeleteAllEtudiants()
+        [Route("DeleteAllPFEs")]
+        public async Task<ActionResult<IEnumerable<PFEModel>>> DeleteAllPFEs()
         {
-            var etudiant = await _context.Etudiants.ToListAsync();
+            var pfe = await _context.PFEs.ToListAsync();
 
-            foreach (var item in etudiant)
+            foreach (var item in pfe)
             {
-                _context.Etudiants.Remove(item);
+                _context.PFEs.Remove(item);
                 await _context.SaveChangesAsync();
             }
             return NoContent();
@@ -119,7 +119,7 @@ namespace PFE.Controllers
 
         [HttpPost]
         [Route("UploadExcelFile")]
-        public async Task<ActionResult<IEnumerable<Etudiant>>> UploadExcelFile(IFormFile file, int sheetIndex = 0)
+        public async Task<ActionResult<IEnumerable<PFEModel>>> UploadExcelFile(IFormFile file, int sheetIndex = 0)
         {
             IWorkbook workbook;
             var file2 = file.OpenReadStream();
@@ -146,29 +146,29 @@ namespace PFE.Controllers
                 return BadRequest("Column not found");
             }
 
-            //await DeleteAllEtudiants();
+            //await DeleteAllPFEs();
 
             foreach (var item in items)
             {
-                Etudiant etudiant = new Etudiant();
+                PFEModel pfeModel = new PFEModel();
 
-                
-                etudiant.Email = item.Value.Email;
-                etudiant.Sujet = item.Value.Sujet;
-                etudiant.NomSociete = item.Value.NomSociete;
-                etudiant.Ville = item.Value.Ville;
-                etudiant.TechnologiesUtilisees = item.Value.TechnologiesUtilisees;
-                etudiant.EmailEncadrant = item.Value.EmailEncadrant;
-                etudiant.Nom = item.Value.Nom;
-                etudiant.Prenom = item.Value.Prenom;
-                etudiant.Filiere = item.Value.Filiere;
-                etudiant.NormalizedEmail = item.Value.Email;
-                etudiant.UserName = item.Value.Prenom;
 
-                _context.Etudiants.Add(etudiant);
+                pfeModel.Email = item.Value.Email;
+                pfeModel.Sujet = item.Value.Sujet;
+                pfeModel.NomSociete = item.Value.NomSociete;
+                pfeModel.Ville = item.Value.Ville;
+                pfeModel.TechnologiesUtilisees = item.Value.TechnologiesUtilisees;
+                pfeModel.EmailEncadrant = item.Value.EmailEncadrant;
+                pfeModel.Nom = item.Value.Nom;
+                pfeModel.Prenom = item.Value.Prenom;
+                pfeModel.Filiere = item.Value.Filiere;
+                pfeModel.NormalizedEmail = item.Value.Email;
+                pfeModel.UserName = item.Value.Prenom;
+
+                _context.PFEs.Add(pfeModel);
                 await _context.SaveChangesAsync();
             }
-            return await _context.Etudiants.ToListAsync();
+            return await _context.PFEs.ToListAsync();
         }
 
         [HttpPost("students/excel/upload")]
@@ -181,10 +181,9 @@ namespace PFE.Controllers
             return Ok();
         }
 
-        private bool EtudiantExists(int id)
+        private bool PFEExists(int id)
         {
-            return _context.Etudiants.Any(e => e.Id == id);
+            return _context.PFEs.Any(e => e.Id == id);
         }
     }
 }
-*/

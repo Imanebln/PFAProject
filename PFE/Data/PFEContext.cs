@@ -28,7 +28,10 @@ namespace PFE.Data
 
         public DbSet<PFE.Models.Etudiant> Etudiants { get; set; }
         public DbSet<PFE.Models.Encadrant> Encadrants { get; set; }
+
+        public DbSet<PFE.Models.Admin> Admins { get; set; }
         public DbSet<PFE.Models.Soutenance> Soutenance { get; set; }
+        public DbSet<PFE.Models.PFEModel> PFEs { get; set; }
     }
 }
  

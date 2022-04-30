@@ -19,8 +19,14 @@ function EncadrantsListe(props) {
     const [encadrants,setEncadrants]= useState([]);
     const [encad,setEncad]= useState();
 
+    function getToken() {
+      const tokenString = sessionStorage.getItem('token');
+      const userToken = JSON.parse(tokenString);
+      return userToken?.token
+    }
+
   useEffect(() => {
-    axios.get('https://localhost:7004/api/Encadrants').then(res => {
+    axios.get('https://localhost:7004/api/Encadrants',{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);
       setEncadrants(res.data);
     })
@@ -33,7 +39,7 @@ function EncadrantsListe(props) {
 		function () {
 			async function deleteCrudById() {
 				try {
-					const response = await axios.get(`https://localhost:7004/api/Authenticate/SuppProf?id=${encadrants.id}`);
+					const response = await axios.get(`https://localhost:7004/api/Authenticate/SuppProf?id=${encadrants.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
 					setEncadrants(response.data);
 				} catch (error) {
 					console.log("error", error);
@@ -48,7 +54,7 @@ function EncadrantsListe(props) {
 		try {
 
       console.log(e)
-			await axios.delete(`https://localhost:7004/api/Authenticate/SuppProf?id=${e.id}`);
+			await axios.delete(`https://localhost:7004/api/Authenticate/SuppProf?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
       toast.warning('Encadrant supprime!')
 		} catch (error) {
@@ -60,7 +66,7 @@ function EncadrantsListe(props) {
 		try {
 
       console.log(e)
-			await axios.delete(`https://localhost:7004/api/Encadrants?id=${e.id}`);
+			await axios.delete(`https://localhost:7004/api/Encadrants?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
 		} catch (error) {
 			console.error(error);

@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import { useState } from 'react'; 
 import './App.css';  
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +17,7 @@ import Footer from './shared/Footer';
 import LoginToken from './components/Login/LoginToken';
 import { useNavigate } from 'react-router-dom';
 import Etudiant from './EtudiantComponent/Etudiant';
+import { Button } from 'reactstrap';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -33,7 +34,6 @@ function getToken() {
 function App() {  
   // const navigate = useNavigate();
   // const [token, setToken] = useState();
-
   const token = getToken();
   if(!token) {
     return (
@@ -44,6 +44,7 @@ function App() {
       {/* <Routes>
         <Route path="/Etudiant" component={Etudiant} element={<Etudiant/>}/>
      </Routes> */}
+     
       <div className='footer'>
      <Footer/>
      </div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace PFE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize (Roles = "Admin")]
     public class AuthenticateController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -31,7 +33,7 @@ namespace PFE.Controllers
 
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
@@ -61,36 +63,152 @@ namespace PFE.Controllers
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
+                dynamic? userData = null;
+                if(userRoles.Contains(UserRoles.Admin))
+                {
+                    userData = await _context.Admins.Where(a => a.Id.Equals(user.Id)).FirstOrDefaultAsync();
+                }
+                else if (userRoles.Contains(UserRoles.Encadrant))
+                {
+                    userData = await _context.Encadrants.Where(a => a.Id.Equals(user.Id)).FirstOrDefaultAsync();
+                }
+                else if (userRoles.Contains(UserRoles.Etudiant))
+                {
+                    userData = await _context.Etudiants.Where(a => a.Id.Equals(user.Id)).FirstOrDefaultAsync();
+                }
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo,
+                    roles = userRoles
+                    /*email = user.Email,
+                    id = userData.Id,
+                    Nom = userData.Nom,
+                    Prenom = userData.Prenom*/
                 });
             }
             return Unauthorized();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        [Route("add-etudiant")]
+        public async Task<IActionResult> RegisterEtudiant([FromBody] RegisterUser model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
+            string pass = model.Username.ToString()+"GI2022.";
             ApplicationUser user = new ApplicationUser()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                PasswordHash = pass,
+                EmailConfirmed = true
             };
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await userManager.CreateAsync(user, pass);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
+            if (!await roleManager.RoleExistsAsync(UserRoles.Etudiant))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.Etudiant));
+            
+            
+            if (await roleManager.RoleExistsAsync(UserRoles.Etudiant))
+            {
+                await userManager.AddToRoleAsync(user, UserRoles.Etudiant);
+            }
+
+            var etudiant = new Etudiant()
+            {
+                Nom = model.Nom,
+                Prenom = model.Prenom,
+                Filiere = "GI",
+                Email = model.Email,
+                UserName = model.Username,
+                PasswordHash = pass,
+                SecurityStamp = Guid.NewGuid().ToString()
+
+
+            };
+
+            _context.Etudiants.Add(etudiant);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                StatusCode(StatusCodes.Status422UnprocessableEntity, "database error");
+            }
+
+
+            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            /*return base.Ok(mapper.Map<Etudiant>(user));*/
+        }
+
+        
+        [HttpPost]
+        [Route("add-encadrant")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RegisterEncadrant([FromBody] RegisterUser model)
+        {
+            var userExists = await userManager.FindByNameAsync(model.Username);
+            if (userExists != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+
+            string pass = model.Username.ToString() + "GI2022.";
+            ApplicationUser user = new ApplicationUser()
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username,
+                PasswordHash = pass,
+                EmailConfirmed = true
+            };
+            var result = await userManager.CreateAsync(user, pass);
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+
+            
+            if (!await roleManager.RoleExistsAsync(UserRoles.Encadrant))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.Encadrant));
+
+            if (await roleManager.RoleExistsAsync(UserRoles.Encadrant))
+            {
+                await userManager.AddToRoleAsync(user, UserRoles.Encadrant);
+            }
+
+            var encadrant = new Encadrant()
+            {
+                Nom = model.Nom,
+                Prenom = model.Prenom,
+                Filiere = "GI",
+                Email = model.Email,
+                UserName = model.Username,
+                PasswordHash = pass,
+                SecurityStamp = Guid.NewGuid().ToString()
+
+
+            };
+
+            _context.Encadrants.Add(encadrant);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                StatusCode(StatusCodes.Status422UnprocessableEntity, "database error");
+            }
+
+
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
+
 
         [HttpPost]
         [Route("register-admin")]
@@ -104,7 +222,8 @@ namespace PFE.Controllers
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                EmailConfirmed = true
             };
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -112,21 +231,45 @@ namespace PFE.Controllers
 
             if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
                 await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-            if (!await roleManager.RoleExistsAsync(UserRoles.User))
-                await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+            if (!await roleManager.RoleExistsAsync(UserRoles.Etudiant))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.Etudiant));
+            if (!await roleManager.RoleExistsAsync(UserRoles.Encadrant))
+                await roleManager.CreateAsync(new IdentityRole(UserRoles.Encadrant));
 
             if (await roleManager.RoleExistsAsync(UserRoles.Admin))
             {
                 await userManager.AddToRoleAsync(user, UserRoles.Admin);
             }
 
+            var admin = new Admin()
+            {
+                Filiere = "GI",
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                Nom = model.Nom,
+                Prenom = model.Prenom,
+                UserName = model.Username
+
+
+            };
+
+            _context.Admins.Add(admin);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                StatusCode(StatusCodes.Status422UnprocessableEntity, "database error");
+            }
+
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
-        
+
 
         //Ajouter un encadrant
-        [Route("AjouterProf")]
+        /*[Route("AjouterProf")]
         [HttpPost]
         public async Task<ActionResult<Encadrant>> AjouterEncadrant(Encadrant encadrant)
         {
@@ -134,10 +277,15 @@ namespace PFE.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetEncadrant", new { id = encadrant.Id }, encadrant);
-        }
+        }*/
+
+
         //Modifer un encadrant
+
+        
         [Route("ModifierProf")]
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ModifierEncadrant(int id, Encadrant encadrant)
         {
             if (id != encadrant.Id)
@@ -171,6 +319,7 @@ namespace PFE.Controllers
         }
 
         //supprimer encadrant
+        [Authorize(Roles = "Admin")]
         [Route("SuppProf")]
         [HttpDelete]
         public async Task<IActionResult> SupprimerEncadrant(int id)
@@ -197,7 +346,7 @@ namespace PFE.Controllers
 
         // *****************************************gerer l'espace etudiant*******************************************************
         //Ajouter un etudiant
-        [Route("AjouterEtudiant")]
+        /*[Route("AjouterEtudiant")]
         [HttpPost]
         public async Task<ActionResult<Etudiant>> AjouterEtudiant(Etudiant etudiant)
         {
@@ -205,8 +354,10 @@ namespace PFE.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetEtudiant", new { id = etudiant.Id }, etudiant);
-        }
+        }*/
+
         //Modifer un etudiant
+        [Authorize(Roles = "Admin")]
         [Route("ModifierEtudiant")]
         [HttpPost]
         public async Task<ActionResult> ModifierEtudiant(int id, Etudiant etudiant)
@@ -241,7 +392,8 @@ namespace PFE.Controllers
             return _context.Etudiants.Any(e => e.Id == id);
         }
 
-        //supprimer encadrant
+        //supprimer etudiant
+        [Authorize(Roles = "Admin")]
         [Route("SuppEtudiant")]
         [HttpDelete]
         public async Task<IActionResult> SupprimerEtudiant(int id)
@@ -249,12 +401,13 @@ namespace PFE.Controllers
 
             //fetching and filter specific member id record   
             var etudiant = await _context.Etudiants.FindAsync(id);
-
+            
             //checking fetched or not with the help of NULL or NOT.  
             if (etudiant != null)
             {
 
                 _context.Etudiants.Remove(etudiant);
+                
                 await _context.SaveChangesAsync();
             }
             else
