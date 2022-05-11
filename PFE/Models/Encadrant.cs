@@ -13,8 +13,9 @@ namespace PFE.Models
 
         public string Filiere { get; set; }
 
-        [ForeignKey("FK_AspNetUsers")]
         public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser ApplicationUser { get; set; }
 
     }
 }

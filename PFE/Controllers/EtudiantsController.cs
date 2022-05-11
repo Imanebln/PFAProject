@@ -114,7 +114,7 @@ namespace PFE.Controllers
             {
                 return NotFound();
             }
-
+            
             _context.Etudiants.Remove(etudiant);
             await _context.SaveChangesAsync();
 

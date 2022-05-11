@@ -25,7 +25,7 @@ function AjouterEtudiant(props) {
 		emailEncadrant:"",
 	    technologiesUtilisees:"",
 	    ville:"",
-		annee:""
+		annee:(new Date()).getFullYear()
 	};
 	const [etudiant, setEtudiant] = useState(initialState);
 
@@ -57,8 +57,7 @@ function AjouterEtudiant(props) {
         navigate("/EtudiantsListe");
         
     }
-
-	
+		
 
 	return (
 		<div className="container" style={{ maxWidth: "400px" }}>

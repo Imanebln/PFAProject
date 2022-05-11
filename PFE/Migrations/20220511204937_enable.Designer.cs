@@ -12,8 +12,8 @@ using PFE.Data;
 namespace PFE.Migrations
 {
     [DbContext(typeof(PFEContext))]
-    [Migration("20220508205914_initial")]
-    partial class initial
+    [Migration("20220511204937_enable")]
+    partial class enable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -350,12 +350,14 @@ namespace PFE.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Encadrants");
                 });
@@ -440,6 +442,10 @@ namespace PFE.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
@@ -448,6 +454,8 @@ namespace PFE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Etudiants");
                 });
@@ -615,6 +623,28 @@ namespace PFE.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PFE.Models.Encadrant", b =>
+                {
+                    b.HasOne("PFE.Auth.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("PFE.Models.Etudiant", b =>
+                {
+                    b.HasOne("PFE.Auth.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 #pragma warning restore 612, 618
         }

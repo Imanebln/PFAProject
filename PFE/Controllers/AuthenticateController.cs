@@ -198,17 +198,17 @@ namespace PFE.Controllers
 
             foreach (var item in items)
             {
-                if (etudiants.Any(et => et.Ville.Equals(item.Value.Ville)
-                    && et.UserName.Equals(item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0])
+                if (etudiants.Any(et => et.UserName.Equals(item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0]) ))
+                    /*&& et.Ville.Equals(item.Value.Ville)
                     && et.Nom.Equals(item.Value.Nom) && et.Prenom.Equals(item.Value.Prenom) && et.Email.Equals(item.Value.Email)
                     && et.Sujet.Equals(item.Value.Sujet) && et.EmailEncadrant.Equals(item.Value.EmailEncadrant)
                     && et.NomSociete.Equals(item.Value.NomSociete) && et.NormalizedEmail.Equals(item.Value.Email)
                     && et.TechnologiesUtilisees.Equals(item.Value.TechnologiesUtilisees) && et.Filiere.Equals(item.Value.Filiere)
-                    /*|| (!item.Value.Ville.Equals(et.Ville) || !item.Value.Nom.Equals(et.Nom)
-                    || !item.Value.Prenom.Equals(et.Prenom) || !item.Value.Sujet.Equals(et.Sujet) || !item.Value.Email.Equals(et.Email)
-                    || !item.Value.EmailEncadrant.Equals(et.EmailEncadrant) || !item.Value.NomSociete.Equals(et.NomSociete)
-                    || !item.Value.TechnologiesUtilisees.Equals(et.TechnologiesUtilisees) || !item.Value.Filiere.Equals(et.Filiere))*/
-                    ))
+                    || (item.Value.Ville.Equals(null) || !item.Value.Nom.Equals(null)
+                    || !item.Value.Prenom.Equals(null) || !item.Value.Sujet.Equals(null) || !item.Value.Email.Equals(null)
+                    || !item.Value.EmailEncadrant.Equals(null) || !item.Value.NomSociete.Equals(null)
+                    || !item.Value.TechnologiesUtilisees.Equals(null) || !item.Value.Filiere.Equals(null))*/
+                    
                 {
                     continue;
                 }
@@ -216,7 +216,7 @@ namespace PFE.Controllers
                 //add etudiant to AspNetUsers
                 var userExists = await userManager.FindByNameAsync(item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0]);
                 if (userExists != null)
-                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error to add in AspNetUsers", Message = "User already exists!" });
 
                 string pass = (item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0]).ToString() + "GI2022.";
                 ApplicationUser user = new ApplicationUser()
@@ -242,7 +242,8 @@ namespace PFE.Controllers
                 }
 
                 Etudiant etudiant = new Etudiant();
-                
+
+                etudiant.UserId = user.Id;
                 etudiant.Nom = item.Value.Nom;
                 etudiant.Prenom = item.Value.Prenom;
                 etudiant.Email = item.Value.Email;
@@ -443,12 +444,13 @@ namespace PFE.Controllers
 
             //fetching and filter specific member id record   
             var encadrant = await _context.Encadrants.FindAsync(id);
-
+            var us = await _context.Users.FindAsync(encadrant.UserId);
             //checking fetched or not with the help of NULL or NOT.  
             if (encadrant != null)
             {
 
                 _context.Encadrants.Remove(encadrant);
+                _context.Users.Remove(us);
                 await _context.SaveChangesAsync();
             }
             else
@@ -517,12 +519,14 @@ namespace PFE.Controllers
 
             //fetching and filter specific member id record   
             var etudiant = await _context.Etudiants.FindAsync(id);
+            var us = await _context.Users.FindAsync(etudiant.UserId);
             
             //checking fetched or not with the help of NULL or NOT.  
             if (etudiant != null)
             {
 
                 _context.Etudiants.Remove(etudiant);
+                _context.Users.Remove(us);
                 
                 await _context.SaveChangesAsync();
             }
@@ -532,6 +536,13 @@ namespace PFE.Controllers
                 return NotFound();
             }
             return NoContent();
+
+        }
+        [Authorize(Roles = "Admin")]
+        [Route("gestionSoutenance")]
+        [HttpPost]
+        public async Task<IActionResult> GererSoutenance(int id)
+        {
 
         }
     }

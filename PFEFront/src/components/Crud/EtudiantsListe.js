@@ -7,7 +7,7 @@ import AjouterEtudiant from "./AjouterEtudiant";
 import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
-import ModalView from "../Modals/modalView";
+import ModalEtudiant from "../Modals/ModalEtudiant";
 
 import {toast} from 'react-toastify';
 import { Container,Col } from 'reactstrap';
@@ -22,6 +22,7 @@ function EtudiantsListe(props) {
   }
 
     const [etudiants,setEtudiants]= useState([]);
+    const[annee, setAnnee] = useState((new Date()).getFullYear());
   useEffect(() => {
     axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);
@@ -29,9 +30,9 @@ function EtudiantsListe(props) {
     })
   }, [])
 //***************************************************************************************************************** */
-  async function getEtudiantsList(){
+  async function getEtudiantsList(a){
     try {
-      axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${a}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);
       setEtudiants(res.data);
     })} 
@@ -52,11 +53,12 @@ function EtudiantsListe(props) {
     formData.append("file", fileSelected);
     try {
 
-      if(annee == null || annee === undefined || annee === NaN) alert("Veuillez saisir l'annee 1");
+      if(annee == null || annee === undefined || annee === NaN) alert("Veuillez saisir l'annee");
 
       else{
         const res = await axios.post(`https://localhost:7004/api/Authenticate/UploadExcelFile?year=${annee}`, formData);
         setEtudiants(res.data);
+        // getEtudiantsList(annee);
         console.log(res);
       }
       
@@ -65,7 +67,6 @@ function EtudiantsListe(props) {
     }
   };
 
-  const[annee, setAnnee] = useState();
 //************************************************************************************************************** */
   const { _id } = useParams();
   const navigate = useNavigate();
@@ -108,6 +109,11 @@ function EtudiantsListe(props) {
 		}
 	}
 
+  async function handleChangeInput(e){
+    setAnnee(parseInt(e.target.value));
+    getEtudiantsList(annee);
+  } 
+
   function AjouterEtudiant(){
     navigate("/AjouterEtudiant");
   }
@@ -119,7 +125,6 @@ function EtudiantsListe(props) {
 
 	return (
     
-
 		<div className="div-margin">
 			<h4>Etudiants</h4>
       <Container>
@@ -127,24 +132,10 @@ function EtudiantsListe(props) {
                     <Col>
                     
                     <input style={{width : '20%' }} name="annee" type="number" defaultValue={(new Date()).getFullYear()} placeholder="Annee" required 
-                    onChange={
-                      (event) => { setAnnee(parseInt(this.state.value));
-                      // if(event.target.value.equals("")) alert("Veuillez saisir l'annee");
-                      getEtudiantsList();
-                      }
-                    } className="form-control"/>
-                  
-                  <div className="custom-file">
-                    <input type="file" className="custom-file-input" id="customFile" onChange={saveFileSelected}/>
-                    <label className="custom-file-label" for="customFile">Choose file</label>
-                  </div>
-
-                  {/* <div className="btn-group">
+                    onChange={handleChangeInput} className="form-control"/>
+                  <div className="btn-group">
                     <input type="file" color="primary" onChange={saveFileSelected}/>
-                  </div> */}
-                  
-                   <div className="btn-group"> 
-                   <input type="button" color="primary" value="Importer" onClick={importFile} className="btn btn-primary"/>
+                    <input type="button" color="primary" value="Importer" onClick={importFile} className="btn btn-primary"/>
                   </div>
                     <Button className="butt" color="primary" onClick={AjouterEtudiant}>Ajouter Etudiant</Button>
                     
@@ -178,12 +169,10 @@ function EtudiantsListe(props) {
             <Button color="primary" variant="primary" onClick={() => setModalShow(true)}>
             <FaEye/>
             </Button>
-            <ModalView
-            encadrant= {etudiant}
+            <ModalEtudiant
+            etudiant= {etudiant}
            show={modalShow}
-           onHide={() => setModalShow(false)}
-           />
-            {/* <a  href="/EncadrantDetails"><FaEye/></a> */}
+           onHide={() => setModalShow(false)}/>
             </td>
             <td>
             <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button>

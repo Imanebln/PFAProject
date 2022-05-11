@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PFE.Auth;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PFE.Models
 {
@@ -18,13 +19,19 @@ namespace PFE.Models
         public string TechnologiesUtilisees { get; set; }
         public string EmailEncadrant { get; set; }
         public string Email { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser ApplicationUser { get; set; }
+
+        /*[ForeignKey("FK_AspNetUsers")]
+        public string UserId { get; set; }*/
 
         /*public Etudiant()
         {
             this.PasswordHash = this.UserName;
         }*/
 
-       
+
 
     }
 }
