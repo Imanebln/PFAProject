@@ -22,7 +22,6 @@ function EtudiantsListe(props) {
   }
 
     const [etudiants,setEtudiants]= useState([]);
-    const[annee, setAnnee] = useState((new Date()).getFullYear());
   useEffect(() => {
     axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);
@@ -30,9 +29,10 @@ function EtudiantsListe(props) {
     })
   }, [])
 //***************************************************************************************************************** */
-  async function getEtudiantsList(a){
+  const[annee, setAnnee] = useState((new Date()).getFullYear());
+  async function getEtudiantsList(){
     try {
-      axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${a}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);
       setEtudiants(res.data);
     })} 
@@ -40,6 +40,11 @@ function EtudiantsListe(props) {
       console.log(ex);
     }
   }
+
+  async function handleChangeInput(e){
+    setAnnee(parseInt(e.target.value));
+    // getEtudiantsList(annee);
+  } 
 
   const [fileSelected, setFileSelected] = useState();
 
@@ -109,11 +114,6 @@ function EtudiantsListe(props) {
 		}
 	}
 
-  async function handleChangeInput(e){
-    setAnnee(parseInt(e.target.value));
-    getEtudiantsList(annee);
-  } 
-
   function AjouterEtudiant(){
     navigate("/AjouterEtudiant");
   }
@@ -133,6 +133,7 @@ function EtudiantsListe(props) {
                     
                     <input style={{width : '20%' }} name="annee" type="number" defaultValue={(new Date()).getFullYear()} placeholder="Annee" required 
                     onChange={handleChangeInput} className="form-control"/>
+                    <Button style={{display : 'none'}} className="butt" color="primary" onClick={getEtudiantsList()}>Chercher</Button>
                   <div className="btn-group">
                     <input type="file" color="primary" onChange={saveFileSelected}/>
                     <input type="button" color="primary" value="Importer" onClick={importFile} className="btn btn-primary"/>

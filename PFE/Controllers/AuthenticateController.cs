@@ -538,12 +538,15 @@ namespace PFE.Controllers
             return NoContent();
 
         }
+
+        /*Gestion soutenance*/
+        
         [Authorize(Roles = "Admin")]
         [Route("gestionSoutenance")]
         [HttpPost]
-        public async Task<IActionResult> GererSoutenance(int id)
+        public async Task<IActionResult> GererSoutenance(int idEtudiant, int idEncadrant1, int idEncadrant2, int iEencadrant3)
         {
-
+            return NoContent();
         }
     }
 }
