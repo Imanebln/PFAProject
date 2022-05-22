@@ -158,13 +158,13 @@ function EtudiantsListe(props) {
         {etudiants.map(etudiant => (
           <tr>
             <td key={etudiant.id}>
-            {etudiant.nom} {etudiant.prenom}
+            {etudiant.etudiant.nom} {etudiant.etudiant.prenom}
             </td>
             <td>
-            {etudiant.email}
+            {etudiant.etudiant.email}
             </td>
             <td>
-            {etudiant.filiere}
+            {etudiant.etudiant.filiere}
             </td>
             <td>
             <Button color="primary" variant="primary" onClick={() => setModalShow(true)}>

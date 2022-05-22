@@ -38,7 +38,7 @@ console.log(props.etudiant.id);
                     <label>Nom</label>
                     <input name="nom"
 						        type="text"
-						        value={etudiant.nom}
+						        value={etudiant.etudiant.nom}
 					        	className="form-control" disabled/>
                 </div>
 
@@ -46,7 +46,7 @@ console.log(props.etudiant.id);
                 <label>Prenom</label>
                 <input name="prenom"
                     type="text"
-                    value={etudiant.prenom}
+                    value={etudiant.etudiant.prenom}
                     className="form-control" disabled/>
                 </div>
 
@@ -54,7 +54,7 @@ console.log(props.etudiant.id);
                 <label>Email</label>
                 <input name="email"
                     type="text"
-                    value={etudiant.email}
+                    value={etudiant.etudiant.email}
                     className="form-control" disabled/>
                 </div>
 

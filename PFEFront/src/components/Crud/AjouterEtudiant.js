@@ -25,7 +25,7 @@ function AjouterEtudiant(props) {
 		emailEncadrant:"",
 	    technologiesUtilisees:"",
 	    ville:"",
-		annee:(new Date()).getFullYear()
+		annee: 0
 	};
 	const [etudiant, setEtudiant] = useState(initialState);
 
