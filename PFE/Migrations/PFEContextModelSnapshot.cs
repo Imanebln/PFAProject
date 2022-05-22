@@ -22,6 +22,21 @@ namespace PFE.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("EncadrantSoutenance", b =>
+                {
+                    b.Property<int>("JuryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SoutenancesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("JuryId", "SoutenancesId");
+
+                    b.HasIndex("SoutenancesId");
+
+                    b.ToTable("EncadrantSoutenance");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -371,9 +386,6 @@ namespace PFE.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Annee")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -383,10 +395,6 @@ namespace PFE.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("EmailEncadrant")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Filiere")
                         .IsRequired()
@@ -399,10 +407,6 @@ namespace PFE.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomSociete")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -427,14 +431,6 @@ namespace PFE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sujet")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TechnologiesUtilisees")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -447,10 +443,6 @@ namespace PFE.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Ville")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -458,7 +450,7 @@ namespace PFE.Migrations
                     b.ToTable("Etudiants");
                 });
 
-            modelBuilder.Entity("PFE.Models.PFEModel", b =>
+            modelBuilder.Entity("PFE.Models.PFE", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -466,61 +458,21 @@ namespace PFE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AccessFailedCount")
+                    b.Property<int>("Annee")
                         .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("EmailEncadrant")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Filiere")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EncadrantId")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EtudiantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NomSociete")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Prenom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sujet")
@@ -531,17 +483,16 @@ namespace PFE.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Ville")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EncadrantId");
+
+                    b.HasIndex("EtudiantId")
+                        .IsUnique();
 
                     b.ToTable("PFEs");
                 });
@@ -554,22 +505,47 @@ namespace PFE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("IdEncadrant")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EncadrantId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdEtudiant")
+                    b.Property<int>("EtudiantId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Jury")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("HeureDebut")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Sujet")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("HeureFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PFEId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EtudiantId")
+                        .IsUnique();
+
+                    b.HasIndex("PFEId");
+
                     b.ToTable("Soutenance");
+                });
+
+            modelBuilder.Entity("EncadrantSoutenance", b =>
+                {
+                    b.HasOne("PFE.Models.Encadrant", null)
+                        .WithMany()
+                        .HasForeignKey("JuryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PFE.Models.Soutenance", null)
+                        .WithMany()
+                        .HasForeignKey("SoutenancesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -643,6 +619,58 @@ namespace PFE.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("PFE.Models.PFE", b =>
+                {
+                    b.HasOne("PFE.Models.Encadrant", "Encadrant")
+                        .WithMany("PFEs")
+                        .HasForeignKey("EncadrantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PFE.Models.Etudiant", "Etudiant")
+                        .WithOne("PFE")
+                        .HasForeignKey("PFE.Models.PFE", "EtudiantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Encadrant");
+
+                    b.Navigation("Etudiant");
+                });
+
+            modelBuilder.Entity("PFE.Models.Soutenance", b =>
+                {
+                    b.HasOne("PFE.Models.Etudiant", "Etudiant")
+                        .WithOne("Soutenance")
+                        .HasForeignKey("PFE.Models.Soutenance", "EtudiantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PFE.Models.PFE", "PFE")
+                        .WithMany()
+                        .HasForeignKey("PFEId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Etudiant");
+
+                    b.Navigation("PFE");
+                });
+
+            modelBuilder.Entity("PFE.Models.Encadrant", b =>
+                {
+                    b.Navigation("PFEs");
+                });
+
+            modelBuilder.Entity("PFE.Models.Etudiant", b =>
+                {
+                    b.Navigation("PFE")
+                        .IsRequired();
+
+                    b.Navigation("Soutenance")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

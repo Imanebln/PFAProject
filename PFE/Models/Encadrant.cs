@@ -10,12 +10,13 @@ namespace PFE.Models
         public int Id { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }
-
         public string Filiere { get; set; }
-
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser ApplicationUser { get; set; }
+        public List<Soutenance> Soutenances { get; set; }
+        public List<PFEModel> PFEs { get; set; }
+
 
     }
 }

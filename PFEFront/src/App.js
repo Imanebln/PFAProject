@@ -73,6 +73,7 @@ function App() {
           <Route path="/EtudiantsListe" component={EtudiantsListe} element={<EtudiantsListe/>}/>
           <Route path="/AjouterEncadrant" component={AjouterEncadrant} element={<AjouterEncadrant/>}/>
           <Route path="/AjouterEtudiant" component={AjouterEtudiant} element={<AjouterEtudiant/>}/>
+          <Route path="/EncadrantDetails" component={EncadrantDetails} element={<EncadrantDetails/>}/>
           <Route path="/Etudiant" component={Etudiant} element={<Etudiant/>}/>
           
       </Routes> 

@@ -97,7 +97,8 @@ namespace PFE.Controllers
         
         [HttpPost]
         [Route("add-etudiant")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterEtudiant([FromBody] RegisterEtudiant model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
@@ -136,18 +137,28 @@ namespace PFE.Controllers
                 UserName = model.Username,
                 PasswordHash = pass,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                UserId = user.Id,
+
+
+
+            };
+            _context.Etudiants.Add(etudiant);
+            await _context.SaveChangesAsync();
+
+            var pfe = new PFEModel()
+            {
+                EtudiantId = etudiant.Id,
                 Sujet = model.Sujet,
                 NomSociete = model.NomSociete,
                 Ville = model.Ville,
                 Annee = model.Annee,
                 TechnologiesUtilisees = model.TechnologiesUtilisees,
-                EmailEncadrant = model.EmailEncadrant
-
-        
-
+                EmailEncadrant = model.EmailEncadrant,
+                EncadrantId = _context.Encadrants.First().Id
             };
            
-            _context.Etudiants.Add(etudiant);
+            
+            _context.PFEs.Add(pfe);
             try
             {
                 await _context.SaveChangesAsync();
@@ -194,21 +205,37 @@ namespace PFE.Controllers
                 return BadRequest("Column not found");
             }
 
-            var etudiants = await _context.Etudiants.Where(et => et.Annee == year).ToListAsync();
+            
 
-            foreach (var item in items)
+            /*var data = _context.Etudiants
+            .Join(
+            _context.PFEs,
+            etudiant => etudiant.Id,
+            pfe => pfe.EtudiantId,
+            (etudiant, pfe) => new
             {
-                if (etudiants.Any(et => et.UserName.Equals(item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0]) ))
-                    /*&& et.Ville.Equals(item.Value.Ville)
-                    && et.Nom.Equals(item.Value.Nom) && et.Prenom.Equals(item.Value.Prenom) && et.Email.Equals(item.Value.Email)
-                    && et.Sujet.Equals(item.Value.Sujet) && et.EmailEncadrant.Equals(item.Value.EmailEncadrant)
-                    && et.NomSociete.Equals(item.Value.NomSociete) && et.NormalizedEmail.Equals(item.Value.Email)
-                    && et.TechnologiesUtilisees.Equals(item.Value.TechnologiesUtilisees) && et.Filiere.Equals(item.Value.Filiere)
-                    || (item.Value.Ville.Equals(null) || !item.Value.Nom.Equals(null)
-                    || !item.Value.Prenom.Equals(null) || !item.Value.Sujet.Equals(null) || !item.Value.Email.Equals(null)
-                    || !item.Value.EmailEncadrant.Equals(null) || !item.Value.NomSociete.Equals(null)
-                    || !item.Value.TechnologiesUtilisees.Equals(null) || !item.Value.Filiere.Equals(null))*/
-                    
+                id = etudiant.Id,
+                nom = etudiant.Nom,
+                prenom = etudiant.Prenom,
+                filiere = etudiant.Filiere,
+                email = etudiant.Email,
+                passwordHash = etudiant.PasswordHash,
+                username = etudiant.UserName,
+                sujet = pfe.Sujet,
+                emailEncadrant = pfe.EmailEncadrant,
+                nomsociete = pfe.NomSociete,
+                techno = pfe.TechnologiesUtilisees,
+                ville = pfe.Ville,
+                annee = pfe.Annee,
+
+            }
+        ).ToList();*/
+            var etudiants = _context.PFEs.Include(e => e.Etudiant).Where(e => e.Annee == year).ToList();
+
+/*            var etudiants = data.Where(et => et.annee == year).ToList();
+*/            foreach (var item in items)
+              {
+                if (etudiants.Any(et => et.Etudiant.UserName.Equals(item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0]) || item.Value == null ))                   
                 {
                     continue;
                 }
@@ -247,19 +274,27 @@ namespace PFE.Controllers
                 etudiant.Nom = item.Value.Nom;
                 etudiant.Prenom = item.Value.Prenom;
                 etudiant.Email = item.Value.Email;
-                etudiant.Sujet = item.Value.Sujet;
-                etudiant.NomSociete = item.Value.NomSociete;
-                etudiant.Ville = item.Value.Ville;
-                etudiant.TechnologiesUtilisees = item.Value.TechnologiesUtilisees;
-                etudiant.EmailEncadrant = item.Value.EmailEncadrant;
                 etudiant.NormalizedEmail = item.Value.Email;
                 etudiant.UserName = etudiant.Nom.Split(' ')[0] + '.' + etudiant.Prenom.Split(' ')[0];
-                /*string pass = etudiant.UserName.ToString() + "GI2022.";*/
-                etudiant.Filiere = item.Value.Filiere;
-                etudiant.Annee = year;
                 etudiant.PasswordHash = pass;
+                etudiant.Filiere = item.Value.Filiere;
 
                 _context.Etudiants.Add(etudiant);
+                await _context.SaveChangesAsync();
+
+                PFEModel pfe = new PFEModel();
+
+                pfe.EtudiantId = etudiant.Id;
+                pfe.EncadrantId = _context.Encadrants.First().Id;
+                pfe.Sujet = item.Value.Sujet;
+                pfe.NomSociete = item.Value.NomSociete;
+                pfe.Ville = item.Value.Ville;
+                pfe.TechnologiesUtilisees = item.Value.TechnologiesUtilisees;
+                pfe.EmailEncadrant = item.Value.EmailEncadrant;
+                pfe.Annee = year;
+                pfe.EtudiantId = etudiant.Id;
+                
+                _context.PFEs.Add(pfe);
                 await _context.SaveChangesAsync();
             }
 
@@ -268,7 +303,8 @@ namespace PFE.Controllers
 
         [HttpPost]
         [Route("add-encadrant")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterEncadrant([FromBody] RegisterUser model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
@@ -444,14 +480,19 @@ namespace PFE.Controllers
 
             //fetching and filter specific member id record   
             var encadrant = await _context.Encadrants.FindAsync(id);
-            var us = await _context.Users.FindAsync(encadrant.UserId);
+            
             //checking fetched or not with the help of NULL or NOT.  
             if (encadrant != null)
             {
-
-                _context.Encadrants.Remove(encadrant);
-                _context.Users.Remove(us);
-                await _context.SaveChangesAsync();
+                var us = await _context.Users.FindAsync(encadrant.UserId);
+                
+                if(us != null)
+                {
+                    _context.Encadrants.Remove(encadrant);
+                    _context.Users.Remove(us);
+                    await _context.SaveChangesAsync();
+                }
+                
             }
             else
             {
@@ -518,23 +559,28 @@ namespace PFE.Controllers
         {
 
             //fetching and filter specific member id record   
-            var etudiant = await _context.Etudiants.FindAsync(id);
-            var us = await _context.Users.FindAsync(etudiant.UserId);
-            
-            //checking fetched or not with the help of NULL or NOT.  
-            if (etudiant != null)
-            {
+            //delete from pfe first
 
-                _context.Etudiants.Remove(etudiant);
-                _context.Users.Remove(us);
-                
-                await _context.SaveChangesAsync();
-            }
-            else
+            var pfe = await _context.PFEs.FindAsync(id);
+
+            if(pfe != null)
             {
-                //return response error as Not Found  with exception message.  
-                return NotFound();
+                var etudiant = await _context.Etudiants.FindAsync(pfe.EtudiantId);
+                if (etudiant != null)
+                {
+                    var us = await _context.Users.FindAsync(etudiant.UserId);
+                    if (us != null)
+                    {
+                        _context.PFEs.Remove(pfe);
+                        _context.Etudiants.Remove(etudiant);
+                        _context.Users.Remove(us);
+
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
             }
+         
             return NoContent();
 
         }

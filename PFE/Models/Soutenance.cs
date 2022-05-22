@@ -4,12 +4,15 @@
     {
         public int Id { get; set; }
 
-        public int IdEtudiant { get; set; }
-        public int IdEncadrant{ get; set; }
+        public DateTime Date { get; set; }
+        public DateTime HeureDebut { get; set; }
+        public DateTime HeureFin { get; set; }
+        public int EtudiantId { get; set; }
+        public Etudiant Etudiant { get; set; } //one to one relationship
+        public int PFEId { get; set; }
+        public PFEModel PFE { get; set; } //one to one relationship
+        public int EncadrantId { get; set; }
+        public List<Encadrant> Jury { get; set; } //many to many relationship
 
-        public string Sujet { get; set; }
-        public DateTime Date { get; }
-
-        public int Jury { get; set; }
     }
 }
