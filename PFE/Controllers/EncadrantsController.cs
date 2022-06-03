@@ -14,7 +14,7 @@ namespace PFE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    /*[Authorize(Roles = "Admin")]*/
     public class EncadrantsController : ControllerBase
     {
         private readonly PFEContext _context;
@@ -26,7 +26,7 @@ namespace PFE.Controllers
 
         // GET: api/Encadrants
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         public async Task<ActionResult<IEnumerable<Encadrant>>> GetEncadrants()
         {
             return await _context.Encadrants.ToListAsync();
@@ -34,7 +34,7 @@ namespace PFE.Controllers
 
         // GET: api/Encadrants/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         public async Task<ActionResult<Encadrant>> GetEncadrant(int id)
         {
             var encadrant = await _context.Encadrants.FindAsync(id);
@@ -50,7 +50,7 @@ namespace PFE.Controllers
         // PUT: api/Encadrants/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         public async Task<IActionResult> PutEncadrant(int id, Encadrant encadrant)
         {
             if (id != encadrant.Id)
@@ -82,7 +82,7 @@ namespace PFE.Controllers
         // POST: api/Encadrants
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         public async Task<ActionResult<Encadrant>> PostEncadrant(Encadrant encadrant)
         {
             _context.Encadrants.Add(encadrant);
@@ -93,7 +93,7 @@ namespace PFE.Controllers
 
         // DELETE: api/Encadrants/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         public async Task<IActionResult> DeleteEncadrant(int id)
         {
             var encadrant = await _context.Encadrants.FindAsync(id);

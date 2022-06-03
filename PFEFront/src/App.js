@@ -17,6 +17,8 @@ import Footer from './shared/Footer';
 import LoginToken from './components/Login/LoginToken';
 import { useNavigate } from 'react-router-dom';
 import Etudiant from './EtudiantComponent/Etudiant';
+import EncadrantDetails from './components/Crud/EncadrantDetails';
+import EtudiantDetails from './components/Crud/EtudiantDetails';
 import { Button } from 'reactstrap';
 
 function setToken(userToken) {
@@ -74,6 +76,7 @@ function App() {
           <Route path="/AjouterEncadrant" component={AjouterEncadrant} element={<AjouterEncadrant/>}/>
           <Route path="/AjouterEtudiant" component={AjouterEtudiant} element={<AjouterEtudiant/>}/>
           <Route path="/EncadrantDetails" component={EncadrantDetails} element={<EncadrantDetails/>}/>
+          <Route path="/EtudiantDetails" component={EtudiantDetails} element={<EtudiantDetails/>}/>
           <Route path="/Etudiant" component={Etudiant} element={<Etudiant/>}/>
           
       </Routes> 

@@ -31,3 +31,17 @@ code {
 .btn-nav{
   opacity: 1;
 }
+
+#newDiv{
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  width:100%;
+  height: 100%;
+  z-index: 1000;
+  top:0;
+}
+
+#newUl{
+  margin-top: 100px;
+  background-color: aliceblue;
+}

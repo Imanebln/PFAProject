@@ -9,15 +9,15 @@ import { CSVLink } from "react-csv";
 import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
-import ModalView from "../Modals/modalView";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import EncadrantDetails from "./EncadrantDetails";
 toast.configure();
 
 function EncadrantsListe(props) {
 
     const [encadrants,setEncadrants]= useState([]);
-    const [encad,setEncad]= useState();
+    // const [encad,setEncad]= useState();
 
     function getToken() {
       const tokenString = sessionStorage.getItem('token');
@@ -62,16 +62,45 @@ function EncadrantsListe(props) {
 		}
 	}
 
-  async function handleView(e) {
-		try {
+  // async function handleView(e) {
 
-      console.log(e)
-			await axios.delete(`https://localhost:7004/api/Encadrants?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
-      setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
-		} catch (error) {
-			console.error(error);
-		}
-	}
+  //      console.log(e)
+  //      setEncad(e)
+	// 		// await axios.get(`https://localhost:7004/api/Encadrants?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
+  //     // setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
+  //     navigate("/EncadrantDetails");
+	// }
+
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = useState(() => {
+      if (typeof window === "undefined") {
+        return initialValue;
+      }
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        console.log(error);
+        return initialValue;
+      }
+    });
+
+    const setValue = (value) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return [storedValue, setValue];
+  }
+
+  const [encad,setEncad] = useLocalStorage("enc",{})
 
   function AjouterProf(){
     navigate("/AjouterEncadrant");
@@ -124,23 +153,33 @@ function EncadrantsListe(props) {
             </td>
             <td>
            {encadrant.filiere}
-            {console.log({encadrant})}
+         
             </td>
             <td>
-            <Button color="primary" variant="primary" onClick={() => setModalShow(true)}>
-            {/* <Button color="primary" variant="primary" onClick={() => viewProf(encadrant)}> */}
-
+            <Link to={{pathname: "/EncadrantDetails"}}>
+            <Button color="primary" variant="primary" onClick={() => setEncad(encadrant)} >
+            {console.log({encad})}
+            
             <FaEye/>
             </Button>
-            <ModalView
+
+            </Link>
+            
+            {/* <Link to={{pathname: "/EncadrantDetails",
+            data : {encadrant}}}>
+            <Button color="primary" variant="primary" >
+            <FaEye/>
+            </Button>
+            </Link> */}
+            {/* <ModalView
             encadrant= {encadrant}
            show={modalShow}
            onHide={() => setModalShow(false)}
            />
-            {/* <a  href="/EncadrantDetails"><FaEye/></a> */}
+            <a  href="/EncadrantDetails"><FaEye/></a> */}
             </td>
             <td>
-            <Button className="btn btn-primary" onClick={()=>handleView(encadrant)} ><FaEdit/></Button>
+            {/* <Button className="btn btn-primary" onClick={()=>handleView(encadrant)} ><FaEdit/></Button> */}
             </td>
             <td>
             <Button className="btn btn-danger" onClick={()=>handleDelete(encadrant)}><FaTrash/></Button>

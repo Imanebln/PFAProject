@@ -439,6 +439,7 @@ namespace PFE.Controllers
         [Route("ModifierProf")]
         [HttpPost]
         [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult> ModifierEncadrant(int id, Encadrant encadrant)
         {
             if (id != encadrant.Id)

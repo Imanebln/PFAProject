@@ -7,7 +7,6 @@ import AjouterEtudiant from "./AjouterEtudiant";
 import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
-import ModalEtudiant from "../Modals/ModalEtudiant";
 
 import {toast} from 'react-toastify';
 import { Container,Col } from 'reactstrap';
@@ -24,7 +23,7 @@ function EtudiantsListe(props) {
     const [etudiants,setEtudiants]= useState([]);
   useEffect(() => {
     axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
-      console.log(res);
+      // console.log(res);
       setEtudiants(res.data);
     })
   }, [])
@@ -33,7 +32,7 @@ function EtudiantsListe(props) {
   async function getEtudiantsList(){
     try {
       axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
-      console.log(res);
+      // console.log(res);
       setEtudiants(res.data);
     })} 
     catch (ex) {
@@ -64,7 +63,8 @@ function EtudiantsListe(props) {
         const res = await axios.post(`https://localhost:7004/api/Authenticate/UploadExcelFile?year=${annee}`, formData);
         setEtudiants(res.data);
         // getEtudiantsList(annee);
-        console.log(res);
+        // console.log(res);
+
       }
       
     } catch (ex) {
@@ -120,8 +120,76 @@ function EtudiantsListe(props) {
 
   //modal view
   const [modalShow, setModalShow] = React.useState(false);
-  // const [modalShow2, setModalShow2] = React.useState(false);
   
+
+
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = useState(() => {
+      if (typeof window === "undefined") {
+        return initialValue;
+      }
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        console.log(error);
+        return initialValue;
+      }
+    });
+
+    const setValue = (value) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return [storedValue, setValue];
+  }
+
+  const [etud,setEtud] = useLocalStorage("etu",{})
+  const [pfe,setPfe] = useLocalStorage("pfe",{})
+  
+  const [encadrants,setEncadrants]= useState([]);
+  useEffect(() => {
+    axios.get('https://localhost:7004/api/Encadrants',{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      console.log(res);
+      setEncadrants(res.data);
+    })
+  }, [])
+
+  const affecterEncadrant = () =>{
+    const newDiv = document.createElement('div');
+    newDiv.setAttribute('id','newDiv');
+    const newUl = document.createElement('ul');
+    newUl.setAttribute('id','newUl');
+
+  encadrants.map(encadrant => { 
+    const para = document.createElement("li"); 
+    para.innerText = encadrant.nom +" "+encadrant.prenom; console.log(encadrant.nom);
+    para.onclick 
+    newUl.appendChild(para);}
+    );
+    newDiv.appendChild(newUl);
+    
+    document.body.appendChild(newDiv);
+    let close = document.createElement("span");
+            close.className = 'close';
+            let closeText = document.createTextNode("X");
+            close.appendChild(closeText);
+            newDiv.appendChild(close);
+
+    document.addEventListener("click",function(e){
+      if(e.target.className == 'close'){
+          e.target.parentNode.remove();
+              }
+          });
+  }
 
 	return (
     
@@ -167,13 +235,14 @@ function EtudiantsListe(props) {
             {etudiant.etudiant.filiere}
             </td>
             <td>
-            <Button color="primary" variant="primary" onClick={() => setModalShow(true)}>
+            <Link to={{pathname: "/EtudiantDetails"}}>
+        <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant)}} >
+            {/* {console.log({etud})} */}
+            
             <FaEye/>
             </Button>
-            <ModalEtudiant
-            etudiant= {etudiant}
-           show={modalShow}
-           onHide={() => setModalShow(false)}/>
+
+            </Link>
             </td>
             <td>
             <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button>
@@ -183,9 +252,14 @@ function EtudiantsListe(props) {
             </td>
             <td>
             {/* <Button className="butt" color="primary" ><FaPlus/></Button> */}
-            <Button color="primary" variant="primary" >
+            <Button color="primary" variant="primary" onClick={affecterEncadrant}>
             <FaPlus/>
             </Button>
+          <div className="popup">
+          <div className="popuptext" id="myPopup">Popup text...</div>
+          </div>
+            
+          
             
             </td>
           </tr>
