@@ -450,7 +450,7 @@ namespace PFE.Migrations
                     b.ToTable("Etudiants");
                 });
 
-            modelBuilder.Entity("PFE.Models.PFE", b =>
+            modelBuilder.Entity("PFE.Models.PFEModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -621,7 +621,7 @@ namespace PFE.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("PFE.Models.PFE", b =>
+            modelBuilder.Entity("PFE.Models.PFEModel", b =>
                 {
                     b.HasOne("PFE.Models.Encadrant", "Encadrant")
                         .WithMany("PFEs")
@@ -631,7 +631,7 @@ namespace PFE.Migrations
 
                     b.HasOne("PFE.Models.Etudiant", "Etudiant")
                         .WithOne("PFE")
-                        .HasForeignKey("PFE.Models.PFE", "EtudiantId")
+                        .HasForeignKey("PFE.Models.PFEModel", "EtudiantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -648,7 +648,7 @@ namespace PFE.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PFE.Models.PFE", "PFE")
+                    b.HasOne("PFE.Models.PFEModel", "PFE")
                         .WithMany()
                         .HasForeignKey("PFEId")
                         .OnDelete(DeleteBehavior.Cascade)

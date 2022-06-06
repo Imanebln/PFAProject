@@ -163,7 +163,7 @@ function EtudiantsListe(props) {
     })
   }, [])
 
-  const affecterEncadrant = () =>{
+  function affecterEncadrant(etudiant){
     const newDiv = document.createElement('div');
     newDiv.setAttribute('id','newDiv');
     const newUl = document.createElement('ul');
@@ -172,7 +172,11 @@ function EtudiantsListe(props) {
   encadrants.map(encadrant => { 
     const para = document.createElement("li"); 
     para.innerText = encadrant.nom +" "+encadrant.prenom; console.log(encadrant.nom);
-    para.onclick 
+    const func = ()=>{
+      console.log("sssss" + " " + encadrant.id);
+      axios.post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${etudiant.id}&idEncadrant=${encadrant.id}`)
+    }
+    para.onclick = func();
     newUl.appendChild(para);}
     );
     newDiv.appendChild(newUl);
@@ -252,7 +256,7 @@ function EtudiantsListe(props) {
             </td>
             <td>
             {/* <Button className="butt" color="primary" ><FaPlus/></Button> */}
-            <Button color="primary" variant="primary" onClick={affecterEncadrant}>
+            <Button color="primary" variant="primary" onClick={()=>affecterEncadrant(etudiant.etudiant)}>
             <FaPlus/>
             </Button>
           <div className="popup">

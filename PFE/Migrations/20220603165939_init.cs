@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PFE.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -187,7 +187,7 @@ namespace PFE.Migrations
                 name: "Encadrants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Prenom = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -217,7 +217,7 @@ namespace PFE.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.NoAction);
+                        onUpdate: ReferentialAction.NoAction); 
                 });
 
             migrationBuilder.CreateTable(
@@ -268,7 +268,7 @@ namespace PFE.Migrations
                     Annee = table.Column<int>(type: "int", nullable: false),
                     NomSociete = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TechnologiesUtilisees = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EncadrantId = table.Column<int>(type: "int", nullable: true),
+                    EncadrantId = table.Column<int>(type: "int", nullable: false),
                     EtudiantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -333,13 +333,13 @@ namespace PFE.Migrations
                         column: x => x.JuryId,
                         principalTable: "Encadrants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EncadrantSoutenance_Soutenance_SoutenancesId",
                         column: x => x.SoutenancesId,
                         principalTable: "Soutenance",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

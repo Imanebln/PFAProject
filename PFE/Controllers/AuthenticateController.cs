@@ -595,5 +595,20 @@ namespace PFE.Controllers
         {
             return NoContent();
         }
+
+        [Route("AffecterEncadrant")]
+        [HttpPut]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<PFEModel>>> AffecterEncadrant(int id, int idEncadrant)//, PFEModel pfe)
+        {
+            var pf = _context.PFEs.Include(e => e.Etudiant).Where(e => e.Id == id).First();
+            if (pf == null) return BadRequest();
+            else
+            {
+                pf.EncadrantId = idEncadrant;
+                await _context.SaveChangesAsync();
+            }
+            return await _context.PFEs.ToArrayAsync();
+        }
     }
 }
