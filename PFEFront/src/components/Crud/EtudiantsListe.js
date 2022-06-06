@@ -8,6 +8,9 @@ import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
 
+import 'react-dropdown/style.css';
+import Dropdown from "./Dropdown";
+
 import {toast} from 'react-toastify';
 import { Container,Col } from 'reactstrap';
 import { CSVLink } from "react-csv";
@@ -155,45 +158,15 @@ function EtudiantsListe(props) {
   const [etud,setEtud] = useLocalStorage("etu",{})
   const [pfe,setPfe] = useLocalStorage("pfe",{})
   
-  const [encadrants,setEncadrants]= useState([]);
-  useEffect(() => {
-    axios.get('https://localhost:7004/api/Encadrants',{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
-      console.log(res);
-      setEncadrants(res.data);
-    })
-  }, [])
+  
 
-  function affecterEncadrant(etudiant){
-    const newDiv = document.createElement('div');
-    newDiv.setAttribute('id','newDiv');
-    const newUl = document.createElement('ul');
-    newUl.setAttribute('id','newUl');
-
-  encadrants.map(encadrant => { 
-    const para = document.createElement("li"); 
-    para.innerText = encadrant.nom +" "+encadrant.prenom; console.log(encadrant.nom);
-    const func = ()=>{
-      console.log("sssss" + " " + encadrant.id);
-      axios.post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${etudiant.id}&idEncadrant=${encadrant.id}`)
-    }
-    para.onclick = func();
-    newUl.appendChild(para);}
-    );
-    newDiv.appendChild(newUl);
-    
-    document.body.appendChild(newDiv);
-    let close = document.createElement("span");
-            close.className = 'close';
-            let closeText = document.createTextNode("X");
-            close.appendChild(closeText);
-            newDiv.appendChild(close);
-
-    document.addEventListener("click",function(e){
-      if(e.target.className == 'close'){
-          e.target.parentNode.remove();
-              }
-          });
-  }
+  // useEffect(() => {
+  //   axios.post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${etudiant.id}&idEncadrant=${encadrant.id}`).then(res => {
+  //     console.log(res);
+  //     setEncadrants(res.data);
+  //   })
+  // }, [])
+  
 
 	return (
     
@@ -227,6 +200,7 @@ function EtudiantsListe(props) {
           </tr>
         </thead>
         <tbody>
+        
         {etudiants.map(etudiant => (
           <tr>
             <td key={etudiant.id}>
@@ -256,17 +230,13 @@ function EtudiantsListe(props) {
             </td>
             <td>
             {/* <Button className="butt" color="primary" ><FaPlus/></Button> */}
-            <Button color="primary" variant="primary" onClick={()=>affecterEncadrant(etudiant.etudiant)}>
-            <FaPlus/>
-            </Button>
-          <div className="popup">
-          <div className="popuptext" id="myPopup">Popup text...</div>
-          </div>
-            
-          
-            
+            {/* <Button color="primary" variant="primary" onClick={()=>affecterEncadrant(etudiant.etudiant)}><FaPlus/></Button> */}
+            <Dropdown></Dropdown>
             </td>
+            
+
           </tr>
+
           ) )}
         </tbody>
       </Table>
