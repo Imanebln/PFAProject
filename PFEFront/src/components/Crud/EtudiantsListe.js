@@ -7,6 +7,7 @@ import AjouterEtudiant from "./AjouterEtudiant";
 import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
+import { post } from "axios";
 
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
@@ -16,7 +17,7 @@ import { Container,Col } from 'reactstrap';
 import { CSVLink } from "react-csv";
 
 function EtudiantsListe(props) {
-
+ 
   function getToken() {
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
@@ -157,16 +158,30 @@ function EtudiantsListe(props) {
 
   const [etud,setEtud] = useLocalStorage("etu",{})
   const [pfe,setPfe] = useLocalStorage("pfe",{})
-  
-  
 
-  // useEffect(() => {
-  //   axios.post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${etudiant.id}&idEncadrant=${encadrant.id}`).then(res => {
-  //     console.log(res);
-  //     setEncadrants(res.data);
-  //   })
-  // }, [])
+
+
+
+  //encad dropdown
+  const Encad = localStorage.getItem('encad');
+  const Encadjson = JSON.parse(Encad);
+
   
+function confirmerAffectation(e){
+  async function postaffect(){
+  
+      try {
+				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
+				
+				
+			} catch (error) {
+				console.log("error", error);
+			}
+}
+postaffect();
+  
+}
+ 
 
 	return (
     
@@ -231,7 +246,12 @@ function EtudiantsListe(props) {
             <td>
             {/* <Button className="butt" color="primary" ><FaPlus/></Button> */}
             {/* <Button color="primary" variant="primary" onClick={()=>affecterEncadrant(etudiant.etudiant)}><FaPlus/></Button> */}
-            <Dropdown></Dropdown>
+            <Dropdown>
+             {console.log({Encad})}
+            </Dropdown>
+            </td>
+            <td>
+            <Button className="btn btn-primary" onClick={()=>confirmerAffectation(etudiant)}>Confirmer</Button>
             </td>
             
 

@@ -597,7 +597,7 @@ namespace PFE.Controllers
         }
 
         [Route("AffecterEncadrant")]
-        [HttpPut]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PFEModel>>> AffecterEncadrant(int id, int idEncadrant)//, PFEModel pfe)
         {

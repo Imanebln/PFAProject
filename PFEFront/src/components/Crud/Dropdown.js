@@ -6,7 +6,7 @@ import 'react-dropdown/style.css';
 import { IndeterminateCheckBox } from "@material-ui/icons";
 
 
-const Dropdown = () => {
+const Dropdown = (props) => {
     const [isOpen, setOpen] = useState(false);
     //const [items, setItem] = useState(data);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -14,10 +14,12 @@ const Dropdown = () => {
     // const toggleDropdown = () => {setDropdownVisibility(true)};
     const toggleDropdown = () => setOpen(!isOpen);
     
-    const handleItemClick = (id) => {
+    const handleItemClick = (id,item) => {
       selectedItem == id ? setSelectedItem(null) : setSelectedItem(id);
+      setSendEncad(item);
     }
     const [fullname,setFullname] = useState("");
+    const [sendEncad,setSendEncad] = useState([]);
 
     const [encadrants,setEncadrants]= useState([]);
   useEffect(() => {
@@ -26,6 +28,38 @@ const Dropdown = () => {
       setEncadrants(res.data);
     })
   }, [])
+
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = useState(() => {
+      if (typeof window === "undefined") {
+        return initialValue;
+      }
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        console.log(error);
+        return initialValue;
+      }
+    });
+
+    const setValue = (value) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return [storedValue, setValue];
+  }
+
+  const [encad,setEncad] = useLocalStorage("encad",{})
+  
 
   
     return(
@@ -38,9 +72,8 @@ const Dropdown = () => {
             
             <div className={`dropdown-body ${isOpen && 'open'}`}>
             {encadrants.map(item => (
-              <div className="dropdown-item" onClick={e => {handleItemClick(e.target.id); setFullname(item.nom+" "+item.prenom);}} id={item.nom} >
+              <div className="dropdown-item" onClick={e => {handleItemClick(e.target.id,item); setEncad(item); setFullname(item.nom+" "+item.prenom);}} id={item.nom} item={item}>
                 <span className={`dropdown-item-dot ${fullname == selectedItem && 'selected'}`}>• </span>
-                {console.log(selectedItem)}
                 <a>{item.nom + " " + item.prenom}</a>
               </div>
             ))}
