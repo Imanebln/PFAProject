@@ -12,8 +12,15 @@ const Dropdown = (props) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [dropdownVisibility,setDropdownVisibility] = useState(false);
     // const toggleDropdown = () => {setDropdownVisibility(true)};
-    const toggleDropdown = () => setOpen(!isOpen);
-    
+    const toggleDropdown = () => {
+      setOpen(!isOpen)
+    };
+    const varLoc = localStorage.getItem('varLoc');
+    const varLocJSON = JSON.parse(varLoc);
+    if(varLocJSON == true){
+      setOpen(false);
+    }
+   useLocalStorage("isop",isOpen);
     const handleItemClick = (id,item) => {
       selectedItem == id ? setSelectedItem(null) : setSelectedItem(id);
       setSendEncad(item);
@@ -59,7 +66,6 @@ const Dropdown = (props) => {
   }
 
   const [encad,setEncad] = useLocalStorage("encad",{})
-  
 
   
     return(

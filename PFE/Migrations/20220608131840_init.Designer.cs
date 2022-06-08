@@ -12,8 +12,8 @@ using PFE.Data;
 namespace PFE.Migrations
 {
     [DbContext(typeof(PFEContext))]
-    [Migration("20220608102044_initial")]
-    partial class initial
+    [Migration("20220608131840_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

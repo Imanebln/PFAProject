@@ -166,22 +166,51 @@ function EtudiantsListe(props) {
   const Encad = localStorage.getItem('encad');
   const Encadjson = JSON.parse(Encad);
 
-  
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = useState(() => {
+      if (typeof window === "undefined") {
+        return initialValue;
+      }
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        console.log(error);
+        return initialValue;
+      }
+    });
+
+    const setValue = (value) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return [storedValue, setValue];
+  }
+  const varLocsto= useLocalStorage("varLoc",false);
+  const [varLoc,setVarLoc] = useState(varLocsto)
 function confirmerAffectation(e){
+  setVarLoc(false);
   async function postaffect(){
-  
       try {
 				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
-				
-				
+				setVarLoc(true);
 			} catch (error) {
 				console.log("error", error);
 			}
 }
+
 postaffect();
-  
-}
  
+}
+
 
 	return (
     
