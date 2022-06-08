@@ -99,3 +99,23 @@ code {
 .icon.open {
   transform: rotate(90deg);
 }
+.divHead{
+  display: flex;
+  flex-direction: row;
+  padding: 20px 0;
+}
+.butt {
+width: 13%;
+
+}
+.importFile {
+  width: 60%;
+}
+.searchYear {
+  width: 25%;
+}
+.searchYear .inputYear{
+  width: 50%;
+}
+.importFileInput{
+}

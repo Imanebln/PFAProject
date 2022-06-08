@@ -6,8 +6,9 @@ import { Table, Button, Row } from 'reactstrap';
 import AjouterEtudiant from "./AjouterEtudiant";
 import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
+import { FaTrash, FaEdit, FaEye, FaPlus, FaCheck} from "react-icons/fa";
 import { post } from "axios";
+import { DropzoneArea } from "material-ui-dropzone";
 
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
@@ -194,14 +195,16 @@ function EtudiantsListe(props) {
     };
     return [storedValue, setValue];
   }
-  const varLocsto= useLocalStorage("varLoc",false);
-  const [varLoc,setVarLoc] = useState(varLocsto)
-function confirmerAffectation(e){
-  setVarLoc(false);
+
+  const varLocsto= useLocalStorage("varLoc",true);
+  const [val,setVal] = useState();
+
+
+  function confirmerAffectation(e){
   async function postaffect(){
       try {
 				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
-				setVarLoc(true);
+        setVal(varLocsto);
 			} catch (error) {
 				console.log("error", error);
 			}
@@ -216,30 +219,32 @@ postaffect();
     
 		<div className="div-margin">
 			<h4>Etudiants</h4>
-      <Container>
-                <Row>
-                    <Col>
-                    
-                    <input style={{width : '20%' }} name="annee" type="number" defaultValue={(new Date()).getFullYear()} placeholder="Annee" required 
-                    onChange={handleChangeInput} className="form-control"/>
-                    <Button style={{display : 'none'}} className="butt" color="primary" onClick={getEtudiantsList()}>Chercher</Button>
-                  <div className="btn-group">
+      <Container className="divHead">
+               
+                    <div className="searchYear">
+                      <input name="annee" type="number" defaultValue={(new Date()).getFullYear()} placeholder="Chercher par annee ..." required 
+                       onChange={handleChangeInput} className="inputYear"/>
+                       <Button style={{display : 'none'}} className="butt" color="primary" onClick={getEtudiantsList()}>Chercher</Button>
+                    </div>
+                   
+                    <div className="importFile">
                     <input type="file" color="primary" onChange={saveFileSelected}/>
-                    <input type="button" color="primary" value="Importer" onClick={importFile} className="btn btn-primary"/>
-                  </div>
+                    <input   type="button" color="primary" value="Importer Fichier EXCEL" onClick={importFile} className="importFileInput"/> 
+                   
+                    </div>
+                 
                     <Button className="butt" color="primary" onClick={AjouterEtudiant}>Ajouter Etudiant</Button>
-                    
                     {/* <a href="/AjouterEncadrant">Ajouter Encadrant</a> */}
-                    
-                    </Col>
-                </Row>
+          
             </Container>
         <Table responsive hover>
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Nom et Prenom</th>
             <th>Email</th>
             <th>Filiere</th>
+            <th></th>
+            <th></th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -257,8 +262,20 @@ postaffect();
             {etudiant.etudiant.filiere}
             </td>
             <td>
+            {/* <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button> */}
+            </td>
+            
+            <td>
+            <Dropdown>
+            </Dropdown>
+            </td>
+            <td>
+            <Button className="btn btn-success"  onClick={()=>confirmerAffectation(etudiant)}><FaCheck/></Button>
+            </td>
+            
+            <td>
             <Link to={{pathname: "/EtudiantDetails"}}>
-        <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant)}} >
+             <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant)}} >
             {/* {console.log({etud})} */}
             
             <FaEye/>
@@ -267,20 +284,7 @@ postaffect();
             </Link>
             </td>
             <td>
-            <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button>
-            </td>
-            <td>
             <Button className="btn btn-danger" onClick={()=>handleDelete(etudiant)}><FaTrash/></Button>
-            </td>
-            <td>
-            {/* <Button className="butt" color="primary" ><FaPlus/></Button> */}
-            {/* <Button color="primary" variant="primary" onClick={()=>affecterEncadrant(etudiant.etudiant)}><FaPlus/></Button> */}
-            <Dropdown>
-             {console.log({Encad})}
-            </Dropdown>
-            </td>
-            <td>
-            <Button className="btn btn-primary" onClick={()=>confirmerAffectation(etudiant)}>Confirmer</Button>
             </td>
             
 

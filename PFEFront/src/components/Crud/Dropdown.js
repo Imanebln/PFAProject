@@ -15,9 +15,9 @@ const Dropdown = (props) => {
     const toggleDropdown = () => {
       setOpen(!isOpen)
     };
-    const varLoc = localStorage.getItem('varLoc');
+    const varLoc = localStorage.getItem("varLoc");
     const varLocJSON = JSON.parse(varLoc);
-    if(varLocJSON == true){
+    if(varLoc == true){
       setOpen(false);
     }
    useLocalStorage("isop",isOpen);
