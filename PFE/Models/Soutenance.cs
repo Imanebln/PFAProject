@@ -4,11 +4,9 @@
     {
         public int Id { get; set; }
 
-        public DateTime Date { get; set; }
-        public DateTime HeureDebut { get; set; }
-        public DateTime HeureFin { get; set; }
-        public int EtudiantId { get; set; }
-        public Etudiant Etudiant { get; set; } //one to one relationship
+        public string Date { get; set; }
+        public int HeureDebut { get; set; }
+        public int HeureFin { get; set; }
         public int PFEId { get; set; }
         public PFEModel PFE { get; set; } //one to one relationship
         public int EncadrantId { get; set; }

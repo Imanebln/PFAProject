@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PFE.Migrations
 {
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -216,8 +216,7 @@ namespace PFE.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.NoAction); 
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -294,22 +293,15 @@ namespace PFE.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HeureDebut = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HeureFin = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EtudiantId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HeureDebut = table.Column<int>(type: "int", nullable: false),
+                    HeureFin = table.Column<int>(type: "int", nullable: false),
                     PFEId = table.Column<int>(type: "int", nullable: false),
                     EncadrantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Soutenance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Soutenance_Etudiants_EtudiantId",
-                        column: x => x.EtudiantId,
-                        principalTable: "Etudiants",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Soutenance_PFEs_PFEId",
                         column: x => x.PFEId,
@@ -404,12 +396,6 @@ namespace PFE.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PFEs_EtudiantId",
                 table: "PFEs",
-                column: "EtudiantId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Soutenance_EtudiantId",
-                table: "Soutenance",
                 column: "EtudiantId",
                 unique: true);
 

@@ -15,7 +15,6 @@ namespace PFE.Models
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser ApplicationUser { get; set; }
-        public Soutenance Soutenance { get; set; }
         public PFEModel PFE { get; set; }
 
 

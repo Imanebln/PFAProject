@@ -12,8 +12,8 @@ using PFE.Data;
 namespace PFE.Migrations
 {
     [DbContext(typeof(PFEContext))]
-    [Migration("20220603165939_init")]
-    partial class init
+    [Migration("20220608102044_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -507,28 +507,23 @@ namespace PFE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EncadrantId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EtudiantId")
+                    b.Property<int>("HeureDebut")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("HeureDebut")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("HeureFin")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("HeureFin")
+                        .HasColumnType("int");
 
                     b.Property<int>("PFEId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EtudiantId")
-                        .IsUnique();
 
                     b.HasIndex("PFEId");
 
@@ -644,19 +639,11 @@ namespace PFE.Migrations
 
             modelBuilder.Entity("PFE.Models.Soutenance", b =>
                 {
-                    b.HasOne("PFE.Models.Etudiant", "Etudiant")
-                        .WithOne("Soutenance")
-                        .HasForeignKey("PFE.Models.Soutenance", "EtudiantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PFE.Models.PFEModel", "PFE")
                         .WithMany()
                         .HasForeignKey("PFEId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Etudiant");
 
                     b.Navigation("PFE");
                 });
@@ -669,9 +656,6 @@ namespace PFE.Migrations
             modelBuilder.Entity("PFE.Models.Etudiant", b =>
                 {
                     b.Navigation("PFE")
-                        .IsRequired();
-
-                    b.Navigation("Soutenance")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

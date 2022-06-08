@@ -205,35 +205,9 @@ namespace PFE.Controllers
                 return BadRequest("Column not found");
             }
 
-            
-
-            /*var data = _context.Etudiants
-            .Join(
-            _context.PFEs,
-            etudiant => etudiant.Id,
-            pfe => pfe.EtudiantId,
-            (etudiant, pfe) => new
-            {
-                id = etudiant.Id,
-                nom = etudiant.Nom,
-                prenom = etudiant.Prenom,
-                filiere = etudiant.Filiere,
-                email = etudiant.Email,
-                passwordHash = etudiant.PasswordHash,
-                username = etudiant.UserName,
-                sujet = pfe.Sujet,
-                emailEncadrant = pfe.EmailEncadrant,
-                nomsociete = pfe.NomSociete,
-                techno = pfe.TechnologiesUtilisees,
-                ville = pfe.Ville,
-                annee = pfe.Annee,
-
-            }
-        ).ToList();*/
             var etudiants = _context.PFEs.Include(e => e.Etudiant).Where(e => e.Annee == year).ToList();
 
-/*            var etudiants = data.Where(et => et.annee == year).ToList();
-*/            foreach (var item in items)
+              foreach (var item in items)
               {
                 if (etudiants.Any(et => et.Etudiant.UserName.Equals(item.Value.Nom.Split(' ')[0] + '.' + item.Value.Prenom.Split(' ')[0]) || item.Value == null ))                   
                 {
@@ -585,17 +559,7 @@ namespace PFE.Controllers
             return NoContent();
 
         }
-
-        /*Gestion soutenance*/
         
-        [Authorize(Roles = "Admin")]
-        [Route("gestionSoutenance")]
-        [HttpPost]
-        public async Task<IActionResult> GererSoutenance(int idEtudiant, int idEncadrant1, int idEncadrant2, int iEencadrant3)
-        {
-            return NoContent();
-        }
-
         [Route("AffecterEncadrant")]
         [HttpPost]
         [AllowAnonymous]
@@ -609,6 +573,69 @@ namespace PFE.Controllers
                 await _context.SaveChangesAsync();
             }
             return await _context.PFEs.ToArrayAsync();
+        }
+
+        /*Gestion soutenance*/
+
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
+        [Route("gestionSoutenance")]
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Soutenance>>> GererSoutenance(int idPfe, int idEncadPrincipal, int idEncad1, int idEncad2, string dateStc, int heureDebut, int heureFin) 
+        {
+            var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
+            var enc2 = _context.Encadrants.Where(e => e.Id.Equals(idEncad2)).First();
+            Soutenance soutenance = new Soutenance();
+
+            soutenance.PFEId = idPfe;
+            soutenance.EncadrantId = idEncadPrincipal;
+            soutenance.Date = dateStc;
+            soutenance.HeureDebut = heureDebut;
+            soutenance.HeureFin = heureFin;
+
+            List<Encadrant> list = new List<Encadrant>();
+            var testEncad = _context.Soutenance.Select(s => s.Jury);
+            foreach(var item in testEncad)
+            {
+                var test1 = item.Where(i => i.Id.Equals(idEncad1)).ToList();
+                foreach(var it in item)
+                {
+                    var testEncad1 = _context.Soutenance.Where(s => s.Date == dateStc 
+                                     && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin).FirstOrDefault();
+                    if(testEncad1 == null)
+                    {
+                        list.Add(enc1);
+                    }
+                    else
+                    {
+                        new Response { Status = "Error", Message = enc1.Nom+" "+enc1.Prenom +" est deja affecte a une soutenance"  };
+                    }
+                }
+
+                var test2 = item.Where(i => i.Id.Equals(idEncad2)).ToList();
+
+                var testEncad2 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin).FirstOrDefault();
+
+                if (testEncad2 == null)
+                {
+                    list.Add(enc2);
+                }
+                else
+                {
+                    new Response { Status = "Error", Message = enc2.Nom + " " + enc2.Prenom + " est deja affecte a une soutenance" };
+                }
+            }
+            
+            soutenance.Jury = list;
+            if(list.Count > 0)
+            {
+                _context.Add(soutenance);
+                await _context.SaveChangesAsync();
+            }
+
+            
+
+            return await _context.Soutenance.ToListAsync();
         }
     }
 }
