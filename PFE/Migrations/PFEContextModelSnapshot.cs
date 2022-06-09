@@ -509,9 +509,6 @@ namespace PFE.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EncadrantId")
-                        .HasColumnType("int");
-
                     b.Property<int>("HeureDebut")
                         .HasColumnType("int");
 

@@ -12,7 +12,7 @@ const Navbar = () => {
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 ">
 			<div className="container">
 				<ul className="navbar-nav mr-auto">
-					<NavLink className="navbar-brand" hrefLang="https://henok.us" to="/Dashboard">
+					<NavLink className="navbar-brand"  to="/Dashboard">
 						PFEProgress
 					</NavLink>
 					

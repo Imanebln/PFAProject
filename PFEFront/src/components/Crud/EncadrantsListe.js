@@ -165,18 +165,6 @@ function EncadrantsListe(props) {
 
             </Link>
             
-            {/* <Link to={{pathname: "/EncadrantDetails",
-            data : {encadrant}}}>
-            <Button color="primary" variant="primary" >
-            <FaEye/>
-            </Button>
-            </Link> */}
-            {/* <ModalView
-            encadrant= {encadrant}
-           show={modalShow}
-           onHide={() => setModalShow(false)}
-           />
-            <a  href="/EncadrantDetails"><FaEye/></a> */}
             </td>
             <td>
             {/* <Button className="btn btn-primary" onClick={()=>handleView(encadrant)} ><FaEdit/></Button> */}

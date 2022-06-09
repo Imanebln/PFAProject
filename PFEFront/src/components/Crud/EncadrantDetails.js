@@ -26,14 +26,19 @@ function EncadrantDetails(props) {
     
     console.log({encad});
 	return (
-		<div className="container">
+		<div className="container" style={{width: '70%'}}>
            
 			<h2>Encadrant Details</h2>
+            <br></br>
             <div className="container">
             <p>
-            <form>
+            <form className="container-sm">
+        
             {/* {encad.map(e => <li>e</li> )} */}
             {/* {Object.keys(encad).map(e => <li>{e}</li> )} */}
+            <div className="row">
+            
+            <div className="col">
                 <div  className="form-group">
                     <label>Nom</label>
                     <input name="nom"
@@ -41,13 +46,17 @@ function EncadrantDetails(props) {
 						        value={encadjson.nom}
 					        	className="form-control" disabled/>
                 </div>
+                </div>
 
+                <div className="col">
                 <div  className="form-group">
                 <label>Prenom</label>
                 <input name="prenom"
                     type="text"
                     value={encadjson.prenom}
                     className="form-control" disabled/>
+                </div>
+                </div>
                 </div>
 
                 <div  className="form-group">

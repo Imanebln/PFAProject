@@ -12,8 +12,8 @@ using PFE.Data;
 namespace PFE.Migrations
 {
     [DbContext(typeof(PFEContext))]
-    [Migration("20220608131840_init")]
-    partial class init
+    [Migration("20220609143020_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -510,9 +510,6 @@ namespace PFE.Migrations
                     b.Property<string>("Date")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EncadrantId")
-                        .HasColumnType("int");
 
                     b.Property<int>("HeureDebut")
                         .HasColumnType("int");

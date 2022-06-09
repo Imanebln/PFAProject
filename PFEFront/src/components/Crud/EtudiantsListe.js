@@ -195,27 +195,22 @@ function EtudiantsListe(props) {
     return [storedValue, setValue];
   }
 
-  const varLocsto= useLocalStorage("varLoc",true);
-  const [val,setVal] = useState(false);
+  const [varLocsto,setVarLocsto] = useLocalStorage("varLoc",false);
 
 
   function confirmerAffectation(e){
   async function postaffect(){
       try {
 				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
-        console.log(val + "1");
-        setVal(varLocsto);
+        setVarLocsto(true);
 			} catch (error) {
 				console.log("error", error);
 			}
-      finally{
-        console.log(val);
-        setVal(false);
-      }
+      
+      
 }
 
 postaffect();
- 
 }
 
 
@@ -227,7 +222,7 @@ postaffect();
                
                     <div className="searchYear">
                       <input name="annee" type="number" defaultValue={(new Date()).getFullYear()} placeholder="Chercher par annee ..." required 
-                       onChange={handleChangeInput} className="inputYear"/>
+                       onChange={handleChangeInput} className="form-control inputYear"/>
                        <Button style={{display : 'none'}} className="butt" color="primary" onClick={getEtudiantsList()}>Chercher</Button>
                     </div>
                    

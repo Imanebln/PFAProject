@@ -25,8 +25,20 @@ export default function Dashboard() {
                     Welcome to CHEF DE FILIERE Space 
              </div>
              
-             {/* <p> Welcome {user.username}</p> */}
-             {/* <Button onClick={handleLogout}>Logout</Button> */}
+            <div class="container">
+            <div class="row">
+    <div class="col-lg">
+      One of three columns
+    </div>
+    <div class="col-lg">
+      One of three columns
+    </div>
+    <div class="col-lg">
+      One of three columns
+    </div>
+  </div>
+</div>
+  
              
              
             </div>
