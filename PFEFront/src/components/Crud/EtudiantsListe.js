@@ -8,7 +8,6 @@ import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus, FaCheck} from "react-icons/fa";
 import { post } from "axios";
-import { DropzoneArea } from "material-ui-dropzone";
 
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
@@ -197,17 +196,22 @@ function EtudiantsListe(props) {
   }
 
   const varLocsto= useLocalStorage("varLoc",true);
-  const [val,setVal] = useState();
+  const [val,setVal] = useState(false);
 
 
   function confirmerAffectation(e){
   async function postaffect(){
       try {
 				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
+        console.log(val + "1");
         setVal(varLocsto);
 			} catch (error) {
 				console.log("error", error);
 			}
+      finally{
+        console.log(val);
+        setVal(false);
+      }
 }
 
 postaffect();
