@@ -581,59 +581,66 @@ namespace PFE.Controllers
         [AllowAnonymous]
         [Route("gestionSoutenance")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Soutenance>>> GererSoutenance(int idPfe, int idEncadPrincipal, int idEncad1, int idEncad2, string dateStc, int heureDebut, int heureFin) 
+        public async Task<ActionResult<IEnumerable<Soutenance>>> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, int heureDebut, int heureFin)
         {
             var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
             var enc2 = _context.Encadrants.Where(e => e.Id.Equals(idEncad2)).First();
+
             Soutenance soutenance = new Soutenance();
 
             soutenance.PFEId = idPfe;
-            soutenance.EncadrantId = idEncadPrincipal;
+            //soutenance.EncadrantId = idEncadPrincipal;
             soutenance.Date = dateStc;
             soutenance.HeureDebut = heureDebut;
             soutenance.HeureFin = heureFin;
 
             List<Encadrant> list = new List<Encadrant>();
-            var testEncad = _context.Soutenance.Select(s => s.Jury);
-            foreach(var item in testEncad)
+            //if table soutenance kawya => pas de traitement
+            if (_context.Soutenance.Count() == 0)
             {
-                var test1 = item.Where(i => i.Id.Equals(idEncad1)).ToList();
-                foreach(var it in item)
+                list.Add(enc1);
+                list.Add(enc2);
+
+                soutenance.Jury = list;
+                _context.Add(soutenance);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var testEncad1 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin)
+                                                .Include(e => e.Jury).Where(i => i.Id == idEncad1).FirstOrDefault();
+
+                if (testEncad1 == null)
                 {
-                    var testEncad1 = _context.Soutenance.Where(s => s.Date == dateStc 
-                                     && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin).FirstOrDefault();
-                    if(testEncad1 == null)
-                    {
-                        list.Add(enc1);
-                    }
-                    else
-                    {
-                        new Response { Status = "Error", Message = enc1.Nom+" "+enc1.Prenom +" est deja affecte a une soutenance"  };
-                    }
+                    list.Add(enc1);
+                }
+                else
+                {
+                    new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance" };
                 }
 
-                var test2 = item.Where(i => i.Id.Equals(idEncad2)).ToList();
-
-                var testEncad2 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin).FirstOrDefault();
-
+                var testEncad2 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin)
+                                                    .Include(e => e.Jury).Where(i => i.Id == idEncad2).FirstOrDefault();
                 if (testEncad2 == null)
                 {
                     list.Add(enc2);
                 }
                 else
                 {
-                    new Response { Status = "Error", Message = enc2.Nom + " " + enc2.Prenom + " est deja affecte a une soutenance" };
+                    new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance" };
+                }
+
+                soutenance.Jury = list;
+                if (list.Count >= 2)
+                {
+                    _context.Add(soutenance);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    new Response { Status = "Error", Message = "Liste invalide" };
                 }
             }
-            
-            soutenance.Jury = list;
-            if(list.Count > 0)
-            {
-                _context.Add(soutenance);
-                await _context.SaveChangesAsync();
-            }
-
-            
 
             return await _context.Soutenance.ToListAsync();
         }
