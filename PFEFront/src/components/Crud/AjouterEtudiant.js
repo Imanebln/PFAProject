@@ -60,10 +60,12 @@ function AjouterEtudiant(props) {
 		
 
 	return (
-		<div className="container" style={{ maxWidth: "400px" }}>
+		<div className="container" style={{ maxWidth: "60%" }}>
 			<h2>Ajouter un Etudiant</h2>
 			<hr />
             <form onSubmit={handleSubmit}>
+			<div className="row">
+            <div className="col">
 			<div className="form-group">
 					<label>Username</label>
 					<input
@@ -75,6 +77,8 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>	
+				<div className="col">
 				<div className="form-group">
 					<label>Nom</label>
 					<input
@@ -86,6 +90,8 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
+				<div className="col">
 				<div className="form-group">
 					<label>Prenom</label>
 					<input
@@ -97,6 +103,11 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
+				</div>
+				<br></br>
+				<div className="row">
+				<div className="col">
 				<div className="form-group">
 					<label>Email</label>
 					<input
@@ -109,7 +120,9 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
 				<br></br>
+				<div className="col">
 				<div className="form-group">
 					<label>Email Encadrant</label>
 					<input
@@ -122,6 +135,11 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
+				</div>
+				<br></br>
+				<div className="row">
+				<div className="col">
 				<div className="form-group">
 					<label>Sujet</label>
 					<input
@@ -133,7 +151,9 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
 				<br/>
+				<div className="col">
 				<div className="form-group">
 					<label>Nom de societe</label>
 					<input
@@ -145,8 +165,12 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
+				</div>
 				<br>
 				</br>
+				<div className="row">
+				<div className="col">
 				<div className="form-group">
 					<label>Ville</label>
 					<input
@@ -158,7 +182,9 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
 				<br/>
+				<div className="col">
 				<div className="form-group">
 					<label>technologie utilise</label>
 					<input
@@ -170,7 +196,9 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
 				<br/>
+				<div className="col">
 				<div className="form-group">
 					<label>Annee</label>
 					<input
@@ -182,7 +210,10 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
+				</div>
 				<br/>
+				<div className="row" style={{ maxWidth: "40%" }}>
 				<div className="btn-group">
 					<input type="submit" value="Submit" className="btn btn-primary" />
 					<button
@@ -192,6 +223,7 @@ function AjouterEtudiant(props) {
 					>
 						Cancel
 					</button>
+				</div>
 				</div>
 				
 			</form>

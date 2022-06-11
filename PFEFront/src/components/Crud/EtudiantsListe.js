@@ -226,14 +226,14 @@ postaffect();
                        <Button style={{display : 'none'}} className="butt" color="primary" onClick={getEtudiantsList()}>Chercher</Button>
                     </div>
                    
-                    <div className="importFile">
+                    <div  className="importFile form-label">
                     <input type="file" color="primary" onChange={saveFileSelected}/>
                     <input   type="button" color="primary" value="Importer Fichier EXCEL" onClick={importFile} className="importFileInput"/> 
                    
                     </div>
                  
                     <Button className="butt" color="primary" onClick={AjouterEtudiant}>Ajouter Etudiant</Button>
-                    {/* <a href="/AjouterEncadrant">Ajouter Encadrant</a> */}
+                    
           
             </Container>
         <Table responsive hover>

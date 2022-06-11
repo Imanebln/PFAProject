@@ -20,6 +20,7 @@ import Etudiant from './EtudiantComponent/Etudiant';
 import EncadrantDetails from './components/Crud/EncadrantDetails';
 import EtudiantDetails from './components/Crud/EtudiantDetails';
 import Dropdown from './components/Crud/Dropdown';
+import SoutenancesListe from './components/Crud/SoutenancesListe';
 import { Button } from 'reactstrap';
 
 function setToken(userToken) {
@@ -80,6 +81,7 @@ function App() {
           <Route path="/EtudiantDetails" component={EtudiantDetails} element={<EtudiantDetails/>}/>
           <Route path="/Etudiant" component={Etudiant} element={<Etudiant/>}/>
           <Route path="/Dropdown" component={Dropdown} element={<Dropdown/>}/>
+          <Route path="/SoutenancesListe" component={SoutenancesListe} element={<SoutenancesListe/>}/>
 
       </Routes> 
      <div className='footer'>

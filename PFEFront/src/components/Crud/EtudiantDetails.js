@@ -47,7 +47,7 @@ function EtudiantDetails(props) {
                     <input name="nom"
 						        type="text"
 						        value={Etudjson.nom}
-					        	className="form-control" />
+					        	className="form-control" disabled/>
                 </div>
                 </div>
 
@@ -57,7 +57,7 @@ function EtudiantDetails(props) {
                 <input name="prenom"
                     type="text"
                     value={Etudjson.prenom}
-                    className="form-control" />
+                    className="form-control" disabled/>
                 </div>
                 </div>
                 </div>
@@ -69,7 +69,7 @@ function EtudiantDetails(props) {
                 <input name="email"
                     type="text"
                     value={Etudjson.email}
-                    className="form-control" />
+                    className="form-control" disabled/>
                 </div>
                 </div>
                 <div className="col">
@@ -78,7 +78,7 @@ function EtudiantDetails(props) {
                 <input name="sujet"
                     type="text"
                     value={pfejson.sujet}
-                    className="form-control" />
+                    className="form-control" disabled />
                 </div>
                 </div>
                 </div>
@@ -90,7 +90,7 @@ function EtudiantDetails(props) {
                 <input name="technologiesUtilisees"
                     type="text"
                     value={pfejson.technologiesUtilisees}
-                    className="form-control" />
+                    className="form-control" disabled />
                 </div>
                 </div>
 
@@ -100,7 +100,7 @@ function EtudiantDetails(props) {
                 <input name="nomSociete"
                     type="text"
                     value={pfejson.nomSociete}
-                    className="form-control" />
+                    className="form-control" disabled/>
                 </div>
                 </div>
                 </div>
@@ -113,7 +113,7 @@ function EtudiantDetails(props) {
                 <input name="ville"
                     type="text"
                     value={pfejson.ville}
-                    className="form-control" />
+                    className="form-control" disabled />
                 </div>
                 </div>
                 
@@ -123,7 +123,7 @@ function EtudiantDetails(props) {
                 <input name="annee"
                     type="text"
                     value={pfejson.annee}
-                    className="form-control" />
+                    className="form-control" disabled/>
                 </div>
                 </div>
                 </div>
@@ -133,7 +133,7 @@ function EtudiantDetails(props) {
                 <input name="emailEncadrant"
                     type="text"
                     value={pfejson.emailEncadrant}
-                    className="form-control" />
+                    className="form-control" disabled/>
                 </div>
 
                
