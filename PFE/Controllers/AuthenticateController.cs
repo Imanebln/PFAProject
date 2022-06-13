@@ -575,13 +575,33 @@ namespace PFE.Controllers
             return await _context.PFEs.ToArrayAsync();
         }
 
+        
+        //get encadrant by id pfe
+        [Route("GetEncadrantByIdPFE")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<PFEModel>> GetEncadrantByIdPFE(int id)
+        {
+
+            var pfe = _context.PFEs.Include(p => p.Encadrant).Where(p => p.Id == id).FirstOrDefaultAsync();
+
+            if (pfe == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return await pfe;
+            }
+        }
+
         /*Gestion soutenance*/
 
         /*[Authorize(Roles = "Admin")]*/
         [AllowAnonymous]
-        [Route("gestionSoutenance")]
+        [Route("GererSoutenance")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Soutenance>>> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, int heureDebut, int heureFin)
+        public async Task<ActionResult<IEnumerable<Soutenance>>> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, string heureDebut, string heureFin)
         {
             var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
             var enc2 = _context.Encadrants.Where(e => e.Id.Equals(idEncad2)).First();
@@ -590,7 +610,7 @@ namespace PFE.Controllers
 
             soutenance.PFEId = idPfe;
             //soutenance.EncadrantId = idEncadPrincipal;
-            soutenance.Date = dateStc;
+            soutenance.Date = dateStc.Split(' ')[0];
             soutenance.HeureDebut = heureDebut;
             soutenance.HeureFin = heureFin;
 
@@ -607,8 +627,8 @@ namespace PFE.Controllers
             }
             else
             {
-                var testEncad1 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin)
-                                                .Include(e => e.Jury).Where(i => i.Id == idEncad1).FirstOrDefault();
+                var testEncad1 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut == heureDebut && s.HeureFin == heureFin)
+                                                                .Include(e => e.Jury).Where(i => i.Id == idEncad1).FirstOrDefault();
 
                 if (testEncad1 == null)
                 {
@@ -618,9 +638,12 @@ namespace PFE.Controllers
                 {
                     new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance" };
                 }
-
-                var testEncad2 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut >= heureDebut && s.HeureFin <= heureFin)
-                                                    .Include(e => e.Jury).Where(i => i.Id == idEncad2).FirstOrDefault();
+                //s.Date == dateStc 
+                //&& DateTime.ParseExact(s.HeureDebut, "HH:mm", CultureInfo.InvariantCulture) >= DateTime.ParseExact(heureDebut, "HH:mm", CultureInfo.InvariantCulture)
+                //&& DateTime.ParseExact(s.HeureFin, "HH:mm", CultureInfo.InvariantCulture) <= DateTime.ParseExact(heureFin, "HH:mm", CultureInfo.InvariantCulture))
+                //.Include(e => e.Jury).Where(i => i.Id == idEncad2).FirstOrDefault();
+                var testEncad2 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut == heureDebut && s.HeureFin == heureFin)
+                                                                .Include(e => e.Jury).Where(i => i.Id == idEncad2).FirstOrDefault();
                 if (testEncad2 == null)
                 {
                     list.Add(enc2);

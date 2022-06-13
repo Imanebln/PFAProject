@@ -294,8 +294,8 @@ namespace PFE.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HeureDebut = table.Column<int>(type: "int", nullable: false),
-                    HeureFin = table.Column<int>(type: "int", nullable: false),
+                    HeureDebut = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HeureFin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PFEId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -7,7 +7,7 @@ import AjouterEtudiant from "./AjouterEtudiant";
 import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus, FaCheck} from "react-icons/fa";
-import { post } from "axios";
+import { post, get } from "axios";
 
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
@@ -159,6 +159,21 @@ function EtudiantsListe(props) {
   const [etud,setEtud] = useLocalStorage("etu",{})
   const [pfe,setPfe] = useLocalStorage("pfe",{})
 
+  const [encadAca, setEncadAca] = useLocalStorage("encAca",{});
+  function EncadrantAcademique(e){
+        async function postEnc(){
+            try {
+                await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+                    setEncadAca(res.data);
+                });
+            } 
+            catch (error) {
+                console.log("error", error);
+            }
+      }
+    postEnc();
+    }
+
 
 
 
@@ -212,6 +227,7 @@ function EtudiantsListe(props) {
 
 postaffect();
 }
+
 
 
 	return (
@@ -274,7 +290,7 @@ postaffect();
             
             <td>
             <Link to={{pathname: "/EtudiantDetails"}}>
-             <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant)}} >
+             <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant);EncadrantAcademique(etudiant)}} >
             {/* {console.log({etud})} */}
             
             <FaEye/>

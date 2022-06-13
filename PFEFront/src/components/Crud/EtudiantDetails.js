@@ -2,11 +2,27 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {Row, Col, Container,Button} from 'reactstrap';
+import DropDownJury1 from "./DropDownJury1";
+import DropDownJury2 from "./DropDownJury2";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import TimePicker from 'react-time-picker';
+import { post } from "axios";
+import { format } from 'date-fns';
+import Moment from 'moment';
+import {FaCheck} from "react-icons/fa";
+
 function EtudiantDetails(props) {
 	
     
-    
-    //  const [Etud,setEtudiant]= useState({});
+ 
+
+    useEffect(() => {
+        if(window.location.hash !== "#2") {
+            window.location.href += "#2";
+            window.location.reload(false);
+        }
+    })
 
      const Etud = localStorage.getItem('etu');
      const Etudjson = JSON.parse(Etud);
@@ -14,6 +30,12 @@ function EtudiantDetails(props) {
      const pfe = localStorage.getItem('pfe');
      const pfejson = JSON.parse(pfe);
      console.log(Etudjson.nom);
+
+     const jury1 = localStorage.getItem('jury1');
+    const jury1JSON = JSON.parse(jury1);
+
+    const jury2 = localStorage.getItem('jury2');
+    const jury2JSON = JSON.parse(jury2);
     
     function modifierEtudiant(e){
         
@@ -21,6 +43,31 @@ function EtudiantDetails(props) {
 
     
     console.log({Etud});
+
+    const [dateStc, setDateStc] = useState(new Date());
+    const [heureDebut, setHeureDebut] = useState();
+    const [heureFin, setHeureFin] = useState();
+
+    const EncadAca = localStorage.getItem('encAca');
+    const EncadAcajson = JSON.parse(EncadAca);
+
+    // const Encad = localStorage.getItem('encad');
+    // const Encadjson = JSON.parse(Encad);
+
+    function confirmerSoutenance(){
+        async function postStc(){
+            try {
+                await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd-MM-yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`);
+                console.log("Soutenance ajoutee");
+            } 
+            catch (error) {
+                console.log("error", error);
+            }
+      }
+    postStc();
+    }
+
+
 	return (
 		<div className="container">
             <h2>Etudiant Details</h2>
@@ -127,7 +174,9 @@ function EtudiantDetails(props) {
                 </div>
                 </div>
                 </div>
-
+                    
+                <div className="row">
+                <div className="col">  
                 <div  className="form-group">
                 <label>Email Encadrant</label>
                 <input name="emailEncadrant"
@@ -135,8 +184,68 @@ function EtudiantDetails(props) {
                     value={pfejson.emailEncadrant}
                     className="form-control" disabled/>
                 </div>
+                </div>
+                <div className="col">
+                <div  className="form-group">
+                <label>Encadrant Academique </label>
+                <input name="EncAca"
+                    type="text"
+                    value={EncadAcajson.encadrant.nom +" "+ EncadAcajson.encadrant.prenom }
+                    className="form-control" disabled/>
+                </div>
+                </div>
+                </div>
+                <br></br>
+                <div className="row">
+                    <div className="col">
+                    <div>
+                    <DropDownJury1>
+                    </DropDownJury1>
+                    </div>
 
-               
+                    </div>
+                    <div className="col">
+                    <div>
+                    <DropDownJury2>
+                    </DropDownJury2>
+                    </div> 
+                    </div>
+                </div>
+                    <br></br>
+                    <div className="row">
+                        <div className="col">
+                        <div className="form-group">
+                        <label>Date de Soutenance</label>
+                        <DatePicker  dateFormat="dd-MM-yyyy" selected={dateStc} onChange={(date) => {let dt = Moment(date).format("dd-MM-yyyy");setDateStc(date);console.log("dateStc : " + format(dateStc, 'dd-MM-yyyy'));console.log("date : " + dateStc)}}/>
+                        </div>
+
+                        </div>
+                        <div className="col">
+                        <div className="form-group">
+                         <label>Heure du debut:</label>
+                         <br></br>
+                         <TimePicker  onChange={(heuredebut) => setHeureDebut(heuredebut)} value={heureDebut}/>
+                         </div> 
+                            
+                        </div>
+                        <div className="col">
+                        <div className="form-group">
+                        <label>Heure de fin:</label>
+                        <br></br>
+                        <TimePicker onChange={(heurefin) => {setHeureFin(heurefin);console.log("heure fin : " + heurefin)}} value={heureFin} />
+                        </div>
+                       
+                        </div>
+                        
+                        <div className="col">
+                        <div>
+                        <br></br>
+                        <Button className="btn btn-success"  onClick={()=>{confirmerSoutenance();}}><FaCheck/></Button>
+                        </div>
+                        </div>
+                    </div>
+                
+                
             </form>
           
           </p>

@@ -509,11 +509,13 @@ namespace PFE.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HeureDebut")
-                        .HasColumnType("int");
+                    b.Property<string>("HeureDebut")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HeureFin")
-                        .HasColumnType("int");
+                    b.Property<string>("HeureFin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PFEId")
                         .HasColumnType("int");

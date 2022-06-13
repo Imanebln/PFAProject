@@ -12,7 +12,7 @@ using PFE.Data;
 namespace PFE.Migrations
 {
     [DbContext(typeof(PFEContext))]
-    [Migration("20220609143020_initial")]
+    [Migration("20220613130842_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -511,11 +511,13 @@ namespace PFE.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HeureDebut")
-                        .HasColumnType("int");
+                    b.Property<string>("HeureDebut")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HeureFin")
-                        .HasColumnType("int");
+                    b.Property<string>("HeureFin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PFEId")
                         .HasColumnType("int");
