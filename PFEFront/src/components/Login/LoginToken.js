@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react'; 
-import { useNavigate } from 'react-router-dom';
-import swal from 'sweetalert';
+import loginImg from '../../loginImg.png'
+import './loginStyling.css';
+
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, 
   InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
@@ -55,42 +56,40 @@ export default function LoginToken({ setToken }) {
   }
 
   return(
-    <div className="app flex-row align-items-center">
-     
-    <Container>
-    <Row className="justify-content-center">
-                        <Col md="9" lg="7" xl="6">
-                            <CardGroup>
+    <div className="loginDiv">
+      <div className="Right">
+      <img src={loginImg}></img>
+      </div>
+      <div className="Left">
+       
                                 <Card className="p-2">
                                     <CardBody>
     
-    
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="myForm">
       <div class="row" 
                                             className="mb-2 pageheading">
-                                                <div class="col-sm-12">
-                                                    Login
+                                                <div className="msgCon">
+                                                    Connectez Vous   
                              </div>
                              </div>
 
         <InputGroup className="mb-3">
-          <Input placeholder="Enter Username" type="text" onChange={e => setUserName(e.target.value)} />
+          <Input  className="myInput" placeholder="Entrez votre nom d'utilisateur" type="text" onChange={e => setUserName(e.target.value)} />
           </InputGroup>
        
         <InputGroup className="mb-3">
-          <Input  placeholder="Enter Password" type="password" onChange={e => setPassword(e.target.value)} />
+          <Input  className="myInput" placeholder="Entrez votre mot de passe" type="password" onChange={e => setPassword(e.target.value)} />
           </InputGroup>
-        
-        <div>
-          <Button color="success" block>Login</Button>
-        </div>
+          <div className="buttonDiv">
+             <Button className="myButton">Se connecter</Button>
+          </div>
+         
       </form>
       </CardBody>
       </Card>
-      </CardGroup>
-      </Col>
-      </Row>
-      </Container>
+   
+    </div>
+    
       </div>
 
     

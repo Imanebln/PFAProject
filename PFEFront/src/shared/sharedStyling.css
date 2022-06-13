@@ -1,0 +1,92 @@
+.Navv ul{
+width: 100%;
+display: flex;
+flex-direction:row;
+list-style: none;
+}
+.Navv .Right{
+width: 80%;
+padding-left: 10%;
+}
+.Navv .Left{
+   width:fit-content;
+   padding: 0;
+}
+.Navv .Left .nav-link{
+    border:1px solid #31CBAF;
+    color: rgb(126, 123, 123);
+    border-radius: 20px;
+    text-align: justify;
+    margin-top: 10px;
+    padding-bottom: 0;
+}
+.Right .nav-link p{
+    color: rgb(126, 123, 123);
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+}
+.container{
+    width: 100%;
+    padding: 10px 0;
+    color:rgb(126, 123, 123) ;
+}
+.NavvBar{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    position: absolute;
+
+}
+.NavvBar .Right{
+width: 30%;
+padding-left: 10%;
+}
+.NavvBar .centre{
+    width: 50%;
+}
+.NavvBar .Left{
+width:fit-content;
+display: flex;
+flex-direction: column;
+padding-top: 20px;
+}
+.iconMenu{
+    width: 30px;
+    height: 30px;
+    color: rgb(126, 123, 123);
+}
+.Left ul{
+   display: none;
+    margin-top: 8px;
+    padding:0 8px;
+    background-color: #f6f4f4;
+}
+.NavvBar .Left .nav-linke {
+    text-decoration: none;
+    color: rgb(126, 123, 123);
+    text-align: center;
+}
+.Left:hover ul{
+    display: block;
+    z-index: 1000;
+}
+.Left ul li {
+      display: block;
+      padding: 0 5px;
+}
+.Left ul li:not(:last-child) {
+    border-bottom: 1px solid rgb(126, 123, 123) ;
+}
+.Left ul::after{
+    content: "";
+    position: relative;
+    left: 0px;
+    top:-140px;
+    z-index: 100;
+    display : inline-block;
+    height : 0;
+    width : 0;
+    border-right : 7px solid transparent;
+    border-bottom : 12px solid #f6f6f6;
+    border-left : 8px solid transparent;
+}

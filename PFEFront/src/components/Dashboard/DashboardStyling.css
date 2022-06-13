@@ -1,0 +1,29 @@
+.dashboardContainer{
+    height: 600px;
+    position: absolute;
+    margin: 0 25%;
+    width: 50%;
+    text-align: center;
+    margin-top: 100px;
+}
+.dashboardContainer .title{
+    font-size: 30px;
+    color:rgb(126, 123, 123);
+}
+.dashboardMenu{
+    padding-top:100px ;
+}
+.dashboardMenu .nav-link{
+    margin: 0 20%;
+    margin-bottom: 50px;
+    font-size: 25px;
+    color: aliceblue;
+    background-color: #31CBAF;
+    text-align: center;
+    border-radius: 20px;
+}
+.dashboardMenu .nav-link:hover{
+    background-color: white;
+    color: rgb(126, 123, 123);
+    text-decoration: none;
+}

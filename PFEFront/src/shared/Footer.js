@@ -1,3 +1,4 @@
+import './sharedStyling.css'
 const Footer = () => {
 	const link = "https://henok.us";
 	const target = "_blank";
@@ -5,9 +6,6 @@ const Footer = () => {
 	return (
 		<div className="container">
 			Copyright © <small>{new Date().getFullYear()}</small> PFEProgress{" "}
-			<a href={link} target={target}>
-				PFEProgress.ma
-			</a>
 		</div>
 	);
 };

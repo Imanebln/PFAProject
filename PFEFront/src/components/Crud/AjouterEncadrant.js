@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import EncadrantsListe from "./EncadrantsListe";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './CrudStyling.css'
 toast.configure();
 
 function AjouterEncadrant(props) {
@@ -54,7 +55,7 @@ function AjouterEncadrant(props) {
 	
 
 	return (
-		<div className="container" style={{ maxWidth: "400px" }}>
+		<div className="ajoutEncadrant">
 			<h2>Ajouter un encadrant</h2>
 			<hr />
             <form onSubmit={handleSubmit}>
@@ -104,7 +105,7 @@ function AjouterEncadrant(props) {
 					/>
 				</div>
 				<br/>
-				<div className="btn-group">
+				<div className="buttons">
 					<input type="submit" value="Submit" className="btn btn-primary" />
 					<button
 						type="button"

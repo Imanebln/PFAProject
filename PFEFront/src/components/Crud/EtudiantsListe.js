@@ -31,7 +31,7 @@ function EtudiantsListe(props) {
       setEtudiants(res.data);
     })
   }, [])
-//***************************************************************************************************************** */
+//*************************************** */
   const[annee, setAnnee] = useState((new Date()).getFullYear());
   async function getEtudiantsList(){
     try {
@@ -76,7 +76,7 @@ function EtudiantsListe(props) {
     }
   };
 
-//************************************************************************************************************** */
+//************************************** */
   const { _id } = useParams();
   const navigate = useNavigate();
 
@@ -229,10 +229,9 @@ postaffect();
 }
 
 
-
 	return (
     
-		<div className="div-margin">
+		<div className="etudiantsListe">
 			<h4>Etudiants</h4>
       <Container className="divHead">
                
@@ -242,14 +241,14 @@ postaffect();
                        <Button style={{display : 'none'}} className="butt" color="primary" onClick={getEtudiantsList()}>Chercher</Button>
                     </div>
                    
-                    <div  className="importFile form-label">
+                    <div className="importFile">
                     <input type="file" color="primary" onChange={saveFileSelected}/>
                     <input   type="button" color="primary" value="Importer Fichier EXCEL" onClick={importFile} className="importFileInput"/> 
                    
                     </div>
                  
                     <Button className="butt" color="primary" onClick={AjouterEtudiant}>Ajouter Etudiant</Button>
-                    
+                    {/* <a href="/AjouterEncadrant">Ajouter Encadrant</a> */}
           
             </Container>
         <Table responsive hover>
@@ -290,7 +289,7 @@ postaffect();
             
             <td>
             <Link to={{pathname: "/EtudiantDetails"}}>
-             <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant);EncadrantAcademique(etudiant)}} >
+             <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant);EncadrantAcademique(etudiant);}} >
             {/* {console.log({etud})} */}
             
             <FaEye/>

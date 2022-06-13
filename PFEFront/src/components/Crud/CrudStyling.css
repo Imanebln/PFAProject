@@ -1,0 +1,52 @@
+.encadrantListe{
+    position: absolute;
+    margin-top: 100px;
+    height: 600px;
+    width: 100%;
+    padding: 5% 10%;
+    overflow: scroll;
+}
+.ajoutEncadrant{
+    position: absolute;
+    height: 600px; 
+    width: 50%;
+    padding: 5% 10%;
+    margin: 0 25%;
+    margin-top: 100px;
+}
+.buttons{
+    width: 100%;
+}
+.buttons button{
+    float: right;
+}
+.encadrantDetails{
+    position: absolute;
+    width: 50%;
+    margin: 0 25%;
+    margin-top: 200px;
+}
+.etudiantsListe{
+    position: absolute;
+    margin-top: 100px;
+    height: 600px;
+    width: 100%;
+    padding: 5% 10%;
+    overflow: scroll;
+}
+.ajoutEtudiant{
+    position: absolute;
+    height: 600px;
+    width: 60%;
+    margin: 0 20%;
+    margin-top: 100px;
+    padding: 0 5%;
+    overflow: scroll;
+}
+.etudiantDetails{
+    position: absolute;
+    height: 600px;
+    width: 60%;
+    margin: 0 20%;
+    margin-top: 100px;
+}

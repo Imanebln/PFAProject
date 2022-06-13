@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Button } from "reactstrap";
+import './sharedStyling.css'
 
 const Nav = () => {
     const handleLogout = () => {
@@ -9,31 +9,27 @@ const Nav = () => {
         window.location.href = "/";
       };
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 ">
-			<div className="container">
-				<ul className="navbar-nav mr-auto">
-					<NavLink className="navbar-brand" hrefLang="https://henok.us" to="/Dashboard">
-						PFEProgress
+		<nav className="Navv">
+				<ul>
+				<li className="Right"><NavLink className="nav-link" hrefLang="https://henok.us" to="/Dashboard">
+					<p>	PFEProgress</p>
 					</NavLink>
+					</li>	
 					
-					<li className="nav-item">
+					<li className="Left">
 						<NavLink
 							className="nav-link"
-							activeClassName="active"
 							to={'/Etudiant'}
 						>
-							Espace Etudiant
+							<p>Espace Etudiant</p>
 						</NavLink>
 					</li>
                     {/* <li className="nav-item">
                     <Button class="btn-nav"
                             onClick={handleLogout}>Logout</Button>
 
-                    </li> */}
-                    
-					
+                    </li> */}	
 				</ul>
-			</div>
 		</nav>
 	);
 };

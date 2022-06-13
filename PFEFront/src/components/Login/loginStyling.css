@@ -1,0 +1,56 @@
+@media screen and (max-width: 320px) {
+   .loginDiv .Right{
+    display: none;
+   }
+   .loginDiv {
+    flex: none;
+   }
+   .loginDiv .Left{
+    width: 100%;
+    transform: translate(50%, 0%);
+   }
+   .mb-3{
+    width: 100%;
+   }
+  }
+.loginDiv{
+    display: flex;
+    flex-direction: row;
+    height: 550px;
+    margin: 0 10% 0 5%;
+}
+.loginDiv .Right{
+    width: 50%;
+}
+.loginDiv .Right img{
+    width: 100%;
+    height: 100%;
+}
+.loginDiv .Left{
+    width: 50%;
+}
+.myForm{
+    transform: translate(0%, 80%);
+}
+.p-2{
+height: 100%;
+border: none;
+}
+.myButton{
+    background-color:#31CBAF ;
+    border: none;
+    width: 100%;
+}
+.buttonDiv{
+    text-align: center;
+    margin: 0 15%;
+}
+.myForm .msgCon{
+    text-align: center;
+    padding-bottom: 10px;
+    font-size: 30px;
+    color: #4a5162;
+}
+.myInput{
+    margin: 0 15%;
+}

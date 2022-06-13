@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {Row, Col, Container,Button} from 'reactstrap';
+import {Row, Col, Container} from 'reactstrap';
 import DropDownJury1 from "./DropDownJury1";
 import DropDownJury2 from "./DropDownJury2";
 import DatePicker from "react-datepicker";
@@ -11,12 +11,10 @@ import { post } from "axios";
 import { format } from 'date-fns';
 import Moment from 'moment';
 import {FaCheck} from "react-icons/fa";
-
+import './CrudStyling.css'
 function EtudiantDetails(props) {
 	
     
- 
-
     useEffect(() => {
         if(window.location.hash !== "#2") {
             window.location.href += "#2";
@@ -45,8 +43,8 @@ function EtudiantDetails(props) {
     console.log({Etud});
 
     const [dateStc, setDateStc] = useState(new Date());
-    const [heureDebut, setHeureDebut] = useState();
-    const [heureFin, setHeureFin] = useState();
+    const [heureDebut, setHeureDebut] = useState("14:00");
+    const [heureFin, setHeureFin] = useState("16:00");
 
     const EncadAca = localStorage.getItem('encAca');
     const EncadAcajson = JSON.parse(EncadAca);
@@ -57,7 +55,7 @@ function EtudiantDetails(props) {
     function confirmerSoutenance(){
         async function postStc(){
             try {
-                await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd-MM-yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`);
+                await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`);
                 console.log("Soutenance ajoutee");
             } 
             catch (error) {
@@ -67,13 +65,14 @@ function EtudiantDetails(props) {
     postStc();
     }
 
-
+    
+    console.log({Etud});
 	return (
-		<div className="container">
+		<div className="etudiantDetails" >
             <h2>Etudiant Details</h2>
           
-			<br></br>
-            <div className="container" style={{width: '70%'}}>
+			<hr></hr>
+            <div>
             <p>
             <form>
             <Container>
@@ -94,7 +93,7 @@ function EtudiantDetails(props) {
                     <input name="nom"
 						        type="text"
 						        value={Etudjson.nom}
-					        	className="form-control" disabled/>
+					        	className="form-control" />
                 </div>
                 </div>
 
@@ -104,7 +103,7 @@ function EtudiantDetails(props) {
                 <input name="prenom"
                     type="text"
                     value={Etudjson.prenom}
-                    className="form-control" disabled/>
+                    className="form-control" />
                 </div>
                 </div>
                 </div>
@@ -116,7 +115,7 @@ function EtudiantDetails(props) {
                 <input name="email"
                     type="text"
                     value={Etudjson.email}
-                    className="form-control" disabled/>
+                    className="form-control" />
                 </div>
                 </div>
                 <div className="col">
@@ -125,7 +124,7 @@ function EtudiantDetails(props) {
                 <input name="sujet"
                     type="text"
                     value={pfejson.sujet}
-                    className="form-control" disabled />
+                    className="form-control" />
                 </div>
                 </div>
                 </div>
@@ -137,7 +136,7 @@ function EtudiantDetails(props) {
                 <input name="technologiesUtilisees"
                     type="text"
                     value={pfejson.technologiesUtilisees}
-                    className="form-control" disabled />
+                    className="form-control" />
                 </div>
                 </div>
 
@@ -147,7 +146,7 @@ function EtudiantDetails(props) {
                 <input name="nomSociete"
                     type="text"
                     value={pfejson.nomSociete}
-                    className="form-control" disabled/>
+                    className="form-control" />
                 </div>
                 </div>
                 </div>
@@ -160,7 +159,7 @@ function EtudiantDetails(props) {
                 <input name="ville"
                     type="text"
                     value={pfejson.ville}
-                    className="form-control" disabled />
+                    className="form-control" />
                 </div>
                 </div>
                 
@@ -170,19 +169,18 @@ function EtudiantDetails(props) {
                 <input name="annee"
                     type="text"
                     value={pfejson.annee}
-                    className="form-control" disabled/>
+                    className="form-control" />
                 </div>
                 </div>
                 </div>
-                    
                 <div className="row">
-                <div className="col">  
+                <div className="col">
                 <div  className="form-group">
-                <label>Email Encadrant</label>
-                <input name="emailEncadrant"
+                    <label>Email Encadrant</label>
+                    <input name="emailEncadrant"
                     type="text"
                     value={pfejson.emailEncadrant}
-                    className="form-control" disabled/>
+                    className="form-control" />
                 </div>
                 </div>
                 <div className="col">
@@ -195,7 +193,9 @@ function EtudiantDetails(props) {
                 </div>
                 </div>
                 </div>
+
                 <br></br>
+                
                 <div className="row">
                     <div className="col">
                     <div>
@@ -216,7 +216,7 @@ function EtudiantDetails(props) {
                         <div className="col">
                         <div className="form-group">
                         <label>Date de Soutenance</label>
-                        <DatePicker  dateFormat="dd-MM-yyyy" selected={dateStc} onChange={(date) => {let dt = Moment(date).format("dd-MM-yyyy");setDateStc(date);console.log("dateStc : " + format(dateStc, 'dd-MM-yyyy'));console.log("date : " + dateStc)}}/>
+                        <DatePicker  dateFormat="dd-MM-yyyy" selected={dateStc} onChange={(date) => {let dt = Moment(date).format("dd/MM/yyyy");setDateStc(date);console.log("dateStc : " + format(dateStc, 'dd/MM/yyyy'));console.log("date : " + dateStc)}}/>
                         </div>
 
                         </div>
@@ -224,7 +224,7 @@ function EtudiantDetails(props) {
                         <div className="form-group">
                          <label>Heure du debut:</label>
                          <br></br>
-                         <TimePicker  onChange={(heuredebut) => setHeureDebut(heuredebut)} value={heureDebut}/>
+                         <TimePicker  format={"HH:mm"}  onChange={(heuredebut) => setHeureDebut(heuredebut)} value={heureDebut}/>
                          </div> 
                             
                         </div>
@@ -232,7 +232,7 @@ function EtudiantDetails(props) {
                         <div className="form-group">
                         <label>Heure de fin:</label>
                         <br></br>
-                        <TimePicker onChange={(heurefin) => {setHeureFin(heurefin);console.log("heure fin : " + heurefin)}} value={heureFin} />
+                        <TimePicker format={"HH:mm"} onChange={(heurefin) => {setHeureFin(heurefin);console.log("heure fin : " + heurefin)}} value={heureFin} />
                         </div>
                        
                         </div>
@@ -240,12 +240,11 @@ function EtudiantDetails(props) {
                         <div className="col">
                         <div>
                         <br></br>
-                        <Button className="btn btn-success"  onClick={()=>{confirmerSoutenance();}}><FaCheck/></Button>
+                        <button className="btn btn-success"  onClick={()=>{confirmerSoutenance();}}><FaCheck/></button>
                         </div>
                         </div>
                     </div>
-                
-                
+               
             </form>
           
           </p>

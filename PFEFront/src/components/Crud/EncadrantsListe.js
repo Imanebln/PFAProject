@@ -4,14 +4,10 @@ import { useNavigate, useParams  } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Table, Button, Row } from 'reactstrap';
 import { Container,Col } from 'reactstrap';
-import { CSVLink } from "react-csv";
-
-import { NavigateBefore } from "@material-ui/icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
+import { FaTrash, FaEye } from "react-icons/fa";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import EncadrantDetails from "./EncadrantDetails";
+import './CrudStyling.css'
 toast.configure();
 
 function EncadrantsListe(props) {
@@ -121,7 +117,7 @@ function EncadrantsListe(props) {
   
 
 	return ( 
-		<div className="div-margin">
+		<div className="encadrantListe">
             <h4>Encadrants</h4>
             <Container>
                 <Row>

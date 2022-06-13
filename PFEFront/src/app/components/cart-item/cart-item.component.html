@@ -1,0 +1,10 @@
+<div class="cart-item">
+  <div class="image">
+    <ion-img [src]="item.image"></ion-img>
+  </div>
+
+  <div class="description">
+    <h3>{{ item.name }}</h3>
+    <p><sup>$</sup>{{ item.price | number: "1.2" }}</p>
+  </div>
+</div>

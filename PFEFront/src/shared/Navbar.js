@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Button } from "reactstrap";
+import { AiOutlineMenu } from 'react-icons/ai';
 
 const Navbar = () => {
 	const handleLogout = () => {
@@ -9,49 +9,35 @@ const Navbar = () => {
         window.location.href = "/";
       };
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 ">
-			<div className="container">
-				<ul className="navbar-nav mr-auto">
-					<NavLink className="navbar-brand"  to="/Dashboard">
-						PFEProgress
-					</NavLink>
-					
+	<nav className="NavvBar">
+	<div className="Right">
+	<NavLink to="/Dashboard" className="nav-link">
+	<p>PFEProgress</p>
+	</NavLink>
+	</div>
+	<div className="centre"></div>
+	<div className="Left">
+	<AiOutlineMenu className="iconMenu"/>
+		<ul>
+			<li>
+			<NavLink className="nav-linke" to={'/EncadrantsListe'}>
+				<p>Encadrants</p>
+			</NavLink>
+			</li>
 
-					<li className="nav-item">
-						<NavLink className="nav-link" activeClassName="active" to={'/EncadrantsListe'}>
-							Encadrants
-						</NavLink>
-					</li>
-					<li className="nav-item">
-						<NavLink
-							className="nav-link"
-							activeClassName="active"
-							to={'/EtudiantsListe'}>
-							Etudiants
-						</NavLink>
-					</li>
-					{/* <li className="nav-item">
-						<NavLink
-							className="nav-link"
-							activeClassName="active"
-							to={'/LoginToken'}
-						>
-							Login
-						</NavLink>
-					</li> */}
-					<li className="nav-item">
-					<NavLink
-							className="nav-link"
-							activeClassName="active"
-							to={'/LoginToken'}
-							onClick={handleLogout}
-						>
-							Logout
-						</NavLink>
-                    </li>
-					
-				</ul>
-			</div>
+			<li>
+			<NavLink className="nav-linke" to={'/EtudiantsListe'}>
+				<p>Etudiants</p>
+			</NavLink>
+			</li>
+
+			<li>
+			<NavLink className="nav-linke" to={'/LoginToken'} onClick={handleLogout}>
+				<p>Logout</p>
+			</NavLink>
+			</li>
+		</ul>
+	</div>
 		</nav>
 	);
 };

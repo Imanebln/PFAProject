@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import EtudiantsListe from "./EtudiantsListe";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './CrudStyling.css'
 toast.configure();
 
 function AjouterEtudiant(props) {
@@ -60,12 +61,10 @@ function AjouterEtudiant(props) {
 		
 
 	return (
-		<div className="container" style={{ maxWidth: "60%" }}>
+		<div className="ajoutEtudiant">
 			<h2>Ajouter un Etudiant</h2>
 			<hr />
             <form onSubmit={handleSubmit}>
-			<div className="row">
-            <div className="col">
 			<div className="form-group">
 					<label>Username</label>
 					<input
@@ -77,8 +76,6 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>	
-				<div className="col">
 				<div className="form-group">
 					<label>Nom</label>
 					<input
@@ -90,8 +87,6 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
-				<div className="col">
 				<div className="form-group">
 					<label>Prenom</label>
 					<input
@@ -103,11 +98,6 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
-				</div>
-				<br></br>
-				<div className="row">
-				<div className="col">
 				<div className="form-group">
 					<label>Email</label>
 					<input
@@ -120,9 +110,7 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
 				<br></br>
-				<div className="col">
 				<div className="form-group">
 					<label>Email Encadrant</label>
 					<input
@@ -135,11 +123,6 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
-				</div>
-				<br></br>
-				<div className="row">
-				<div className="col">
 				<div className="form-group">
 					<label>Sujet</label>
 					<input
@@ -151,9 +134,7 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
 				<br/>
-				<div className="col">
 				<div className="form-group">
 					<label>Nom de societe</label>
 					<input
@@ -165,12 +146,8 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
-				</div>
 				<br>
 				</br>
-				<div className="row">
-				<div className="col">
 				<div className="form-group">
 					<label>Ville</label>
 					<input
@@ -182,9 +159,7 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
 				<br/>
-				<div className="col">
 				<div className="form-group">
 					<label>technologie utilise</label>
 					<input
@@ -196,9 +171,7 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
 				<br/>
-				<div className="col">
 				<div className="form-group">
 					<label>Annee</label>
 					<input
@@ -210,11 +183,8 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				</div>
-				</div>
 				<br/>
-				<div className="row" style={{ maxWidth: "40%" }}>
-				<div className="btn-group">
+				<div className="buttons">
 					<input type="submit" value="Submit" className="btn btn-primary" />
 					<button
 						type="button"
@@ -223,7 +193,6 @@ function AjouterEtudiant(props) {
 					>
 						Cancel
 					</button>
-				</div>
 				</div>
 				
 			</form>

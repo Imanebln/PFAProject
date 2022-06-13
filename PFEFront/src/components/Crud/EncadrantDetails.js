@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import './CrudStyling.css'
 
 function EncadrantDetails(props) {
 	
@@ -26,10 +25,10 @@ function EncadrantDetails(props) {
     
     console.log({encad});
 	return (
-		<div className="container" style={{width: '70%'}}>
+		<div className="encadrantDetails">
            
 			<h2>Encadrant Details</h2>
-            <br></br>
+            <hr></hr>
             <div className="container">
             <p>
             <form className="container-sm">
