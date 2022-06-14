@@ -34,31 +34,7 @@ namespace PFE.Controllers
         /*[Authorize(Roles = "Admin")]*/
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PFEModel>>> GetEtudiantsByYear(int annee)
-        {
-            var data = _context.Etudiants
-            .Join(
-            _context.PFEs,
-            etudiant => etudiant.Id,
-            pfe => pfe.EtudiantId,
-            (etudiant, pfe) => new
-            {
-                id = etudiant.Id,
-                nom = etudiant.Nom,
-                prenom = etudiant.Prenom,
-                filiere = etudiant.Filiere,
-                email = etudiant.Email,
-                passwordHash = etudiant.PasswordHash,
-                username = etudiant.UserName,
-                sujet = pfe.Sujet,
-                emailEncadrant = pfe.EmailEncadrant,
-                nomsociete = pfe.NomSociete,
-                techno = pfe.TechnologiesUtilisees,
-                ville = pfe.Ville,
-                annee = pfe.Annee,
-
-            }
-        ).ToList();
-           
+        {           
             return await _context.PFEs.Include(e => e.Etudiant).Where(e => e.Annee == annee).ToListAsync();
         }
 
