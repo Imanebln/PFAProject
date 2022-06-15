@@ -54,6 +54,7 @@ padding-top: 20px;
     width: 30px;
     height: 30px;
     color: rgb(126, 123, 123);
+    cursor: pointer;
 }
 .Left ul{
    display: none;
@@ -72,7 +73,6 @@ padding-top: 20px;
 }
 .Left ul li {
       display: block;
-      padding: 0 5px;
 }
 .Left ul li:not(:last-child) {
     border-bottom: 1px solid rgb(126, 123, 123) ;
@@ -81,7 +81,7 @@ padding-top: 20px;
     content: "";
     position: relative;
     left: 0px;
-    top:-140px;
+    top:-180px;
     z-index: 100;
     display : inline-block;
     height : 0;

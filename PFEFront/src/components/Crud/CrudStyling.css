@@ -6,6 +6,14 @@
     padding: 5% 10%;
     overflow: scroll;
 }
+.soutenanceDiv{
+    position: absolute;
+    margin-top: 100px;
+    height: 600px;
+    width: 100%;
+    padding: 5% 10%;
+    overflow: scroll;
+}
 .ajoutEncadrant{
     position: absolute;
     height: 600px; 

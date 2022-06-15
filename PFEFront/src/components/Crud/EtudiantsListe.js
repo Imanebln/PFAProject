@@ -68,7 +68,6 @@ function EtudiantsListe(props) {
         setEtudiants(res.data);
          getEtudiantsList(annee);
         // console.log(res);
-
       }
       
     } catch (ex) {
@@ -164,11 +163,14 @@ function EtudiantsListe(props) {
   const [pfe,setPfe] = useLocalStorage("pfe",{})
 
   const [encadAca, setEncadAca] = useLocalStorage("encAca",{});
+
   function EncadrantAcademique(e){
         async function postEnc(){
             try {
-                await post(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+                await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+                  
                     setEncadAca(res.data);
+                    console.log(encadAca);
                 });
             } 
             catch (error) {

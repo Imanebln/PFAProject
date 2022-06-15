@@ -32,6 +32,12 @@ const Navbar = () => {
 			</li>
 
 			<li>
+			<NavLink className="nav-linke" to={'/SoutenancesListe'}>
+				<p>Soutenances</p>
+			</NavLink>
+			</li>
+
+			<li>
 			<NavLink className="nav-linke" to={'/LoginToken'} onClick={handleLogout}>
 				<p>Logout</p>
 			</NavLink>

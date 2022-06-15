@@ -22,13 +22,13 @@ function SoutenancesListe(props) {
     const [date,setDate] = useState((new Date()));
     const [soutenances,setSoutenances] = useState([]);
     useEffect(() => {
-      axios.post(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.get(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
         setSoutenances(res.data);
     })
   }, [])
   async function getSoutenancesListe(){
     try {
-      axios.post(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.get(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);  
       setSoutenances(res.data);
     })} 
@@ -38,7 +38,7 @@ function SoutenancesListe(props) {
   }
  
 	return ( 
-		<div className="div-margin">
+		<div className="soutenanceDiv">
       <br></br>
       <br></br>
             <h4>Liste des soutenances</h4>

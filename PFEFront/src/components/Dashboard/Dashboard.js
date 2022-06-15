@@ -21,6 +21,10 @@ export default function Dashboard() {
                 <p>Etudiants</p>
               </NavLink>
             
+              <NavLink className='nav-link' to={'/SoutenancesListe'}>
+                <p>Soutenances</p>
+              </NavLink>
+
               <NavLink className='nav-link' to={'/LoginToken'} onClick={handleLogout}>
                 <p>Logout</p>
               </NavLink>
