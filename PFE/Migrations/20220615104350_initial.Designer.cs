@@ -12,7 +12,7 @@ using PFE.Data;
 namespace PFE.Migrations
 {
     [DbContext(typeof(PFEContext))]
-    [Migration("20220613130842_initial")]
+    [Migration("20220615104350_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -467,7 +467,7 @@ namespace PFE.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EncadrantId")
+                    b.Property<int?>("EncadrantId")
                         .HasColumnType("int");
 
                     b.Property<int>("EtudiantId")
@@ -621,9 +621,7 @@ namespace PFE.Migrations
                 {
                     b.HasOne("PFE.Models.Encadrant", "Encadrant")
                         .WithMany("PFEs")
-                        .HasForeignKey("EncadrantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EncadrantId");
 
                     b.HasOne("PFE.Models.Etudiant", "Etudiant")
                         .WithOne("PFE")

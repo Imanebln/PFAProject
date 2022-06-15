@@ -26,7 +26,7 @@ function EtudiantsListe(props) {
 
     const [etudiants,setEtudiants]= useState([]);
   useEffect(() => {
-    axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+    axios.post(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       // console.log(res);
       setEtudiants(res.data);
     })
@@ -35,7 +35,7 @@ function EtudiantsListe(props) {
   const[annee, setAnnee] = useState((new Date()).getFullYear());
   async function getEtudiantsList(){
     try {
-      axios.get(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.post(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       // console.log(res);
       setEtudiants(res.data);
     })} 
@@ -167,7 +167,7 @@ function EtudiantsListe(props) {
   function EncadrantAcademique(e){
         async function postEnc(){
             try {
-                await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+                await post(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
                     setEncadAca(res.data);
                 });
             } 
@@ -231,10 +231,7 @@ function EtudiantsListe(props) {
 			} catch (error) {
 				console.log("error", error);
 			}
-      
-      
 }
-
 postaffect();
 }
 

@@ -9,7 +9,7 @@
         public int Annee { get; set; }
         public string NomSociete { get; set; }
         public string TechnologiesUtilisees { get; set; }
-        public int EncadrantId { get; set; }
+        public int? EncadrantId { get; set; }
         public Encadrant Encadrant { get; set; }
         public int EtudiantId { get; set; }
         public Etudiant Etudiant { get; set; }
