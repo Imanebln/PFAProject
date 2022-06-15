@@ -259,7 +259,7 @@ namespace PFE.Controllers
                 PFEModel pfe = new PFEModel();
 
                 pfe.EtudiantId = etudiant.Id;
-                pfe.EncadrantId = _context.Encadrants.First().Id;
+                //pfe.EncadrantId = _context.Encadrants.First().Id;
                 pfe.Sujet = item.Value.Sujet;
                 pfe.NomSociete = item.Value.NomSociete;
                 pfe.Ville = item.Value.Ville;
@@ -465,6 +465,19 @@ namespace PFE.Controllers
                 {
                     _context.Encadrants.Remove(encadrant);
                     _context.Users.Remove(us);
+
+                    var pfe = _context.PFEs.Where(s => s.EncadrantId == id);
+                    if (pfe != null)
+                    {
+                        foreach (var row in pfe)
+                            row.EncadrantId = null;
+                    }
+
+                    var stc = _context.Soutenance.Where(s => s.PFE.EncadrantId == id).FirstOrDefault();
+                    if (stc != null)
+                    {
+                         _context.Soutenance.Remove(stc);
+                    }
                     await _context.SaveChangesAsync();
                 }
                 
@@ -536,28 +549,32 @@ namespace PFE.Controllers
             //fetching and filter specific member id record   
             //delete from pfe first
 
-            var pfe = await _context.PFEs.FindAsync(id);
+            var pfe = _context.PFEs.Where(p => p.Id == id).FirstOrDefault();
 
             if(pfe != null)
             {
-                var etudiant = await _context.Etudiants.FindAsync(pfe.EtudiantId);
+                var etudiant = _context.Etudiants.Where(e => e.Id == pfe.EtudiantId).FirstOrDefault();
                 if (etudiant != null)
                 {
-                    var us = await _context.Users.FindAsync(etudiant.UserId);
+                    var us = _context.Users.Where(u => u.Id == etudiant.UserId).FirstOrDefault();
                     if (us != null)
                     {
                         _context.PFEs.Remove(pfe);
                         _context.Etudiants.Remove(etudiant);
                         _context.Users.Remove(us);
 
+                        var stc = _context.Soutenance.Where(s => s.PFE.Id == id).FirstOrDefault();
+                        if(stc != null)
+                        {
+                            _context.Soutenance.Remove(stc);
+                        }
+
                         await _context.SaveChangesAsync();
                     }
                 }
 
             }
-         
             return NoContent();
-
         }
         
         [Route("AffecterEncadrant")]
@@ -578,7 +595,7 @@ namespace PFE.Controllers
         
         //get encadrant by id pfe
         [Route("GetEncadrantByIdPFE")]
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<PFEModel>> GetEncadrantByIdPFE(int id)
         {
@@ -666,13 +683,11 @@ namespace PFE.Controllers
         // Get Soutenance par Date 
 
         [Route("GetSoutenanceByDate")]
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceByDate(string date)
         {
-            return await _context.Soutenance.Where(s => s.Date == date).ToListAsync();
+            return await _context.Soutenance.Include(s => s.PFE.Etudiant).Where(s => s.Date == date).ToListAsync();
         }
-
-
     }
 }

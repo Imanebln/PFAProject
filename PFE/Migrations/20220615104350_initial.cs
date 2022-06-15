@@ -267,7 +267,7 @@ namespace PFE.Migrations
                     Annee = table.Column<int>(type: "int", nullable: false),
                     NomSociete = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TechnologiesUtilisees = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EncadrantId = table.Column<int>(type: "int", nullable: false),
+                    EncadrantId = table.Column<int>(type: "int", nullable: true),
                     EtudiantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -277,8 +277,7 @@ namespace PFE.Migrations
                         name: "FK_PFEs_Encadrants_EncadrantId",
                         column: x => x.EncadrantId,
                         principalTable: "Encadrants",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PFEs_Etudiants_EtudiantId",
                         column: x => x.EtudiantId,

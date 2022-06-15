@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams  } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { Table, Button, Row } from 'reactstrap';
-import { Container,Col } from 'reactstrap';
-import { CSVLink } from "react-csv";
-
-import { NavigateBefore } from "@material-ui/icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
+import { FaTrash, FaEye } from "react-icons/fa";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
@@ -29,13 +22,13 @@ function SoutenancesListe(props) {
     const [date,setDate] = useState((new Date()));
     const [soutenances,setSoutenances] = useState([]);
     useEffect(() => {
-      axios.get(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.post(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
         setSoutenances(res.data);
     })
   }, [])
   async function getSoutenancesListe(){
     try {
-      axios.get(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+      axios.post(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
       console.log(res);  
       setSoutenances(res.data);
     })} 

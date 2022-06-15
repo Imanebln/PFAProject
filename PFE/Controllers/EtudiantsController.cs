@@ -29,7 +29,7 @@ namespace PFE.Controllers
 
 
         //Get by year
-        [HttpGet]
+        [HttpPost]
         [Route("GetByYear")]
         /*[Authorize(Roles = "Admin")]*/
         [AllowAnonymous]
