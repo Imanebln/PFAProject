@@ -66,7 +66,7 @@ function EtudiantsListe(props) {
       else{
         const res = await axios.post(`https://localhost:7004/api/Authenticate/UploadExcelFile?year=${annee}`, formData);
         setEtudiants(res.data);
-        // getEtudiantsList(annee);
+         getEtudiantsList(annee);
         // console.log(res);
 
       }
@@ -234,7 +234,23 @@ function EtudiantsListe(props) {
 }
 postaffect();
 }
+const [hasEnc, setHasEnc] = useState();
+useEffect(() => {
+    async function HasEncadrant() {
+      try {
+        console.log("before get")
+				axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${pfe.id}`).then(res =>{
+          console.log(res.data);
+          console.log(" after get");});
+			} 
+      catch (error) {
+				console.log("error", error);
+			}
+    }
+    HasEncadrant();
+});
 
+//console.log(hasEnc + " 2");
 
 	return (
     
@@ -298,14 +314,12 @@ postaffect();
 
             <td>
 
-              <Link to={{ pathname: "/EtudiantDetails" }}>
-                <Button color="primary" variant="primary" onClick={() => { setEtud(etudiant.etudiant); setPfe(etudiant); EncadrantAcademique(etudiant); } }>
-                  {/* {console.log({etud})} */}
-
-                  <FaEye />
+              {/* HasEncadrant(etudiant);  */}
+                <Button color="primary" variant="primary" onClick={() => { 
+                  setEtud(etudiant.etudiant); setPfe(etudiant); EncadrantAcademique(etudiant); } }>
+                    <Link to={{ pathname: "/EtudiantDetails" }}><FaEye /></Link>
+                
                 </Button>
-
-              </Link>
             </td>
             <td>
               <Button className="btn btn-danger" onClick={() => handleDelete(etudiant)}><FaTrash /></Button>
