@@ -194,7 +194,7 @@ function EtudiantDetails(props) {
                 <label>Encadrant Academique </label>
                 <input name="EncAca"
                     type="text"
-                    value={EncadAcajson.encadrant.nom +" "+ EncadAcajson.encadrant.prenom }
+                    value={EncadAcajson != null ? EncadAcajson.encadrant.nom +" "+ EncadAcajson.encadrant.prenom : " " }
                     className="form-control" disabled/>
                 </div>
                 </div>
@@ -222,7 +222,7 @@ function EtudiantDetails(props) {
                         <div className="col">
                         <div className="form-group">
                         <label>Date de Soutenance</label>
-                        <DatePicker  dateFormat="dd-MM-yyyy" selected={dateStc} onChange={(date) => {let dt = Moment(date).format("dd/MM/yyyy");setDateStc(date);console.log("dateStc : " + format(dateStc, 'dd/MM/yyyy'));console.log("date : " + dateStc)}}/>
+                        <DatePicker  dateFormat="dd-MM-yyyy" selected={dateStc} onChange={(date) => {setDateStc(date)}}/>
                         </div>
 
                         </div>

@@ -153,8 +153,7 @@ namespace PFE.Controllers
                 Ville = model.Ville,
                 Annee = model.Annee,
                 TechnologiesUtilisees = model.TechnologiesUtilisees,
-                EmailEncadrant = model.EmailEncadrant,
-                EncadrantId = _context.Encadrants.First().Id
+                EmailEncadrant = model.EmailEncadrant
             };
            
             
@@ -259,7 +258,6 @@ namespace PFE.Controllers
                 PFEModel pfe = new PFEModel();
 
                 pfe.EtudiantId = etudiant.Id;
-                pfe.EncadrantId = _context.Encadrants.First().Id;
                 pfe.Sujet = item.Value.Sujet;
                 pfe.NomSociete = item.Value.NomSociete;
                 pfe.Ville = item.Value.Ville;
@@ -671,5 +669,15 @@ namespace PFE.Controllers
 
             return await _context.Soutenance.ToListAsync();
         }
+
+        [HttpGet]
+        [Route("GetSoutenanceByDate")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceByDate(string date)
+        {
+            return await _context.Soutenance.Include(e => e.PFE.Etudiant).Where(e => e.Date == date).ToListAsync();
+        }
+
     }
 }

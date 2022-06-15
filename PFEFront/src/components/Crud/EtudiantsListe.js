@@ -66,7 +66,7 @@ function EtudiantsListe(props) {
       else{
         const res = await axios.post(`https://localhost:7004/api/Authenticate/UploadExcelFile?year=${annee}`, formData);
         setEtudiants(res.data);
-        // getEtudiantsList(annee);
+        getEtudiantsList(annee);
         // console.log(res);
 
       }
@@ -164,11 +164,14 @@ function EtudiantsListe(props) {
   const [pfe,setPfe] = useLocalStorage("pfe",{})
 
   const [encadAca, setEncadAca] = useLocalStorage("encAca",{});
+
   function EncadrantAcademique(e){
         async function postEnc(){
             try {
-                await post(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+                await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+                  
                     setEncadAca(res.data);
+                    console.log(encadAca);
                 });
             } 
             catch (error) {
