@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lenovo\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj": {}
+    "C:\\Users\\HP\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lenovo\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj": {
+    "C:\\Users\\HP\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lenovo\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj",
         "projectName": "PFE",
-        "projectPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj",
-        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\PFAProject\\PFE\\obj\\",
+        "projectPath": "C:\\Users\\HP\\Documents\\GitHub\\PFAProject\\PFE\\PFE.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\Documents\\GitHub\\PFAProject\\PFE\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -117,7 +117,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

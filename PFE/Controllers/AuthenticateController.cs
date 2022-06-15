@@ -154,7 +154,7 @@ namespace PFE.Controllers
                 Annee = model.Annee,
                 TechnologiesUtilisees = model.TechnologiesUtilisees,
                 EmailEncadrant = model.EmailEncadrant,
-                EncadrantId = _context.Encadrants.First().Id
+                //EncadrantId = _context.Encadrants.First().Id
             };
            
             
@@ -259,7 +259,7 @@ namespace PFE.Controllers
                 PFEModel pfe = new PFEModel();
 
                 pfe.EtudiantId = etudiant.Id;
-                pfe.EncadrantId = _context.Encadrants.First().Id;
+                //pfe.EncadrantId = _context.Encadrants.First().Id;
                 pfe.Sujet = item.Value.Sujet;
                 pfe.NomSociete = item.Value.NomSociete;
                 pfe.Ville = item.Value.Ville;
@@ -274,6 +274,8 @@ namespace PFE.Controllers
 
             return await _context.Etudiants.ToListAsync();
         }
+
+
 
         [HttpPost]
         [Route("add-encadrant")]
@@ -670,6 +672,37 @@ namespace PFE.Controllers
             }
 
             return await _context.Soutenance.ToListAsync();
+        }
+
+
+        [HttpGet]
+        [Route("GetSoutenanceByDate")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceByDate(string date)
+        {
+            return await _context.Soutenance.Include(e => e.PFE.Etudiant).Where(e => e.Date == date).ToListAsync();
+        }
+
+        [HttpGet]
+        [Route("HasEncadrant")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
+        public bool HasEncadrant(int id)
+        {
+            var test = _context.PFEs.Where(e => e.Id == id).FirstOrDefault();
+            if(test != null)
+            {
+                if (test.EncadrantId == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
