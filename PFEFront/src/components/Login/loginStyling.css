@@ -30,7 +30,8 @@
     width: 50%;
 }
 .myForm{
-    transform: translate(0%, 80%);
+    transform: translate(0%, 75%);
+    width: 100%;
 }
 .p-2{
 height: 100%;
@@ -53,4 +54,19 @@ border: none;
 }
 .myInput{
     margin: 0 15%;
+}
+.show{
+    margin: 2% 15%;
+    text-align: center;
+}
+#eye{
+    margin-right: 10px;
+    cursor: pointer;
+}
+.show a{
+    cursor: pointer;
+    margin-top: -5px;
+}
+.show a:hover{
+    color: #31CBAF;
 }

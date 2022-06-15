@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useState } from 'react'; 
-import loginImg from '../../loginImg.png'
+import { useState,useEffect } from 'react'; 
+import loginImg from '../../loginImg.png';
+import getToken from '../../App.js'
 import './loginStyling.css';
+import { AiOutlineEye } from 'react-icons/ai';
+
+
 
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, 
   InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
@@ -22,37 +26,20 @@ export default function LoginToken({ setToken }) {
 
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
-
+  const [msg,setMsg] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+    localStorage.setItem('msg', JSON.stringify(msg));
   const handleSubmit = async e => {
     e.preventDefault();
+    setMsg(true);
     const token = await loginUser({
       username,
       password
     });
-    // if ('accessToken' in token) {
-    //   swal("Success", token.message, "success", {
-    //     buttons: false,
-    //     timer: 2000,
-    //   })
-    //   .then((value) => {
-    //     localStorage.setItem('accessToken', token['accessToken']);
-    //     localStorage.setItem('user', JSON.stringify(token['user']));
-    //     window.location.href = "/profile";
-    //   });
-    // } else {
-    //   swal("Failed", token.message, "error");
-    // }
     setToken(token);
-    // if(setToken(token)){
-    //   console.log("hello world!!!!!");
-    //   this.props.history.push("/Dashboard");
-    // }
-    // else{
-    //   console.log("error !!!!!");
-    // }
-    // setToken(token);
-
-    
   }
 
   return(
@@ -74,12 +61,18 @@ export default function LoginToken({ setToken }) {
                              </div>
 
         <InputGroup className="mb-3">
-          <Input  className="myInput" placeholder="Entrez votre nom d'utilisateur" type="text" onChange={e => setUserName(e.target.value)} />
+          <Input name="usr" className="myInput" placeholder="Entrez votre nom d'utilisateur" type="text" onChange={e => setUserName(e.target.value)} />
           </InputGroup>
        
         <InputGroup className="mb-3">
-          <Input  className="myInput" placeholder="Entrez votre mot de passe" type="password" onChange={e => setPassword(e.target.value)} />
-          </InputGroup>
+          <Input id="pwd" name="pwd" className="myInput" placeholder="Entrez votre mot de passe" type={passwordShown ? "text" : "password"} onChange={e => setPassword(e.target.value)} ></Input>
+        </InputGroup>  
+        <InputGroup className="show">
+        <AiOutlineEye  onClick={togglePassword} id="eye" />
+        <a onClick={togglePassword}>afficher mot de passe</a>
+        </InputGroup>    
+    
+ 
           <div className="buttonDiv">
              <Button className="myButton">Se connecter</Button>
           </div>

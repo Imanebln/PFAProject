@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react'; 
+import { useState , useEffect} from 'react'; 
 import './App.css';  
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -21,6 +21,7 @@ import EncadrantDetails from './components/Crud/EncadrantDetails';
 import EtudiantDetails from './components/Crud/EtudiantDetails';
 import Dropdown from './components/Crud/Dropdown';
 import { Button } from 'reactstrap';
+import swal from 'sweetalert';
 
 function setToken(userToken) {
   sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -28,26 +29,23 @@ function setToken(userToken) {
 }
 
 function getToken() {
-  const tokenString = sessionStorage.getItem('token');
-  const userToken = JSON.parse(tokenString);
-  return userToken?.token
-}
+    const tokenString = sessionStorage.getItem('token');
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+  }
 
 
-function App() {  
-  // const navigate = useNavigate();
-  // const [token, setToken] = useState();
+function App() { 
   const token = getToken();
+  const msg = JSON.parse(localStorage.getItem('msg'));
+if(!token && msg){
+  swal("Nom d'utilisateur ou mot de passe incorrect");
+}
   if(!token) {
     return (
       <>
-      {/* <Navbar/> */}
       <Nav/>
       <LoginToken setToken={setToken} />
-      {/* <Routes>
-        <Route path="/Etudiant" component={Etudiant} element={<Etudiant/>}/>
-     </Routes> */}
-     
       <div className='footer'>
      <Footer/>
      </div>
@@ -55,13 +53,8 @@ function App() {
     </>
     )
   }
-  //else if(token) {
-  //   console.log("hello world!!!!!");
-  // }
-
   return (  
       <>
-      
       <Navbar />
      
       <Routes>

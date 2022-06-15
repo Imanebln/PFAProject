@@ -6,6 +6,7 @@ import EtudiantsListe from "./EtudiantsListe";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './CrudStyling.css'
+import swal from 'sweetalert'
 toast.configure();
 
 function AjouterEtudiant(props) {
@@ -38,7 +39,12 @@ function AjouterEtudiant(props) {
 		async function postCrud() {
 			try {
 				const response = await post("https://localhost:7004/api/Authenticate/add-etudiant", etudiant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
-				
+				swal({
+					text:'Etudiant ajouté',
+					icon: "success",
+					timer:2000,
+					buttons:false
+				  })
 				
 			} catch (error) {
 				console.log("error", error);

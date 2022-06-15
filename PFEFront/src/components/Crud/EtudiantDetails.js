@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import Moment from 'moment';
 import {FaCheck} from "react-icons/fa";
 import './CrudStyling.css'
+import swal from 'sweetalert'
 function EtudiantDetails(props) {
 	
     
@@ -56,7 +57,12 @@ function EtudiantDetails(props) {
         async function postStc(){
             try {
                 await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`);
-                console.log("Soutenance ajoutee");
+                swal({
+                    text:'Soutenance confirmée',
+                    icon: "success",
+                    timer:2000,
+                    buttons:false
+                  })
             } 
             catch (error) {
                 console.log("error", error);

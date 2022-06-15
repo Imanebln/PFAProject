@@ -6,6 +6,8 @@ import EncadrantsListe from "./EncadrantsListe";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './CrudStyling.css'
+import swal from 'sweetalert'
+
 toast.configure();
 
 function AjouterEncadrant(props) {
@@ -31,7 +33,12 @@ function AjouterEncadrant(props) {
 		async function postCrud() {
 			try {
 				const response = await post("https://localhost:7004/api/Authenticate/add-encadrant", encadrant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
-				
+				swal({
+					text:'Encadrant ajouté',
+					icon: "success",
+					timer:2000,
+					buttons:false
+				  })
 				
 			} catch (error) {
 				console.log("error", error);

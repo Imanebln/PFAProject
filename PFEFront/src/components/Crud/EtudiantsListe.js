@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,  useRef} from "react";
 import axios from "axios";
 import { useNavigate, useParams  } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { NavigateBefore } from "@material-ui/icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus, FaCheck} from "react-icons/fa";
 import { post, get } from "axios";
-
+import swal from 'sweetalert';
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
 
@@ -101,7 +101,11 @@ function EtudiantsListe(props) {
       console.log(e)
 			await axios.delete(`https://localhost:7004/api/Authenticate/SuppEtudiant?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEtudiants(etudiants.filter((ele)=> ele.id !== e.id))
-      toast.warning('Etudiant supprime!')
+      swal({
+        text:'Etudiant supprimé',
+        timer:2000,
+        buttons:false
+      })
 		} catch (error) {
 			console.error(error);
 		}
@@ -175,8 +179,7 @@ function EtudiantsListe(props) {
     }
 
 
-
-
+ 
   //encad dropdown
   const Encad = localStorage.getItem('encad');
   const Encadjson = JSON.parse(Encad);
@@ -210,14 +213,21 @@ function EtudiantsListe(props) {
     return [storedValue, setValue];
   }
 
-  const [varLocsto,setVarLocsto] = useLocalStorage("varLoc",false);
-
+ 
+  
 
   function confirmerAffectation(e){
+ 
   async function postaffect(){
       try {
 				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
-        setVarLocsto(true);
+        
+        swal({
+          text: "Affectation réussite!",
+          icon: "success",
+          button:false,
+          timer:2000
+        });
 			} catch (error) {
 				console.log("error", error);
 			}
@@ -265,45 +275,49 @@ postaffect();
         <tbody>
         
         {etudiants.map(etudiant => (
-          <tr>
+          <><tr>
             <td key={etudiant.id}>
-            {etudiant.etudiant.nom} {etudiant.etudiant.prenom}
+              {etudiant.etudiant.nom} {etudiant.etudiant.prenom}
             </td>
             <td>
-            {etudiant.etudiant.email}
+              {etudiant.etudiant.email}
             </td>
             <td>
-            {etudiant.etudiant.filiere}
+              {etudiant.etudiant.filiere}
             </td>
             <td>
-            {/* <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button> */}
+              {/* <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button> */}
             </td>
-            
-            <td>
-            <Dropdown>
-            </Dropdown>
-            </td>
-            <td>
-            <Button className="btn btn-success"  onClick={()=>confirmerAffectation(etudiant)}><FaCheck/></Button>
-            </td>
-            
-            <td>
-            <Link to={{pathname: "/EtudiantDetails"}}>
-             <Button color="primary" variant="primary" onClick={() => {setEtud(etudiant.etudiant);setPfe(etudiant);EncadrantAcademique(etudiant);}} >
-            {/* {console.log({etud})} */}
-            
-            <FaEye/>
-            </Button>
 
-            </Link>
+            <td>
+              <Dropdown>
+              </Dropdown>
             </td>
             <td>
-            <Button className="btn btn-danger" onClick={()=>handleDelete(etudiant)}><FaTrash/></Button>
+              <button key={etudiant.id} className="btn btn-success" onClick={() => {
+                confirmerAffectation(etudiant);
+              } }><FaCheck /></button>
             </td>
-            
 
-          </tr>
+            <td>
 
+              <Link to={{ pathname: "/EtudiantDetails" }}>
+                <Button color="primary" variant="primary" onClick={() => { setEtud(etudiant.etudiant); setPfe(etudiant); EncadrantAcademique(etudiant); } }>
+                  {/* {console.log({etud})} */}
+
+                  <FaEye />
+                </Button>
+
+              </Link>
+            </td>
+            <td>
+              <Button className="btn btn-danger" onClick={() => handleDelete(etudiant)}><FaTrash /></Button>
+            </td>
+
+
+          </tr></>
+         
+         
           ) )}
         </tbody>
       </Table>

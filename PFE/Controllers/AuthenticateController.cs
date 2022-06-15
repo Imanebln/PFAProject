@@ -536,30 +536,34 @@ namespace PFE.Controllers
             //fetching and filter specific member id record   
             //delete from pfe first
 
-            var pfe = await _context.PFEs.FindAsync(id);
+            var pfe = _context.PFEs.Where(p => p.Id == id).FirstOrDefault();
 
-            if(pfe != null)
+            if (pfe != null)
             {
-                var etudiant = await _context.Etudiants.FindAsync(pfe.EtudiantId);
+                var etudiant = _context.Etudiants.Where(e => e.Id == pfe.EtudiantId).FirstOrDefault();
                 if (etudiant != null)
                 {
-                    var us = await _context.Users.FindAsync(etudiant.UserId);
+                    var us = _context.Users.Where(u => u.Id == etudiant.UserId).FirstOrDefault();
                     if (us != null)
                     {
                         _context.PFEs.Remove(pfe);
                         _context.Etudiants.Remove(etudiant);
                         _context.Users.Remove(us);
 
+                        var stc = _context.Soutenance.Where(s => s.PFE.Id == id).FirstOrDefault();
+                        if (stc != null)
+                        {
+                            _context.Soutenance.Remove(stc);
+                        }
+
                         await _context.SaveChangesAsync();
                     }
                 }
 
             }
-         
             return NoContent();
-
         }
-        
+
         [Route("AffecterEncadrant")]
         [HttpPost]
         [AllowAnonymous]

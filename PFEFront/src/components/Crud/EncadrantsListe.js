@@ -8,6 +8,7 @@ import { FaTrash, FaEye } from "react-icons/fa";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './CrudStyling.css'
+import swal from 'sweetalert';
 toast.configure();
 
 function EncadrantsListe(props) {
@@ -52,9 +53,18 @@ function EncadrantsListe(props) {
       console.log(e)
 			await axios.delete(`https://localhost:7004/api/Authenticate/SuppProf?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
-      toast.warning('Encadrant supprime!')
+      swal({
+        text:'Encadrant supprimé',
+        timer:2000,
+        buttons:false
+      })
 		} catch (error) {
-			console.error(error);
+      swal({
+        title:'Encadrant non supprimé',
+        text:'déjà affecté à un étudiant',
+        timer:2000,
+        buttons:false
+      })
 		}
 	}
 

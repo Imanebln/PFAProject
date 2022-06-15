@@ -7,20 +7,16 @@ import { IndeterminateCheckBox } from "@material-ui/icons";
 
 
 const Dropdown = (props) => {
+  
     const [isOpen, setOpen] = useState(false);
-    //const [items, setItem] = useState(data);
+   
     const [selectedItem, setSelectedItem] = useState(null);
     const [dropdownVisibility,setDropdownVisibility] = useState(false);
     // const toggleDropdown = () => {setDropdownVisibility(true)};
     const toggleDropdown = () => {
       setOpen(!isOpen)
     };
-    const varLoc = localStorage.getItem("varLoc");
-    console.log(varLoc);
-    const varLocJSON = JSON.parse(varLoc);
-    if(varLoc == true){
-      setOpen(false);
-    }
+
    useLocalStorage("isop",isOpen);
     const handleItemClick = (id,item) => {
       selectedItem == id ? setSelectedItem(null) : setSelectedItem(id);
@@ -32,7 +28,6 @@ const Dropdown = (props) => {
     const [encadrants,setEncadrants]= useState([]);
   useEffect(() => {
     axios.get('https://localhost:7004/api/Encadrants').then(res => {
-      console.log(res);
       setEncadrants(res.data);
     })
   }, [])
@@ -71,7 +66,6 @@ const Dropdown = (props) => {
   
     return(
         <div className='dropdown'>
-
               <div className='dropdown-header' onClick={toggleDropdown}>
               {selectedItem ? encadrants.find(item => item.nom == selectedItem).nom : "Selectionner un encadrant"}
               <i className={`fa fa-chevron-right icon ${isOpen && "open"}`}></i>
