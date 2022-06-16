@@ -21,6 +21,7 @@ import EncadrantDetails from './components/Crud/EncadrantDetails';
 import EtudiantDetails from './components/Crud/EtudiantDetails';
 import Dropdown from './components/Crud/Dropdown';
 import SoutenancesListe from './components/Crud/SoutenancesListe';
+import SoutenanceDetails from './components/Crud/SoutenanceDetails';
 import { Button } from 'reactstrap';
 import swal from 'sweetalert';
 
@@ -75,6 +76,7 @@ if(!token && msg){
           <Route path="/Etudiant" component={Etudiant} element={<Etudiant/>}/>
           <Route path="/Dropdown" component={Dropdown} element={<Dropdown/>}/>
           <Route path="/SoutenancesListe" component={SoutenancesListe} element={<SoutenancesListe/>}/>
+          <Route path="/SoutenanceDetails" component={SoutenanceDetails} element={<SoutenanceDetails/>}/>
 
       </Routes> 
      <div className='footer'>

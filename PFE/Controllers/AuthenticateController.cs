@@ -607,59 +607,58 @@ namespace PFE.Controllers
         [AllowAnonymous]
         [Route("GererSoutenance")]
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<Soutenance>>> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, string heureDebut, string heureFin)
+        
+        public async Task<IActionResult> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, string heureDebut, string heureFin)
         {
-            var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
-            var enc2 = _context.Encadrants.Where(e => e.Id.Equals(idEncad2)).First();
-
-            Soutenance soutenance = new Soutenance();
-
-            soutenance.PFEId = idPfe;
-            //soutenance.EncadrantId = idEncadPrincipal;
-            soutenance.Date = dateStc.Split(' ')[0];
-            soutenance.HeureDebut = heureDebut;
-            soutenance.HeureFin = heureFin;
-
-            List<Encadrant> list = new List<Encadrant>();
-            //if table soutenance kawya => pas de traitement
-            if (_context.Soutenance.Count() == 0)
+            var stcIdPfe = _context.Soutenance.Any(s => s.PFEId == idPfe);
+            var encadprincipal = _context.PFEs.Include(p => p.Encadrant).Any(e => e.EncadrantId == idEncad1 || e.EncadrantId == idEncad2);
+            if (stcIdPfe == false && idEncad1 != idEncad2 && encadprincipal == false)
             {
-                list.Add(enc1);
-                list.Add(enc2);
+                var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
+                var enc2 = _context.Encadrants.Where(e => e.Id.Equals(idEncad2)).First();
 
-                soutenance.Jury = list;
-                _context.Add(soutenance);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                var testEncad1 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut == heureDebut && s.HeureFin == heureFin)
-                                                                .Include(e => e.Jury).Where(i => i.Id == idEncad1).FirstOrDefault();
+                Soutenance soutenance = new Soutenance();
 
-                if (testEncad1 == null)
+                soutenance.PFEId = idPfe;
+                soutenance.Date = dateStc;
+                soutenance.HeureDebut = heureDebut;
+                soutenance.HeureFin = heureFin;
+                List<Encadrant> list = new List<Encadrant>();
+
+                if (_context.Soutenance.Count() == 0)
                 {
                     list.Add(enc1);
-                }
-                else
-                {
-                    new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance" };
-                }
-                //s.Date == dateStc 
-                //&& DateTime.ParseExact(s.HeureDebut, "HH:mm", CultureInfo.InvariantCulture) >= DateTime.ParseExact(heureDebut, "HH:mm", CultureInfo.InvariantCulture)
-                //&& DateTime.ParseExact(s.HeureFin, "HH:mm", CultureInfo.InvariantCulture) <= DateTime.ParseExact(heureFin, "HH:mm", CultureInfo.InvariantCulture))
-                //.Include(e => e.Jury).Where(i => i.Id == idEncad2).FirstOrDefault();
-                var testEncad2 = _context.Soutenance.Where(s => s.Date == dateStc && s.HeureDebut == heureDebut && s.HeureFin == heureFin)
-                                                                .Include(e => e.Jury).Where(i => i.Id == idEncad2).FirstOrDefault();
-                if (testEncad2 == null)
-                {
                     list.Add(enc2);
                 }
-                else
-                {
-                    new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance" };
-                }
+               else
+               {
+                    var testEncad1 = _context.Soutenance.Any(s => s.Jury.Any(j => j.Id == idEncad1) && s.Date == dateStc
+                                            && s.HeureDebut == heureDebut && s.HeureFin == heureFin);
+
+                    if (testEncad1 == false)
+                    {
+                     list.Add(enc1);
+                    }
+                    else
+                    {
+                        return Ok(new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance " });
+                    }
+
+
+                    var testEncad2 = _context.Soutenance.Any(s => s.Jury.Any(j => j.Id == idEncad2) && s.Date == dateStc
+                                            && s.HeureDebut == heureDebut && s.HeureFin == heureFin);
+                    if (testEncad2 == false)
+                    {
+                        list.Add(enc2);
+                    }
+                    else
+                    {
+                        return Ok(new Response { Status = "Error", Message = enc2.Nom + " " + enc2.Prenom + " est deja affecte a une soutenance" });
+                    }
+               }
 
                 soutenance.Jury = list;
+
                 if (list.Count >= 2)
                 {
                     _context.Add(soutenance);
@@ -667,21 +666,54 @@ namespace PFE.Controllers
                 }
                 else
                 {
-                    new Response { Status = "Error", Message = "Liste invalide" };
+                    return Ok(new Response { Status = "Error", Message = "Liste invalide" });
                 }
+                    
+                return Ok(new Response { Status = "success", Message = "Soutenance ajoutee" });
             }
-
-            return await _context.Soutenance.ToListAsync();
+            else
+            {
+                return Ok(new Response { Status = "error", Message = "pfe a deja une soutenance" });
+            }
+            
         }
 
+        // Get Soutenance par Date 
 
-        [HttpGet]
         [Route("GetSoutenanceByDate")]
-        /*[Authorize(Roles = "Admin")]*/
+        [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceByDate(string date)
         {
-            return await _context.Soutenance.Include(e => e.PFE.Etudiant).Where(e => e.Date == date).ToListAsync();
+            return await _context.Soutenance.Include(j => j.Jury).Include(e => e.PFE.Etudiant).Include(e => e.PFE.Encadrant).Where(s => s.Date == date).ToListAsync();
+        }
+
+        [HttpGet]
+        [Route("GetSoutenanceById")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceById(int id)
+        {
+            return await _context.Soutenance.Include(j => j.Jury).Include(e => e.PFE.Etudiant).Include(e => e.PFE.Encadrant).Where(e => e.Id == id).ToListAsync();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteSoutenance")]
+        [HttpDelete]
+        public async Task<IActionResult> SupprimerSoutenance(int id)
+        {
+
+            //fetching and filter specific member id record   
+            //delete from pfe first
+
+            var stc = _context.Soutenance.Where(p => p.Id == id).FirstOrDefault();
+
+            if (stc != null)
+            {
+                _context.Soutenance.Remove(stc);
+                await _context.SaveChangesAsync();
+            }
+            return NoContent();
         }
 
         [HttpGet]

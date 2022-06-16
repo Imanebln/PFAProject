@@ -6,6 +6,8 @@ import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import DatePicker from "react-datepicker";
+import { Link } from "react-router-dom";
+import swal from 'sweetalert';
 
 toast.configure();
 
@@ -36,6 +38,67 @@ function SoutenancesListe(props) {
       console.log(ex);
     }
   }
+
+  useEffect(
+		function () {
+			async function deleteCrudById() {
+				try {
+					const response = await axios.get(`https://localhost:7004/api/Authenticate/DeleteSoutenance?id=${soutenances.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
+					setSoutenances(response.data);
+				} catch (error) {
+					console.log("error", error);
+				}
+			}
+			deleteCrudById();
+		},
+		[props]
+	);
+
+	async function handleDelete(s) {
+		try {
+
+      console.log(s)
+			await axios.delete(`https://localhost:7004/api/Authenticate/DeleteSoutenance?id=${s.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
+      setSoutenances(soutenances.filter((ele)=> ele.id !== s.id))
+      swal({
+        text:'Soutenance supprimée',
+        timer:2000,
+        buttons:false
+      })
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = useState(() => {
+      if (typeof window === "undefined") {
+        return initialValue;
+      }
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        console.log(error);
+        return initialValue;
+      }
+    });
+
+    const setValue = (value) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
+        setStoredValue(valueToStore);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    return [storedValue, setValue];
+  }
+  const [stc, setStc] = useLocalStorage("stc",{})
  
 	return ( 
 		<div className="soutenanceDiv">
@@ -68,10 +131,12 @@ function SoutenancesListe(props) {
             {soutenance.date}
             </td>
             <td>
-              <Button color="primary"><FaEye/></Button>
+              <Link to = {{pathname: "/SoutenanceDetails"}}>
+              <Button color="primary" onClick={() => setStc(soutenance)}><FaEye/></Button>
+              </Link>
             </td>
             <td>
-              <Button className="btn btn-danger"><FaTrash/></Button>
+              <Button className="btn btn-danger" onClick={() => handleDelete(soutenance)}><FaTrash/></Button>
             </td>
           </tr>
         ))}

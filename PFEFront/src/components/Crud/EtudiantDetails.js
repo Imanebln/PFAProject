@@ -194,7 +194,7 @@ function EtudiantDetails(props) {
                 <label>Encadrant Academique </label>
                 <input name="EncAca"
                     type="text"
-                    value={EncadAcajson != null ? EncadAcajson.encadrant.nom +" "+ EncadAcajson.encadrant.prenom : "" }
+                    value={EncadAcajson.encadrant != null ? EncadAcajson.encadrant.nom +" "+ EncadAcajson.encadrant.prenom : "" }
                     className="form-control" disabled/>
                 </div>
                 </div>

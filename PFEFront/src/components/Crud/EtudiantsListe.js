@@ -168,9 +168,8 @@ function EtudiantsListe(props) {
         async function postEnc(){
             try {
                 await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
-                  
+                    console.log(res.data);
                     setEncadAca(res.data);
-                    console.log(encadAca);
                 });
             } 
             catch (error) {
@@ -236,24 +235,41 @@ function EtudiantsListe(props) {
 }
 postaffect();
 }
-const [hasEnc, setHasEnc] = useState();
-useEffect(() => {
-    async function HasEncadrant() {
+const [hasEnc, setHasEnc] = useState("");
+
+    function HasEncadrant(e) {
+      async function postHasEnc(){
       try {
-        console.log("before get")
-				axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${pfe.id}`).then(res =>{
-          console.log(res.data);
-          console.log(" after get");});
-			} 
-      catch (error) {
+				axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${e.id}`).then(res =>{
+          console.log("res : " + res.data);
+          setHasEnc(res.data);
+          console.log("has fuct "+hasEnc);
+        });
+			}catch (error) 
+      {
 				console.log("error", error);
 			}
     }
-    HasEncadrant();
-});
+    postHasEnc();
+    }
 
-//console.log(hasEnc + " 2");
-
+    useEffect(
+      function () {
+        async function HasEncadrantbyID() {
+          try {
+          axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${pfe.id}`).then(res =>{
+          console.log("res : " + res.data);
+          setHasEnc(res.data);
+          console.log("hasEnc : " + hasEnc);
+          }) 
+        }
+        catch (error) {
+            console.log("error", error);
+        }
+      } HasEncadrantbyID();
+      },
+      [props]
+    );
 	return (
     
 		<div className="etudiantsListe">
@@ -310,18 +326,19 @@ useEffect(() => {
             </td>
             <td>
               <button key={etudiant.id} className="btn btn-success" onClick={() => {
-                confirmerAffectation(etudiant);
+                confirmerAffectation(etudiant); HasEncadrant(etudiant);
               } }><FaCheck /></button>
             </td>
 
             <td>
 
-              {/* HasEncadrant(etudiant);  */}
+              <Link to={{ pathname: "/EtudiantDetails" }}>
                 <Button color="primary" variant="primary" onClick={() => { 
+                  console.log("HasEnc 2 " + hasEnc);
                   setEtud(etudiant.etudiant); setPfe(etudiant); EncadrantAcademique(etudiant); } }>
-                    <Link to={{ pathname: "/EtudiantDetails" }}><FaEye /></Link>
-                
+                <FaEye />
                 </Button>
+              </Link>
             </td>
             <td>
               <Button className="btn btn-danger" onClick={() => handleDelete(etudiant)}><FaTrash /></Button>
