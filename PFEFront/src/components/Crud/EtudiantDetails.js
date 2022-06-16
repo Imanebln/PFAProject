@@ -13,15 +13,16 @@ import Moment from 'moment';
 import {FaCheck} from "react-icons/fa";
 import './CrudStyling.css'
 import swal from 'sweetalert'
+import e from "cors";
 function EtudiantDetails(props) {
 	
     
-    useEffect(() => {
-        if(window.location.hash !== "#2") {
-            window.location.href += "#2";
-            window.location.reload(false);
-        }
-    })
+    // useEffect(() => {
+    //     if(window.location.hash !== "#2") {
+    //         window.location.href += "#2";
+    //         window.location.reload(false);
+    //     }
+    // })
 
      const Etud = localStorage.getItem('etu');
      const Etudjson = JSON.parse(Etud);
@@ -49,28 +50,43 @@ function EtudiantDetails(props) {
 
     const EncadAca = localStorage.getItem('encAca');
     const EncadAcajson = JSON.parse(EncadAca);
+    console.log({EncadAca});
 
     // const Encad = localStorage.getItem('encad');
     // const Encadjson = JSON.parse(Encad);
-
+const [affecterSoute, setAffecterSoute] = useState("");
     function confirmerSoutenance(){
         async function postStc(){
             try {
-                await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`);
+                await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`).then(res =>
+                //etAffecterSoute(res.data) 
+                {console.log(res.data);
+                res.data.status == "error" ? 
                 swal({
-                    text:'Soutenance confirmée',
+                    text: res.data.message,
+                    icon: "error",
+                    timer:2000,
+                    buttons:false
+                  }) 
+              : swal({
+                    text: res.data.message,
                     icon: "success",
                     timer:2000,
                     buttons:false
-                  })
+                  })}
+                );
             } 
             catch (error) {
-                console.log("error", error);
+                swal({
+                    text:'Soutenance non ajoutée',
+                    icon: "error",
+                    timer:2000,
+                    buttons:false
+                  })
             }
       }
     postStc();
     }
-
     
     console.log({Etud});
 	return (
@@ -194,7 +210,7 @@ function EtudiantDetails(props) {
                 <label>Encadrant Academique </label>
                 <input name="EncAca"
                     type="text"
-                    value={EncadAcajson.encadrant != null ? EncadAcajson.encadrant.nom +" "+ EncadAcajson.encadrant.prenom : "" }
+                    value={pfejson.encadrant != null ? pfejson.encadrant.nom +" "+ pfejson.encadrant.prenom : "" }
                     className="form-control" disabled/>
                 </div>
                 </div>
@@ -246,7 +262,7 @@ function EtudiantDetails(props) {
                         <div className="col">
                         <div>
                         <br></br>
-                        <button className="btn btn-success"  onClick={()=>{confirmerSoutenance();}}><FaCheck/></button>
+                        <button className="btn btn-success"  onClick={(e)=>{e.preventDefault();confirmerSoutenance(); }}><FaCheck/></button>
                         </div>
                         </div>
                     </div>

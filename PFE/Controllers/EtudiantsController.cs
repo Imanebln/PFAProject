@@ -35,7 +35,7 @@ namespace PFE.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<PFEModel>>> GetEtudiantsByYear(int annee)
         {           
-            return await _context.PFEs.Include(e => e.Etudiant).Where(e => e.Annee == annee).ToListAsync();
+            return await _context.PFEs.Include(e => e.Encadrant).Include(e => e.Etudiant).Where(e => e.Annee == annee).ToListAsync();
         }
 
         // GET: api/Etudiants

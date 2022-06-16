@@ -3,18 +3,13 @@ import axios from "axios";
 import { useNavigate, useParams  } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Table, Button, Row } from 'reactstrap';
-import AjouterEtudiant from "./AjouterEtudiant";
-import { NavigateBefore } from "@material-ui/icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTrash, FaEdit, FaEye, FaPlus, FaCheck} from "react-icons/fa";
 import { post, get } from "axios";
 import swal from 'sweetalert';
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
 
-import {toast} from 'react-toastify';
 import { Container,Col } from 'reactstrap';
-import { CSVLink } from "react-csv";
 
 function EtudiantsListe(props) {
  
@@ -161,23 +156,23 @@ function EtudiantsListe(props) {
 
   const [etud,setEtud] = useLocalStorage("etu",{})
   const [pfe,setPfe] = useLocalStorage("pfe",{})
+  const [encAc,setEncAc] = useLocalStorage("encAc",{})
 
-  const [encadAca, setEncadAca] = useLocalStorage("encAca",{});
+  //const [encadAca, setEncadAca] = useLocalStorage("encAca",{});
 
-  function EncadrantAcademique(e){
-        async function postEnc(){
-            try {
-                await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
-                    console.log(res.data);
-                    setEncadAca(res.data);
-                });
-            } 
-            catch (error) {
-                console.log("error", error);
-            }
-      }
-    postEnc();
-    }
+    //     async function postEnc(){
+    //         try {
+    //             await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
+    //                 console.log(res.data);
+    //                 setEncadAca(res.data);
+    //             });
+    //         } 
+    //         catch (error) {
+    //             console.log("error", error);
+    //         }
+    //   }
+    // postEnc();
+    // }
 
 
  
@@ -222,7 +217,8 @@ function EtudiantsListe(props) {
   async function postaffect(){
       try {
 				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
-        
+        setHasEnc(true);
+        console.log("has confirm "+ hasEnc);
         swal({
           text: "Affectation réussite!",
           icon: "success",
@@ -235,7 +231,7 @@ function EtudiantsListe(props) {
 }
 postaffect();
 }
-const [hasEnc, setHasEnc] = useState("");
+const [hasEnc, setHasEnc] = useState(false);
 
     function HasEncadrant(e) {
       async function postHasEnc(){
@@ -243,7 +239,7 @@ const [hasEnc, setHasEnc] = useState("");
 				axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${e.id}`).then(res =>{
           console.log("res : " + res.data);
           setHasEnc(res.data);
-          console.log("has fuct "+hasEnc);
+          console.log("has get "+hasEnc);
         });
 			}catch (error) 
       {
@@ -253,23 +249,24 @@ const [hasEnc, setHasEnc] = useState("");
     postHasEnc();
     }
 
-    useEffect(
-      function () {
-        async function HasEncadrantbyID() {
-          try {
-          axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${pfe.id}`).then(res =>{
-          console.log("res : " + res.data);
-          setHasEnc(res.data);
-          console.log("hasEnc : " + hasEnc);
-          }) 
-        }
-        catch (error) {
-            console.log("error", error);
-        }
-      } HasEncadrantbyID();
-      },
-      [props]
-    );
+    // useEffect(
+    //   function () {
+    //     async function HasEncadrantbyID() {
+    //       try {
+    //       axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${pfe.id}`).then(res =>{
+    //       console.log("res : " + res.data);
+    //       setHasEnc(res.data);
+    //       console.log("hasEnc : " + hasEnc);
+    //       }) 
+    //     }
+    //     catch (error) {
+    //         console.log("error", error);
+    //     }
+    //   } HasEncadrantbyID();
+    //   },
+    //   [props]
+    // );
+    const [able,setAble] = useState(false);
 	return (
     
 		<div className="etudiantsListe">
@@ -325,8 +322,8 @@ const [hasEnc, setHasEnc] = useState("");
               </Dropdown>
             </td>
             <td>
-              <button key={etudiant.id} className="btn btn-success" onClick={() => {
-                confirmerAffectation(etudiant); HasEncadrant(etudiant);
+            <button key={etudiant.id}  className="btn btn-success" onClick={() => { HasEncadrant(etudiant);
+                confirmerAffectation(etudiant)
               } }><FaCheck /></button>
             </td>
 
@@ -334,8 +331,10 @@ const [hasEnc, setHasEnc] = useState("");
 
               <Link to={{ pathname: "/EtudiantDetails" }}>
                 <Button color="primary" variant="primary" onClick={() => { 
-                  console.log("HasEnc 2 " + hasEnc);
-                  setEtud(etudiant.etudiant); setPfe(etudiant); EncadrantAcademique(etudiant); } }>
+                  setEtud(etudiant.etudiant);
+                  setPfe(etudiant);
+                  setEncAc(etudiant.encadrant)
+                  console.log("hello pfe "+ pfe); }}>
                 <FaEye />
                 </Button>
               </Link>
@@ -343,11 +342,7 @@ const [hasEnc, setHasEnc] = useState("");
             <td>
               <Button className="btn btn-danger" onClick={() => handleDelete(etudiant)}><FaTrash /></Button>
             </td>
-
-
-          </tr></>
-         
-         
+          </tr></>         
           ) )}
         </tbody>
       </Table>

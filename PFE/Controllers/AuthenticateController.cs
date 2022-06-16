@@ -569,9 +569,9 @@ namespace PFE.Controllers
         [Route("AffecterEncadrant")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<PFEModel>>> AffecterEncadrant(int id, int idEncadrant)//, PFEModel pfe)
+        public async Task<ActionResult<IEnumerable<PFEModel>>> AffecterEncadrant(int id, int idEncadrant)
         {
-            var pf = _context.PFEs.Include(e => e.Etudiant).Where(e => e.Id == id).First();
+            var pf = _context.PFEs.Include(e => e.Etudiant).Include(e => e.Encadrant).Where(e => e.Id == id).First();
             if (pf == null) return BadRequest();
             else
             {
@@ -611,7 +611,9 @@ namespace PFE.Controllers
         public async Task<IActionResult> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, string heureDebut, string heureFin)
             {
             var stcIdPfe = _context.Soutenance.Any(s => s.PFEId == idPfe);
-            var encadprincipal = _context.PFEs.Include(p => p.Encadrant).Any(e => e.Id == idPfe && e.EncadrantId == idEncad1 || e.EncadrantId == idEncad2);
+          //  var encadprincipal = _context.PFEs.Any(e => e.Id == idPfe && (e.EncadrantId == idEncad1 || e.EncadrantId == idEncad2));
+            var encadprincipal = _context.PFEs.Any(e => e.Id == idPfe && (e.EncadrantId == idEncad1 || e.EncadrantId == idEncad2));
+            var pfee = _context.PFEs.Any(e => e.Id == idPfe && (e.EncadrantId != idEncad1 || e.EncadrantId != idEncad2));
             
             if (stcIdPfe == false && idEncad1 != idEncad2 && encadprincipal == false)
             {
@@ -676,16 +678,16 @@ namespace PFE.Controllers
             {
                 return Ok(new Response { Status = "error", Message = "pfe a deja une soutenance" });
             }
-            else if(idEncad1 == idEncad2) {
-                return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents" });
-            }
-            else if(encadprincipal == true)
+            else if (encadprincipal == true )
             {
                 return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents de l'encadrant academique" });
             }
+            else if(idEncad1 == idEncad2) {
+                return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents" });
+            }
             else
             {
-                return Ok(new Response { Status = "error", Message = "erroooooooooooooooor" });
+                return Ok(new Response { Status = "error", Message = "Soutenance non ajoutee" });
             }
             
         }
