@@ -609,9 +609,10 @@ namespace PFE.Controllers
         [HttpPost]
         
         public async Task<IActionResult> GererSoutenance(int idPfe, int idEncad1, int idEncad2, string dateStc, string heureDebut, string heureFin)
-        {
+            {
             var stcIdPfe = _context.Soutenance.Any(s => s.PFEId == idPfe);
-            var encadprincipal = _context.PFEs.Include(p => p.Encadrant).Any(e => e.EncadrantId == idEncad1 || e.EncadrantId == idEncad2);
+            var encadprincipal = _context.PFEs.Include(p => p.Encadrant).Any(e => e.Id == idPfe && e.EncadrantId == idEncad1 || e.EncadrantId == idEncad2);
+            
             if (stcIdPfe == false && idEncad1 != idEncad2 && encadprincipal == false)
             {
                 var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
@@ -671,9 +672,20 @@ namespace PFE.Controllers
                     
                 return Ok(new Response { Status = "success", Message = "Soutenance ajoutee" });
             }
-            else
+            else if(stcIdPfe == true)
             {
                 return Ok(new Response { Status = "error", Message = "pfe a deja une soutenance" });
+            }
+            else if(idEncad1 == idEncad2) {
+                return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents" });
+            }
+            else if(encadprincipal == true)
+            {
+                return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents de l'encadrant academique" });
+            }
+            else
+            {
+                return Ok(new Response { Status = "error", Message = "erroooooooooooooooor" });
             }
             
         }
