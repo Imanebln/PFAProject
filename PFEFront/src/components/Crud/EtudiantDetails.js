@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {Row, Col, Container} from 'reactstrap';
@@ -17,29 +17,55 @@ import e from "cors";
 function EtudiantDetails(props) {
 	
     
-    // useEffect(() => {
-    //     if(window.location.hash !== "#2") {
-    //         window.location.href += "#2";
-    //         window.location.reload(false);
-    //     }
-    // })
+    const [jury1,setJury1] = useState({});
+    const [isOpen, setOpen] = useState(false);
+    const [isOpen2, setOpen2] = useState(false);
+
+    function toggleDropdown1(){
+        setOpen(!isOpen)
+      };
+    function toggleDropdown2(){
+        setOpen2(!isOpen2)
+      };
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [encadrants,setEncadrants]= useState([]);
+  useEffect(() => {
+    axios.get('https://localhost:7004/api/Encadrants').then(res => {
+      setEncadrants(res.data);
+    })
+  }, []
+  )
+  const [fullname2,setFullname2] = useState("");
+  const handleItemClick2 = (id,item) => {
+    selectedItem2 == id ? setSelectedItem2(null) : setSelectedItem2(id);
+  }
+
+  const [jury2,setJury2] = useState({});
+ 
+  const [selectedItem2, setSelectedItem2] = useState(null);
+useEffect(() => {
+  axios.get('https://localhost:7004/api/Encadrants').then(res => {
+    setEncadrants(res.data);
+  })
+}, []
+)
+const [fullname,setFullname] = useState("");
+const handleItemClick = (id,item) => {
+  selectedItem == id ? setSelectedItem(null) : setSelectedItem(id);
+}
 
      const Etud = localStorage.getItem('etu');
      const Etudjson = JSON.parse(Etud);
 
      const pfe = localStorage.getItem('pfe');
      const pfejson = JSON.parse(pfe);
-     console.log(Etudjson.nom);
 
-     const jury1 = localStorage.getItem('jury1');
-    const jury1JSON = JSON.parse(jury1);
+    //const jury1 = localStorage.getItem('jury1');
+    //const jury1JSON = JSON.parse(jury1);
 
-    const jury2 = localStorage.getItem('jury2');
-    const jury2JSON = JSON.parse(jury2);
-    
-    function modifierEtudiant(e){
-        
-    }
+    //const jury2 = localStorage.getItem('jury2');
+   // const jury2JSON = JSON.parse(jury2);
+
 
     
     console.log({Etud});
@@ -50,15 +76,16 @@ function EtudiantDetails(props) {
 
     const EncadAca = localStorage.getItem('encAca');
     const EncadAcajson = JSON.parse(EncadAca);
-    console.log({EncadAca});
 
     // const Encad = localStorage.getItem('encad');
     // const Encadjson = JSON.parse(Encad);
 const [affecterSoute, setAffecterSoute] = useState("");
+
     function confirmerSoutenance(){
-        async function postStc(){
+         function postStc(){
             try {
-                await post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1JSON.id}&idEncad2=${jury2JSON.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`).then(res =>
+                console.log(" dd "+ " " + pfejson?.id + " " + jury1.nom + " " + jury2.nom + " ");
+                 post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1.id}&idEncad2=${jury2.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`).then(res =>
                 //etAffecterSoute(res.data) 
                 {console.log(res.data);
                 res.data.status == "error" ? 
@@ -86,9 +113,14 @@ const [affecterSoute, setAffecterSoute] = useState("");
             }
       }
     postStc();
-    }
     
-    console.log({Etud});
+    }
+  
+    
+    
+      
+  
+
 	return (
 		<div className="etudiantDetails" >
             <h2>Etudiant Details</h2>
@@ -220,17 +252,42 @@ const [affecterSoute, setAffecterSoute] = useState("");
                 
                 <div className="row">
                     <div className="col">
-                    <div>
-                    <DropDownJury1>
-                    </DropDownJury1>
+                    <div className='dropdown'>
+
+                    <div className='dropdown-header' onClick={()=>toggleDropdown1()}>
+                    {selectedItem ? encadrants.find(item => item.nom == selectedItem).prenom +" " +  encadrants.find(item => item.nom == selectedItem).nom : "Selectionner le jury 1"}
+                    <i className={`fa fa-chevron-right icon ${isOpen && "open"}`}></i>
+                    </div>
+
+                    <div className={`dropdown-body ${isOpen && 'open'}`}>
+                    {encadrants.map(item => (
+                    <div className="dropdown-item" onClick={e => {handleItemClick(e.target.id,item); setJury1(item); setFullname(item.nom+" "+item.prenom);toggleDropdown1();}} id={item.nom} item={item}>
+                    <span className={`dropdown-item-dot ${fullname == selectedItem && 'selected'}`}>• </span>
+                    <a>{item.nom + " " + item.prenom}</a>
+                    </div>
+                    ))}
+                    </div> 
                     </div>
 
                     </div>
+                    
                     <div className="col">
-                    <div>
-                    <DropDownJury2>
-                    </DropDownJury2>
-                    </div> 
+                  
+                    <div className='dropdown'>
+                        <div className='dropdown-header' onClick={()=>toggleDropdown2()}>
+                        {selectedItem2 ?encadrants.find(item => item.nom == selectedItem2).prenom +" " +  encadrants.find(item => item.nom == selectedItem2).nom : "Selectionner le jury 2"}
+                        <i className={`fa fa-chevron-right icon ${isOpen2 && "open"}`}></i>
+                        </div>
+                        
+                        <div className={`dropdown-body ${isOpen2 && 'open'}`}>
+                        {encadrants.map(item => (
+                        <div className="dropdown-item" onClick={e => {handleItemClick2(e.target.id,item); setJury2(item); setFullname2(item.nom+" "+item.prenom);toggleDropdown2();}} id={item.nom} item={item}>
+                            <span className={`dropdown-item-dot ${fullname2 == selectedItem2 && 'selected'}`}>• </span>
+                            <a>{item.nom + " " + item.prenom}</a>
+                        </div>
+                        ))}
+                        </div>
+                    </div>
                     </div>
                 </div>
                     <br></br>
@@ -262,7 +319,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                         <div className="col">
                         <div>
                         <br></br>
-                        <button className="btn btn-success"  onClick={(e)=>{e.preventDefault();confirmerSoutenance(); }}><FaCheck/></button>
+                        <button className="btn btn-success" type="submit" onClick={(e)=> { e.preventDefault();confirmerSoutenance()}}>Confirmer</button>
                         </div>
                         </div>
                     </div>

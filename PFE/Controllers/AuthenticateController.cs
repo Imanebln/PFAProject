@@ -1,4 +1,5 @@
 ﻿
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -382,7 +383,20 @@ namespace PFE.Controllers
 
             };
 
+            var encadrant = new Encadrant()
+            {
+                Nom = model.Nom,
+                Prenom = model.Prenom,
+                Filiere = "GI",
+                Email = model.Email,
+                UserName = model.Username,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserId = user.Id
+            };
+
             _context.Admins.Add(admin);
+            _context.Encadrants.Add(encadrant);
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -457,19 +471,35 @@ namespace PFE.Controllers
 
             //fetching and filter specific member id record   
             var encadrant = await _context.Encadrants.FindAsync(id);
-            
+
             //checking fetched or not with the help of NULL or NOT.  
             if (encadrant != null)
             {
                 var us = await _context.Users.FindAsync(encadrant.UserId);
-                
-                if(us != null)
+
+                if (us != null)
                 {
+                    var stc = _context.Soutenance.Where(s => s.PFE.EncadrantId == id || s.Jury.Any(j => j.Id == id)).ToList();
+                    if (stc != null)
+                    {
+                        foreach (var item in stc)
+                        {
+                            _context.Soutenance.Remove(item);
+                        }
+                    }
+                    var encEtu = _context.PFEs.Where(p => p.EncadrantId == id).ToList();
+                    if (encEtu != null)
+                    {
+                        foreach (var item in encEtu)
+                        {
+                            item.EncadrantId = null;
+                        }
+                    }
                     _context.Encadrants.Remove(encadrant);
                     _context.Users.Remove(us);
                     await _context.SaveChangesAsync();
                 }
-                
+
             }
             else
             {
@@ -552,7 +582,7 @@ namespace PFE.Controllers
                         _context.Etudiants.Remove(etudiant);
                         _context.Users.Remove(us);
 
-                        var stc = _context.Soutenance.Where(s => s.PFE.Id == id).FirstOrDefault();
+                        var stc = _context.Soutenance.Where(s => s.PFE.EtudiantId == id).FirstOrDefault();
                         if (stc != null)
                         {
                             _context.Soutenance.Remove(stc);
@@ -644,8 +674,8 @@ namespace PFE.Controllers
                     }
                     else
                     {
-                        return Ok(new Response { Status = "Error", Message = enc1.Nom + " " + enc1.Prenom + " est deja affecte a une soutenance " });
-                    }
+                        return Ok(new Response { Status = "error", Message = enc1.Nom + " " + enc1.Prenom + " est déjà affecté à une soutenance " + "le " + dateStc +" à " + heureDebut });
+                        }
 
 
                     var testEncad2 = _context.Soutenance.Any(s => s.Jury.Any(j => j.Id == idEncad2) && s.Date == dateStc
@@ -656,7 +686,7 @@ namespace PFE.Controllers
                     }
                     else
                     {
-                        return Ok(new Response { Status = "Error", Message = enc2.Nom + " " + enc2.Prenom + " est deja affecte a une soutenance" });
+                        return Ok(new Response { Status = "error", Message = enc2.Nom + " " + enc2.Prenom + " est déjà affecté à une soutenance " + "le " + dateStc +" à " + heureDebut });
                     }
                }
 
@@ -669,25 +699,25 @@ namespace PFE.Controllers
                 }
                 else
                 {
-                    return Ok(new Response { Status = "Error", Message = "Liste invalide" });
+                    return Ok(new Response { Status = "error", Message = "Liste invalide" });
                 }
                     
-                return Ok(new Response { Status = "success", Message = "Soutenance ajoutee" });
+                return Ok(new Response { Status = "success", Message = "Soutenance ajoutée avec succès" });
             }
             else if(stcIdPfe == true)
             {
-                return Ok(new Response { Status = "error", Message = "pfe a deja une soutenance" });
+                return Ok(new Response { Status = "error", Message = "Cet étudiant a déjà une soutenance" });
             }
             else if (encadprincipal == true )
             {
-                return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents de l'encadrant academique" });
+                return Ok(new Response { Status = "error", Message = "Les jurys doivent être différents de l'encadrant académique" });
             }
             else if(idEncad1 == idEncad2) {
-                return Ok(new Response { Status = "error", Message = "les jurys doivent etre differents" });
+                return Ok(new Response { Status = "error", Message = "Les jurys doivent être différents" });
             }
             else
             {
-                return Ok(new Response { Status = "error", Message = "Soutenance non ajoutee" });
+                return Ok(new Response { Status = "error", Message = "Soutenance non ajoutée" });
             }
             
         }

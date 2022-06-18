@@ -3,7 +3,7 @@
     margin-top: 100px;
     height: 600px;
     width: 100%;
-    padding: 5% 10%;
+    padding: 5% 15%;
     overflow: scroll;
 }
 .soutenanceDiv{
@@ -11,7 +11,7 @@
     margin-top: 100px;
     height: 600px;
     width: 100%;
-    padding: 5% 10%;
+    padding: 5% 15%;
     overflow: scroll;
 }
 .ajoutEncadrant{
@@ -32,29 +32,39 @@
     position: absolute;
     width: 50%;
     margin: 0 25%;
-    margin-top: 200px;
+    margin-top: 250px;
 }
 .etudiantsListe{
     position: absolute;
     margin-top: 100px;
     height: 600px;
     width: 100%;
-    padding: 5% 10%;
+    padding: 5% 15%;
     overflow: scroll;
 }
 .ajoutEtudiant{
     position: absolute;
-    height: 400px;
+    height: 500px;
     width: 60%;
     margin: 0 20%;
-    margin-top: 100px;
+    margin-top: 120px;
     padding: 0 5%;
     overflow: scroll;
 }
+.ajoutEtudiant .row{
+    display: flex;
+    flex-direction: row;
+
+}
+.ajoutEtudiant .column{
+    width: 50%;
+}
 .etudiantDetails{
     position: absolute;
-    height: 600px;
-    width: 60%;
+    height: 500px;
+    width: 65%;
     margin: 0 20%;
-    margin-top: 100px;
+    margin-top: 120px;
+    padding: 2%;
+    overflow-y: scroll;
 }

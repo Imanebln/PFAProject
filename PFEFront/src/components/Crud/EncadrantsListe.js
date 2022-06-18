@@ -54,12 +54,14 @@ function EncadrantsListe(props) {
 			await axios.delete(`https://localhost:7004/api/Authenticate/SuppProf?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
       swal({
+        icon: "success",
         text:'Encadrant supprimé',
         timer:2000,
-        buttons:false
+        buttons:false,
       })
 		} catch (error) {
       swal({
+        icon: "error",
         title:'Encadrant non supprimé',
         text:'déjà affecté à un étudiant',
         timer:2000,

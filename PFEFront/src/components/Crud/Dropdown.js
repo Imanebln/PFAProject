@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -13,7 +12,7 @@ const Dropdown = (props) => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [dropdownVisibility,setDropdownVisibility] = useState(false);
     // const toggleDropdown = () => {setDropdownVisibility(true)};
-    const toggleDropdown = () => {
+    function toggleDropdown() {
       setOpen(!isOpen)
     };
 
@@ -66,21 +65,19 @@ const Dropdown = (props) => {
   
     return(
         <div className='dropdown'>
-              <div className='dropdown-header' onClick={toggleDropdown}>
-              {selectedItem ? encadrants.find(item => item.nom == selectedItem).nom : "Selectionner un encadrant"}
+              <div className='dropdown-header' onClick={() => toggleDropdown()}>
+              {selectedItem ? encadrants.find(item => item.nom == selectedItem).prenom +" " +  encadrants.find(item => item.nom == selectedItem).nom : "Selectionner un encadrant"}
               <i className={`fa fa-chevron-right icon ${isOpen && "open"}`}></i>
             </div>
             
             <div className={`dropdown-body ${isOpen && 'open'}`}>
             {encadrants.map(item => (
-              <div className="dropdown-item" onClick={e => {handleItemClick(e.target.id,item); setEncad(item); setFullname(item.nom+" "+item.prenom);}} id={item.nom} item={item}>
-                <span className={`dropdown-item-dot ${fullname == selectedItem && 'selected'}`}>• </span>
+              <div className="dropdown-item" onClick={e => {handleItemClick(e.target.id,item); setEncad(item); setFullname(item.nom+" "+item.prenom);toggleDropdown()}} id={item.nom} item={item}>
+                <span className={`dropdown-item-dot ${fullname == selectedItem && 'selected'} `}>•</span>
                 <a>{item.nom + " " + item.prenom}</a>
               </div>
             ))}
              </div>
-            
-           
         </div>
     )
   }

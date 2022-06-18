@@ -41,7 +41,13 @@ function AjouterEncadrant(props) {
 				  })
 				
 			} catch (error) {
-				console.log("error", error);
+				
+				swal({
+					text:"Nom d'utilisateur deja existant",
+					icon: "error",
+					timer:2000,
+					buttons:false
+				  })
 			}
             finally{
                 navigate("/EncadrantsListe");

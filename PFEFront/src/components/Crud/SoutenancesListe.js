@@ -61,6 +61,7 @@ function SoutenancesListe(props) {
 			await axios.delete(`https://localhost:7004/api/Authenticate/DeleteSoutenance?id=${s.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
       setSoutenances(soutenances.filter((ele)=> ele.id !== s.id))
       swal({
+        icon:"success",
         text:'Soutenance supprimée',
         timer:2000,
         buttons:false

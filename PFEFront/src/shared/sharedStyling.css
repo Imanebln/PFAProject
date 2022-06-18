@@ -24,6 +24,13 @@ padding-left: 10%;
     color: rgb(126, 123, 123);
     font-family: 'Dancing Script', cursive;
     font-size: 30px;
+    
+}
+.Left{
+    margin-top: 17px;
+}
+.Left .nav-link p{
+padding: 0;
 }
 .container{
     width: 100%;
@@ -39,7 +46,7 @@ padding-left: 10%;
 }
 .NavvBar .Right{
 width: 30%;
-padding-left: 10%;
+padding-left: 18%;
 }
 .NavvBar .centre{
     width: 50%;
@@ -51,16 +58,18 @@ flex-direction: column;
 padding-top: 20px;
 }
 .iconMenu{
+    margin-top: 0px;
     width: 30px;
     height: 30px;
     color: rgb(126, 123, 123);
     cursor: pointer;
 }
 .Left ul{
-   display: none;
+    display: none;
     margin-top: 8px;
     padding:0 8px;
     background-color: #f6f4f4;
+    height: 156px;
 }
 .NavvBar .Left .nav-linke {
     text-decoration: none;

@@ -24,10 +24,6 @@ export default function Dashboard() {
               <NavLink className='nav-link' to={'/SoutenancesListe'}>
                 <p>Soutenances</p>
               </NavLink>
-
-              <NavLink className='nav-link' to={'/LoginToken'} onClick={handleLogout}>
-                <p>Logout</p>
-              </NavLink>
           </div>  
             </div>
         );

@@ -76,7 +76,8 @@ function AjouterEtudiant(props) {
 			<h2>Ajouter un Etudiant</h2>
 			<hr />
             <form onSubmit={handleSubmit}>
-			<div className="form-group">
+				<div className="row">
+				<div className="form-group">
 					<label>Username</label>
 					<input
 						name="username"
@@ -86,19 +87,24 @@ function AjouterEtudiant(props) {
 						onChange={handleChange}
 						className="form-control"
 					/>
+				</div>	
 				</div>
-				<div className="form-group">
-					<label>Nom</label>
-					<input
-						name="nom"
-						type="text"
-						required
-						value={etudiant.nom}
-						onChange={handleChange}
-						className="form-control"
-					/>
-				</div>
-				<div className="form-group">
+				<div className="row">
+					<div className="column">
+						<div className="form-group">
+						<label>Nom</label>
+						<input
+							name="nom"
+							type="text"
+							required
+							value={etudiant.nom}
+							onChange={handleChange}
+							className="form-control"
+						/>
+						</div>
+					</div>
+					<div className="column">
+						<div className="form-group">
 					<label>Prenom</label>
 					<input
 						name="prenom"
@@ -108,8 +114,11 @@ function AjouterEtudiant(props) {
 						onChange={handleChange}
 						className="form-control"
 					/>
+					</div>
+					</div>
 				</div>
-				<div className="form-group">
+				<div className="row">
+					<div className="form-group">
 					<label>Email</label>
 					<input
 						name="email"
@@ -120,9 +129,11 @@ function AjouterEtudiant(props) {
 						onChange={handleChange}
 						className="form-control"
 					/>
+					</div>
 				</div>
 				<br></br>
-				<div className="form-group">
+				<div className="row">
+					<div className="form-group">
 					<label>Email Encadrant</label>
 					<input
 						name="emailEncadrant"
@@ -134,6 +145,8 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+				</div>
+				
 				<div className="form-group">
 					<label>Sujet</label>
 					<input
@@ -146,32 +159,42 @@ function AjouterEtudiant(props) {
 					/>
 				</div>
 				<br/>
-				<div className="form-group">
-					<label>Nom de societe</label>
-					<input
-						name="nomSociete"
-						type="text"
-						required
-						value={etudiant.nomSociete}
-						onChange={handleChange}
-						className="form-control"
-					/>
+				<div className="row">
+					<div className="column">
+						<div className="form-group">
+						<label>Nom de societe</label>
+						<input
+							name="nomSociete"
+							type="text"
+							required
+							value={etudiant.nomSociete}
+							onChange={handleChange}
+							className="form-control"
+						/>
+						</div>
+					</div>
+					<div className="column">
+						<div className="form-group">
+						<label>Ville</label>
+						<input
+							name="ville"
+							type="text"
+							required
+							value={etudiant.ville}
+							onChange={handleChange}
+							className="form-control"
+						/>
+						</div>
+					</div>
 				</div>
+				
 				<br>
 				</br>
-				<div className="form-group">
-					<label>Ville</label>
-					<input
-						name="ville"
-						type="text"
-						required
-						value={etudiant.ville}
-						onChange={handleChange}
-						className="form-control"
-					/>
-				</div>
+				
 				<br/>
-				<div className="form-group">
+				<div className="row">
+					<div className="column">
+					<div className="form-group">
 					<label>technologie utilise</label>
 					<input
 						name="technologiesUtilisees"
@@ -182,8 +205,9 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
-				<br/>
-				<div className="form-group">
+					</div>
+					<div className="column">
+					<div className="form-group">
 					<label>Annee</label>
 					<input
 						name="annee"
@@ -194,6 +218,11 @@ function AjouterEtudiant(props) {
 						className="form-control"
 					/>
 				</div>
+					</div>
+				</div>
+				
+				<br/>
+				
 				<br/>
 				<div className="buttons">
 					<input type="submit" value="Submit" className="btn btn-primary" />

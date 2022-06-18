@@ -97,6 +97,7 @@ function EtudiantsListe(props) {
       setEtudiants(etudiants.filter((ele)=> ele.id !== e.id))
       swal({
         text:'Etudiant supprimé',
+        icon:"success",
         timer:2000,
         buttons:false
       })
