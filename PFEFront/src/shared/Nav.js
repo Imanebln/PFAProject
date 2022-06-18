@@ -1,13 +1,8 @@
-import React from "react";
+import React from "react"; 
 import { NavLink } from "react-router-dom";
 import './sharedStyling.css'
 
 const Nav = () => {
-    const handleLogout = () => {
-        sessionStorage.removeItem("token");
-        // sessionStorage.removeItem("user");
-        window.location.href = "/";
-      };
 	return (
 		<nav className="Navv">
 				<ul>
@@ -23,12 +18,8 @@ const Nav = () => {
 						>
 							<p>Espace Etudiant</p>
 						</NavLink>
+						
 					</li>
-                    {/* <li className="nav-item">
-                    <Button class="btn-nav"
-                            onClick={handleLogout}>Logout</Button>
-
-                    </li> */}	
 				</ul>
 		</nav>
 	);

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { post } from "axios";
 import { useNavigate } from "react-router-dom";
-import {Link} from "react-router-dom";
-import EncadrantsListe from "./EncadrantsListe";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './CrudStyling.css'
@@ -10,7 +8,7 @@ import swal from 'sweetalert'
 
 toast.configure();
 
-function AjouterEncadrant(props) {
+function AjouterEncadrant() {
 
     function getToken() {
 		const tokenString = sessionStorage.getItem('token');
@@ -29,10 +27,9 @@ function AjouterEncadrant(props) {
 
     function handleSubmit(event) {
 		event.preventDefault();
-		//if (!crud.companyName || !crud.email) return;
 		async function postCrud() {
 			try {
-				const response = await post("https://localhost:7004/api/Authenticate/add-encadrant", encadrant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
+				await post("https://localhost:7004/api/Authenticate/add-encadrant", encadrant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
 				swal({
 					text:'Encadrant ajouté',
 					icon: "success",

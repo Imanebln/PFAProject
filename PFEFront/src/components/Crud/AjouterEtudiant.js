@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { post } from "axios";
 import { useNavigate } from "react-router-dom";
-import {Link} from "react-router-dom";
-import EtudiantsListe from "./EtudiantsListe";
 import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './CrudStyling.css'
 import swal from 'sweetalert'
 toast.configure();
 
-function AjouterEtudiant(props) {
+function AjouterEtudiant() {
 
 	function getToken() {
 		const tokenString = sessionStorage.getItem('token');
@@ -35,10 +33,10 @@ function AjouterEtudiant(props) {
 
     function handleSubmit(event) {
 		event.preventDefault();
-		//if (!crud.companyName || !crud.email) return;
+
 		async function postCrud() {
 			try {
-				const response = await post("https://localhost:7004/api/Authenticate/add-etudiant", etudiant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
+				await post("https://localhost:7004/api/Authenticate/add-etudiant", etudiant,{headers: {"Authorization" : `Bearer ${getToken()}`}});
 				swal({
 					text:'Etudiant ajouté',
 					icon: "success",
@@ -78,7 +76,7 @@ function AjouterEtudiant(props) {
             <form onSubmit={handleSubmit}>
 				<div className="row">
 				<div className="form-group">
-					<label>Username</label>
+					<label>Nom d'utilisateur</label>
 					<input
 						name="username"
 						type="text"
@@ -105,7 +103,7 @@ function AjouterEtudiant(props) {
 					</div>
 					<div className="column">
 						<div className="form-group">
-					<label>Prenom</label>
+					<label>Prénom</label>
 					<input
 						name="prenom"
 						type="text"
@@ -134,7 +132,7 @@ function AjouterEtudiant(props) {
 				<br></br>
 				<div className="row">
 					<div className="form-group">
-					<label>Email Encadrant</label>
+					<label>Email Encadrant de la société</label>
 					<input
 						name="emailEncadrant"
 						type="email"
@@ -162,7 +160,7 @@ function AjouterEtudiant(props) {
 				<div className="row">
 					<div className="column">
 						<div className="form-group">
-						<label>Nom de societe</label>
+						<label>Société</label>
 						<input
 							name="nomSociete"
 							type="text"
@@ -195,7 +193,7 @@ function AjouterEtudiant(props) {
 				<div className="row">
 					<div className="column">
 					<div className="form-group">
-					<label>technologie utilise</label>
+					<label>Technologies Utilisées</label>
 					<input
 						name="technologiesUtilisees"
 						type="text"
@@ -208,7 +206,7 @@ function AjouterEtudiant(props) {
 					</div>
 					<div className="column">
 					<div className="form-group">
-					<label>Annee</label>
+					<label>Année</label>
 					<input
 						name="annee"
 						type="number"
@@ -231,7 +229,7 @@ function AjouterEtudiant(props) {
 						onClick={handleCancel}						
                         className="btn btn-secondary"
 					>
-						Cancel
+						Annuler
 					</button>
 				</div>
 				

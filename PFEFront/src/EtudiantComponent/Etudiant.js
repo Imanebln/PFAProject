@@ -9,15 +9,8 @@ import Testing from './Testing/Testing'
 import Todo from './Todo/Todo'
 
 export default function Etudiant() {
-	const [selectedFile, setSelectedFile] = useState();
-	const [isFilePicked, setIsFilePicked] = useState(false);
-  const changeHandler = (event) => {
-		setSelectedFile(event.target.files[0]);
 
-	};
-
-	const handleSubmission = () => {
-	};
+	
   return (
     <div> 
       <div>

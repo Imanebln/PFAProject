@@ -1,20 +1,13 @@
-import React, { useState, useEffect} from "react";
-import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {Row, Col, Container} from 'reactstrap';
-import DropDownJury1 from "./DropDownJury1";
-import DropDownJury2 from "./DropDownJury2";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import TimePicker from 'react-time-picker';
-import { post } from "axios";
-import { format } from 'date-fns';
-import Moment from 'moment';
-import {FaCheck} from "react-icons/fa";
+import React, { useState, useEffect} from "react"
+import axios from "axios"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import TimePicker from 'react-time-picker'
+import { post } from "axios"
+import { format } from 'date-fns'
 import './CrudStyling.css'
 import swal from 'sweetalert'
-import e from "cors";
-function EtudiantDetails(props) {
+function EtudiantDetails() {
 	
     
     const [jury1,setJury1] = useState({});
@@ -60,12 +53,6 @@ const handleItemClick = (id,item) => {
      const pfe = localStorage.getItem('pfe');
      const pfejson = JSON.parse(pfe);
 
-    //const jury1 = localStorage.getItem('jury1');
-    //const jury1JSON = JSON.parse(jury1);
-
-    //const jury2 = localStorage.getItem('jury2');
-   // const jury2JSON = JSON.parse(jury2);
-
 
     
     console.log({Etud});
@@ -74,19 +61,11 @@ const handleItemClick = (id,item) => {
     const [heureDebut, setHeureDebut] = useState("14:00");
     const [heureFin, setHeureFin] = useState("16:00");
 
-    const EncadAca = localStorage.getItem('encAca');
-    const EncadAcajson = JSON.parse(EncadAca);
-
-    // const Encad = localStorage.getItem('encad');
-    // const Encadjson = JSON.parse(Encad);
-const [affecterSoute, setAffecterSoute] = useState("");
 
     function confirmerSoutenance(){
          function postStc(){
             try {
-                console.log(" dd "+ " " + pfejson?.id + " " + jury1.nom + " " + jury2.nom + " ");
-                 post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1.id}&idEncad2=${jury2.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`).then(res =>
-                //etAffecterSoute(res.data) 
+                 post(`https://localhost:7004/api/Authenticate/GererSoutenance?idPfe=${pfejson.id}&idEncad1=${jury1.id}&idEncad2=${jury2.id}&dateStc=${format(dateStc,'dd/MM/yyyy')}&heureDebut=${heureDebut}&heureFin=${heureFin}`).then(res => 
                 {console.log(res.data);
                 res.data.status == "error" ? 
                 swal({
@@ -129,16 +108,6 @@ const [affecterSoute, setAffecterSoute] = useState("");
             <div>
             <p>
             <form>
-            <Container>
-               <Row>
-                   <Col>
-                   {/* <Button className="butt" color="primary" >Modifier Etudiant</Button> */}
-
-                   </Col>
-               </Row>
-           </Container>
-            {/* {Etud.map(e => <li>e</li> )} */}
-            {/* {Object.keys(Etud).map(e => <li>{e}</li> )} */}
             <div className="row">
                 <div className="col">
                 <div  className="">
@@ -153,7 +122,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
 
                 <div className="col">
                 <div  className="form-group">
-                <label>Prenom</label>
+                <label>Prénom</label>
                 <input name="prenom"
                     type="text"
                     value={Etudjson.prenom}
@@ -186,7 +155,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                 <div className="row">
                 <div className="col">
                 <div  className="form-group">
-                <label>Les technologies utilisees</label>
+                <label>Technologies Utilisées</label>
                 <input name="technologiesUtilisees"
                     type="text"
                     value={pfejson.technologiesUtilisees}
@@ -196,7 +165,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
 
                 <div className="col">
                 <div  className="form-group">
-                <label>Societe</label>
+                <label>Société</label>
                 <input name="nomSociete"
                     type="text"
                     value={pfejson.nomSociete}
@@ -219,7 +188,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                 
                 <div className="col">
                 <div  className="form-group">
-                <label>Annee</label>
+                <label>Année</label>
                 <input name="annee"
                     type="text"
                     value={pfejson.annee}
@@ -230,7 +199,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                 <div className="row">
                 <div className="col">
                 <div  className="form-group">
-                    <label>Email Encadrant</label>
+                    <label>Email Encadrant de la société</label>
                     <input name="emailEncadrant"
                     type="text"
                     value={pfejson.emailEncadrant}
@@ -239,7 +208,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                 </div>
                 <div className="col">
                 <div  className="form-group">
-                <label>Encadrant Academique </label>
+                <label>Encadrant Académique</label>
                 <input name="EncAca"
                     type="text"
                     value={pfejson.encadrant != null ? pfejson.encadrant.nom +" "+ pfejson.encadrant.prenom : "" }
@@ -255,7 +224,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                     <div className='dropdown'>
 
                     <div className='dropdown-header' onClick={()=>toggleDropdown1()}>
-                    {selectedItem ? encadrants.find(item => item.nom == selectedItem).prenom +" " +  encadrants.find(item => item.nom == selectedItem).nom : "Selectionner le jury 1"}
+                    {selectedItem ? encadrants.find(item => item.nom == selectedItem).prenom +" " +  encadrants.find(item => item.nom == selectedItem).nom : "Séléctionner le 1er jury "}
                     <i className={`fa fa-chevron-right icon ${isOpen && "open"}`}></i>
                     </div>
 
@@ -275,7 +244,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                   
                     <div className='dropdown'>
                         <div className='dropdown-header' onClick={()=>toggleDropdown2()}>
-                        {selectedItem2 ?encadrants.find(item => item.nom == selectedItem2).prenom +" " +  encadrants.find(item => item.nom == selectedItem2).nom : "Selectionner le jury 2"}
+                        {selectedItem2 ?encadrants.find(item => item.nom == selectedItem2).prenom +" " +  encadrants.find(item => item.nom == selectedItem2).nom : "Séléctionner le 2ème jury "}
                         <i className={`fa fa-chevron-right icon ${isOpen2 && "open"}`}></i>
                         </div>
                         
@@ -301,7 +270,7 @@ const [affecterSoute, setAffecterSoute] = useState("");
                         </div>
                         <div className="col">
                         <div className="form-group">
-                         <label>Heure du debut:</label>
+                         <label>Heure du début:</label>
                          <br></br>
                          <TimePicker  format={"HH:mm"}  onChange={(heuredebut) => setHeureDebut(heuredebut)} value={heureDebut}/>
                          </div> 

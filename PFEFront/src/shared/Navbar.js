@@ -5,7 +5,6 @@ import { AiOutlineMenu } from 'react-icons/ai';
 const Navbar = () => {
 	const handleLogout = () => {
         sessionStorage.removeItem("token");
-        // sessionStorage.removeItem("user");
         window.location.href = "/";
       };
 	return (

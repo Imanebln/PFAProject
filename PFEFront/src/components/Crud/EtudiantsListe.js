@@ -1,15 +1,15 @@
-import React, { useState, useEffect ,  useRef} from "react";
+import React, { useState, useEffect} from "react";
 import axios from "axios";
-import { useNavigate, useParams  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Table, Button, Row } from 'reactstrap';
-import { FaTrash, FaEdit, FaEye, FaPlus, FaCheck} from "react-icons/fa";
-import { post, get } from "axios";
+import { Table, Button} from 'reactstrap';
+import { FaTrash,  FaEye, FaCheck} from "react-icons/fa";
+import { post} from "axios";
 import swal from 'sweetalert';
 import 'react-dropdown/style.css';
 import Dropdown from "./Dropdown";
 
-import { Container,Col } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 function EtudiantsListe(props) {
  
@@ -22,16 +22,13 @@ function EtudiantsListe(props) {
     const [etudiants,setEtudiants]= useState([]);
   useEffect(() => {
     axios.post(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
-      // console.log(res);
       setEtudiants(res.data);
     })
   }, [])
-//*************************************** */
   const[annee, setAnnee] = useState((new Date()).getFullYear());
   async function getEtudiantsList(){
     try {
       axios.post(`https://localhost:7004/api/Etudiants/GetByYear?annee=${annee}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
-      // console.log(res);
       setEtudiants(res.data);
     })} 
     catch (ex) {
@@ -41,7 +38,6 @@ function EtudiantsListe(props) {
 
   async function handleChangeInput(e){
     setAnnee(parseInt(e.target.value));
-    // getEtudiantsList(annee);
   } 
 
   const [fileSelected, setFileSelected] = useState();
@@ -62,16 +58,12 @@ function EtudiantsListe(props) {
         const res = await axios.post(`https://localhost:7004/api/Authenticate/UploadExcelFile?year=${annee}`, formData);
         setEtudiants(res.data);
          getEtudiantsList(annee);
-        // console.log(res);
       }
       
     } catch (ex) {
       console.log(ex);
     }
   };
-
-//************************************** */
-  const { _id } = useParams();
   const navigate = useNavigate();
 
   useEffect(
@@ -106,24 +98,9 @@ function EtudiantsListe(props) {
 		}
 	}
 
-  async function handleView(e) {
-		try {
-
-      console.log(e)
-			await axios.delete(`https://localhost:7004/api/Etudiants?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
-      setEtudiants(etudiants.filter((ele)=> ele.id !== e.id))
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
   function AjouterEtudiant(){
     navigate("/AjouterEtudiant");
   }
-
-  //modal view
-  const [modalShow, setModalShow] = React.useState(false);
-  
 
 
   function useLocalStorage(key, initialValue) {
@@ -158,26 +135,6 @@ function EtudiantsListe(props) {
   const [etud,setEtud] = useLocalStorage("etu",{})
   const [pfe,setPfe] = useLocalStorage("pfe",{})
   const [encAc,setEncAc] = useLocalStorage("encAc",{})
-
-  //const [encadAca, setEncadAca] = useLocalStorage("encAca",{});
-
-    //     async function postEnc(){
-    //         try {
-    //             await get(`https://localhost:7004/api/Authenticate/GetEncadrantByIdPFE?id=${e.id}`).then(res =>{
-    //                 console.log(res.data);
-    //                 setEncadAca(res.data);
-    //             });
-    //         } 
-    //         catch (error) {
-    //             console.log("error", error);
-    //         }
-    //   }
-    // postEnc();
-    // }
-
-
- 
-  //encad dropdown
   const Encad = localStorage.getItem('encad');
   const Encadjson = JSON.parse(Encad);
 
@@ -217,7 +174,7 @@ function EtudiantsListe(props) {
  
   async function postaffect(){
       try {
-				const response = await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
+			 await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
         setHasEnc(true);
         console.log("has confirm "+ hasEnc);
         swal({
@@ -250,24 +207,6 @@ const [hasEnc, setHasEnc] = useState(false);
     postHasEnc();
     }
 
-    // useEffect(
-    //   function () {
-    //     async function HasEncadrantbyID() {
-    //       try {
-    //       axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${pfe.id}`).then(res =>{
-    //       console.log("res : " + res.data);
-    //       setHasEnc(res.data);
-    //       console.log("hasEnc : " + hasEnc);
-    //       }) 
-    //     }
-    //     catch (error) {
-    //         console.log("error", error);
-    //     }
-    //   } HasEncadrantbyID();
-    //   },
-    //   [props]
-    // );
-    const [able,setAble] = useState(false);
 	return (
     
 		<div className="etudiantsListe">
@@ -287,15 +226,14 @@ const [hasEnc, setHasEnc] = useState(false);
                     </div>
                  
                     <Button className="butt" color="primary" onClick={AjouterEtudiant}>Ajouter Etudiant</Button>
-                    {/* <a href="/AjouterEncadrant">Ajouter Encadrant</a> */}
           
             </Container>
         <Table responsive hover>
         <thead>
           <tr>
-            <th>Nom et Prenom</th>
+            <th>Nom et Prénom</th>
             <th>Email</th>
-            <th>Filiere</th>
+            <th>Filière</th>
             <th></th>
             <th></th>
             <th>Actions</th>
@@ -313,9 +251,6 @@ const [hasEnc, setHasEnc] = useState(false);
             </td>
             <td>
               {etudiant.etudiant.filiere}
-            </td>
-            <td>
-              {/* <Button className="btn btn-primary" onClick={etudiant.id} ><FaEdit/></Button> */}
             </td>
 
             <td>

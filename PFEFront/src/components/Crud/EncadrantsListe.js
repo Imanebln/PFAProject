@@ -14,7 +14,6 @@ toast.configure();
 function EncadrantsListe(props) {
 
     const [encadrants,setEncadrants]= useState([]);
-    // const [encad,setEncad]= useState();
 
     function getToken() {
       const tokenString = sessionStorage.getItem('token');
@@ -29,7 +28,6 @@ function EncadrantsListe(props) {
     })
   }, [])
 
-  const { _id } = useParams();
   const navigate = useNavigate();
 
   useEffect(
@@ -70,14 +68,6 @@ function EncadrantsListe(props) {
 		}
 	}
 
-  // async function handleView(e) {
-
-  //      console.log(e)
-  //      setEncad(e)
-	// 		// await axios.get(`https://localhost:7004/api/Encadrants?id=${e.id}`,{headers: {"Authorization" : `Bearer ${getToken()}`}});
-  //     // setEncadrants(encadrants.filter((ele)=> ele.id !== e.id))
-  //     navigate("/EncadrantDetails");
-	// }
 
   function useLocalStorage(key, initialValue) {
     const [storedValue, setStoredValue] = useState(() => {
@@ -113,17 +103,6 @@ function EncadrantsListe(props) {
   function AjouterProf(){
     navigate("/AjouterEncadrant");
   }
-
-  //modal view
-  const [modalShow, setModalShow] = React.useState(false);
-  // function viewProf(e){
-  //   setModalShow(true);
-  //   setEncad(e);
-  // }
-  // function afterOpenModal(e) {
-  //   props.onAfterOpen(e, 'After Modal Opened');
-  
-  // }
   
   
   
@@ -135,8 +114,6 @@ function EncadrantsListe(props) {
                 <Row>
                     <Col>
                     <Button className="butt" color="primary" onClick={AjouterProf}>Ajouter Encadrant</Button>
-                    {/* <a href="/AjouterEncadrant">Ajouter Encadrant</a> */}
-                    
                     </Col>
                 </Row>
             </Container>
@@ -144,9 +121,9 @@ function EncadrantsListe(props) {
         <Table responsive hover>
         <thead>
           <tr>
-            <th>Nom et Prenom</th>
+            <th>Nom et Prénom</th>
             <th>Email</th>
-            <th>Filiere</th>
+            <th>Filière</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -173,9 +150,6 @@ function EncadrantsListe(props) {
 
             </Link>
             
-            </td>
-            <td>
-            {/* <Button className="btn btn-primary" onClick={()=>handleView(encadrant)} ><FaEdit/></Button> */}
             </td>
             <td>
             <Button className="btn btn-danger" onClick={()=>handleDelete(encadrant)}><FaTrash/></Button>

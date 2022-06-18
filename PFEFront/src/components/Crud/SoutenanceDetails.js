@@ -1,4 +1,4 @@
-function SoutenanceDetails (props){
+function SoutenanceDetails (){
     const stc = localStorage.getItem('stc');
     const stcjson = JSON.parse(stc);
     console.log(stcjson);
@@ -11,14 +11,11 @@ function SoutenanceDetails (props){
             <div className="container">
             <p>
             <form className="container-sm">
-        
-            {/* {encad.map(e => <li>e</li> )} */}
-            {/* {Object.keys(encad).map(e => <li>{e}</li> )} */}
             <div className="row">
             
             <div className="col">
                 <div  className="form-group">
-                    <label>Nom de l'etudiant</label>
+                    <label>Nom & Prénom</label>
                     <input name="nom"
 						        type="text"
 						        value={stcjson.pfe.etudiant.nom + " " +stcjson.pfe.etudiant.prenom}
@@ -38,7 +35,7 @@ function SoutenanceDetails (props){
                 </div>
         
             <div  className="form-group">
-                <label>Encadrant</label>
+                <label>Encadrant Académique</label>
                 <input name="encad"
                     type="text"
                     value={stcjson.pfe.encadrant != null ? stcjson.pfe.encadrant.nom + " " + stcjson.pfe.encadrant.prenom : " "}
@@ -69,7 +66,7 @@ function SoutenanceDetails (props){
             </div>
             <div className="col">
                 <div className="form-group">
-                <label>Duree </label>
+                <label>Durée </label>
                 <input name="email"
                     type="text"
                     value={stcjson.heureDebut + " -> " + stcjson.heureFin}

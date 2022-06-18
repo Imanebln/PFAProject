@@ -1,29 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import './CrudStyling.css'
 
-function EncadrantDetails(props) {
-	
-    
-    
-    //  const [encad,setEncadrant]= useState({});
-
+function EncadrantDetails() {
      const encad = localStorage.getItem('enc');
      const encadjson = JSON.parse(encad);
-     console.log(encadjson.nom);
-    
-    //  const { data } = this.props.data
-
-    // useEffect(()=>{
-    //     setEncadrant(props.encadrant) 
-    // })
-    
-
-    
-    // const { data } = this.props
-    
-
-    
-    console.log({encad});
 	return (
 		<div className="encadrantDetails">
            
@@ -32,9 +12,6 @@ function EncadrantDetails(props) {
             <div className="container">
             <p>
             <form className="container-sm">
-        
-            {/* {encad.map(e => <li>e</li> )} */}
-            {/* {Object.keys(encad).map(e => <li>{e}</li> )} */}
             <div className="row">
             
             <div className="col">

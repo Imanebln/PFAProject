@@ -2,13 +2,7 @@ import React from 'react';
 import TaskTesting from './TaskTesting'
 export default function TasksTesting(props) {
   return <div>
-  {/* <button onClick={props.deleteOptions}>Remove  All</button>
-        {props.options.length === 0 && <p> No options to show , Add ones </p>}
-       <div>{
-            props.options.map((option)=> <Task deleteOption={props.deleteOption} key={option} optionText={option}></Task> )
-        }
-        </div> 
-  </div> */}
+ 
 
   <div className='todo'>
           <h5>Testing</h5>

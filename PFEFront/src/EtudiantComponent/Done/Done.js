@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
+
 import React, { Component } from 'react'
 import TasksDone from './TasksDone'
 import AddDone from './AddDone'
@@ -66,54 +66,6 @@ deleteOptionDone(doneRemove){
           <TasksDone optionsdone = {this.state.optionsdone} deleteOptionsDone = {this.deleteOptionsDone} deleteOptionDone = {this.deleteOptionDone}/>
            <AddDone AddDone = {this.AddDone}/>
    
-       
-
-      {/* <div className='mylists'>
-          <div className='todo'>
-          <h5>To Do</h5>
-          <div className='taches'>
-            les taches a réaliser...
-          </div>
-          <div className='taches'>
-            les taches a réaliser...
-          </div>
-          <form className='ajoutache' onSubmit={this.ajoutTache}>
-          <input placeholder='ajouter tache '></input>
-          <button>Ajouter tache</button>
-          </form>
-          </div>
-          <div className='inprogress'>
-            <h5>In Progress</h5>
-            <div className='taches'>
-            les taches a réaliser...
-            </div>
-            
-            <form className='ajoutache'>
-            <input type="text" name="opt" placeholder='ajouter tache' onFocus={(e) => e.target.placeholder = ""}  onBlur={(e) => e.target.placeholder = "Add an Option"}></input>
-            <button>Ajouter tache</button>
-            </form>
-          
-            </div>
-          <div className='testing'>
-            <h5>Testing</h5>
-            <div className='taches'>
-            les taches a réaliser...
-            </div>
-            <form className='ajoutache'>
-            <input placeholder='ajouter tache '></input>
-            <button>Ajouter tache</button>
-            </form>
-          </div>
-          <div className='done'>
-            <h5>Done</h5>
-            <div className='taches'>
-            </div>
-            <form  className='ajoutache'>
-            <input type="text" name="opt" placeholder='ajouter tache' onFocus={(e) => e.target.placeholder = ""}  onBlur={(e) => e.target.placeholder = "Add an Option"}></input>
-            <button>Ajouter tache</button>
-            </form>
-          </div>
-        </div> */}
     </div>
     )
   }

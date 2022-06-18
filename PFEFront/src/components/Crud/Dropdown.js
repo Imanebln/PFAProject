@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import 'react-dropdown/style.css';
-import { IndeterminateCheckBox } from "@material-ui/icons";
 
 
-const Dropdown = (props) => {
+const Dropdown = () => {
   
     const [isOpen, setOpen] = useState(false);
    
     const [selectedItem, setSelectedItem] = useState(null);
-    const [dropdownVisibility,setDropdownVisibility] = useState(false);
-    // const toggleDropdown = () => {setDropdownVisibility(true)};
     function toggleDropdown() {
       setOpen(!isOpen)
     };

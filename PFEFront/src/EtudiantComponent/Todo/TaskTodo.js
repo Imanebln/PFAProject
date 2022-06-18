@@ -1,6 +1,6 @@
 import React from 'react';
 import './StylingTodo.css';
-import { useState, createContext } from 'react';
+import { createContext } from 'react';
 export const UserContext = createContext();
 export default function TaskTodo(props) {
   

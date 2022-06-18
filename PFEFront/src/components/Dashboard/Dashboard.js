@@ -3,10 +3,6 @@ import './DashboardStyling.css'
 import { NavLink } from "react-router-dom";
 
 export default function Dashboard() {
-  const handleLogout = () => {
-        sessionStorage.removeItem("token");
-        window.location.href = "/";
-      };
         return (
             <div className='dashboardContainer'>
               <div className='title'>

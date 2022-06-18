@@ -1,12 +1,9 @@
 import React from 'react';
-import { useState , useEffect} from 'react'; 
 import './App.css';  
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import Login2 from "./components/Login/Login2";  
-import { BrowserRouter as Router,Routes, Switch, Route, Link } from 'react-router-dom';   
+import 'bootstrap/dist/css/bootstrap.css'; 
+import { BrowserRouter as Router,Routes, Route} from 'react-router-dom';   
 import Dashboard from "./components/Dashboard/Dashboard";  
-import Home from './components/Home/Home';
 import EtudiantsListe from './components/Crud/EtudiantsListe';
 import EncadrantsListe from './components/Crud/EncadrantsListe';
 import AjouterEncadrant from './components/Crud/AjouterEncadrant';
@@ -15,14 +12,12 @@ import Navbar from './shared/Navbar';
 import Nav from './shared/Nav';
 import Footer from './shared/Footer';
 import LoginToken from './components/Login/LoginToken';
-import { useNavigate } from 'react-router-dom';
 import Etudiant from './EtudiantComponent/Etudiant';
 import EncadrantDetails from './components/Crud/EncadrantDetails';
 import EtudiantDetails from './components/Crud/EtudiantDetails';
 import Dropdown from './components/Crud/Dropdown';
 import SoutenancesListe from './components/Crud/SoutenancesListe';
 import SoutenanceDetails from './components/Crud/SoutenanceDetails';
-import { Button } from 'reactstrap';
 import swal from 'sweetalert';
 
 function setToken(userToken) {
@@ -63,8 +58,7 @@ if(!token && msg){
           <Route path='/Navbar' element={<Navbar/>} />
           <Route path='/Nav' element={<Nav/>} />
           <Route path='/Footer' element={<Footer/>} />
-          <Route path='/LoginToken' element={<LoginToken/>} />  
-          <Route path='/Login2' component={Login2} element={<Login2/>} />     
+          <Route path='/LoginToken' element={<LoginToken/>} />      
           <Route path='/Dashboard' component={Dashboard} element={<Dashboard/>}/>  
           <Route path="/EncadrantsListe" component={EncadrantsListe} element={<EncadrantsListe/>} />
           <Route path='/' component={LoginToken} element={<LoginToken/>} />

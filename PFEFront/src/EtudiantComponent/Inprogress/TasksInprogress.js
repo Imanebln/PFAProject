@@ -1,7 +1,6 @@
 import React from 'react';
 import TaskInprogress from './TaskInprogress'
-import TaskTodo from '../Todo/TaskTodo';
-import TasksTodo from '../Todo/TasksTodo';
+
 
 export default function TasksInprogress(props) {
 

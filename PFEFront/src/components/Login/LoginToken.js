@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useState,useEffect } from 'react'; 
+import { useState } from 'react'; 
 import loginImg from '../../loginImg.png';
-import getToken from '../../App.js'
 import './loginStyling.css';
 import { AiOutlineEye } from 'react-icons/ai';
 
 
 
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, 
-  InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Button, Card, CardBody, Input, 
+  InputGroup } from 'reactstrap';
 
 async function loginUser(credentials) {
     return fetch('https://localhost:7004/api/Authenticate/login', {
