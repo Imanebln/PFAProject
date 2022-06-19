@@ -409,22 +409,6 @@ namespace PFE.Controllers
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
 
-
-
-        //Ajouter un encadrant
-        /*[Route("AjouterProf")]
-        [HttpPost]
-        public async Task<ActionResult<Encadrant>> AjouterEncadrant(Encadrant encadrant)
-        {
-            _context.Encadrants.Add(encadrant);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEncadrant", new { id = encadrant.Id }, encadrant);
-        }*/
-
-
-        //Modifer un encadrant
-
         
         [Route("ModifierProf")]
         [HttpPost]
@@ -509,18 +493,6 @@ namespace PFE.Controllers
             return NoContent();
 
         }
-
-        // *****************************************gerer l'espace etudiant*******************************************************
-        //Ajouter un etudiant
-        /*[Route("AjouterEtudiant")]
-        [HttpPost]
-        public async Task<ActionResult<Etudiant>> AjouterEtudiant(Etudiant etudiant)
-        {
-            _context.Etudiants.Add(etudiant);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetEtudiant", new { id = etudiant.Id }, etudiant);
-        }*/
 
         //Modifer un etudiant
         [Authorize(Roles = "Admin")]
@@ -649,6 +621,7 @@ namespace PFE.Controllers
             {
                 var enc1 = _context.Encadrants.Where(e => e.Id.Equals(idEncad1)).First();
                 var enc2 = _context.Encadrants.Where(e => e.Id.Equals(idEncad2)).First();
+                var enc = _context.PFEs.Include(p => p.Encadrant).Where(e => e.Id == idPfe).First();
 
                 Soutenance soutenance = new Soutenance();
 
@@ -662,12 +635,23 @@ namespace PFE.Controllers
                 {
                     list.Add(enc1);
                     list.Add(enc2);
+                    list.Add(enc.Encadrant);
                 }
                else
                {
+                    var testEncad = _context.Soutenance.Any(s => (s.Jury.Any(j => j.Id == enc.EncadrantId)) && s.Date == dateStc
+                                           && s.HeureDebut == heureDebut && s.HeureFin == heureFin);
+                    if (testEncad == false)
+                    {
+                        list.Add(enc.Encadrant);
+                    }
+                    else
+                    {
+                        return Ok(new Response { Status = "error", Message = enc.Encadrant.Nom + " " + enc.Encadrant.Prenom + " est déjà affecté à une soutenance " + "le " + dateStc + " à " + heureDebut });
+                    }
+
                     var testEncad1 = _context.Soutenance.Any(s => s.Jury.Any(j => j.Id == idEncad1) && s.Date == dateStc
                                             && s.HeureDebut == heureDebut && s.HeureFin == heureFin);
-
                     if (testEncad1 == false)
                     {
                      list.Add(enc1);
@@ -675,7 +659,7 @@ namespace PFE.Controllers
                     else
                     {
                         return Ok(new Response { Status = "error", Message = enc1.Nom + " " + enc1.Prenom + " est déjà affecté à une soutenance " + "le " + dateStc +" à " + heureDebut });
-                        }
+                    }
 
 
                     var testEncad2 = _context.Soutenance.Any(s => s.Jury.Any(j => j.Id == idEncad2) && s.Date == dateStc
@@ -692,7 +676,7 @@ namespace PFE.Controllers
 
                 soutenance.Jury = list;
 
-                if (list.Count >= 2)
+                if (list.Count >= 3)
                 {
                     _context.Add(soutenance);
                     await _context.SaveChangesAsync();

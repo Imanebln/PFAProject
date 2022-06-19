@@ -212,7 +212,7 @@ const handleItemClick = (id,item) => {
                 <input name="EncAca"
                     type="text"
                     value={pfejson.encadrant != null ? pfejson.encadrant.nom +" "+ pfejson.encadrant.prenom : "" }
-                    className="form-control" disabled/>
+                    className="form-control"/>
                 </div>
                 </div>
                 </div>
