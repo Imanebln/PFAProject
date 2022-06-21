@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "devextreme": "^21.2.4",
     "devextreme-react": "^21.2.6",
+    "jspdf": "^2.5.1",
     "material-ui-dropzone": "^3.5.0",
     "moment": "^2.29.3",
     "react": "^17.0.2",

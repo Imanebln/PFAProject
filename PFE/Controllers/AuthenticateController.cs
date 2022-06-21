@@ -7,10 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npoi.Mapper;
+using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 using PFE.Auth;
 using PFE.Data;
 using PFE.Models;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -447,12 +451,12 @@ namespace PFE.Controllers
         }
 
         //supprimer encadrant
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         [Route("SuppProf")]
         [HttpDelete]
         public async Task<IActionResult> SupprimerEncadrant(int id)
         {
-
             //fetching and filter specific member id record   
             var encadrant = await _context.Encadrants.FindAsync(id);
 
@@ -460,28 +464,35 @@ namespace PFE.Controllers
             if (encadrant != null)
             {
                 var us = await _context.Users.FindAsync(encadrant.UserId);
-
-                if (us != null)
+               
+                if (us != null)// && us.Roles != "Admin"
                 {
-                    var stc = _context.Soutenance.Where(s => s.PFE.EncadrantId == id || s.Jury.Any(j => j.Id == id)).ToList();
-                    if (stc != null)
-                    {
-                        foreach (var item in stc)
+                    var role = await userManager.GetRolesAsync(us);
+                    
+                        var stc = _context.Soutenance.Where(s => s.PFE.EncadrantId == id || s.Jury.Any(j => j.Id == id)).ToList();
+                        if (stc != null)
                         {
-                            _context.Soutenance.Remove(item);
+                            foreach (var item in stc)
+                            {
+                                _context.Soutenance.Remove(item);
+                            }
                         }
-                    }
-                    var encEtu = _context.PFEs.Where(p => p.EncadrantId == id).ToList();
-                    if (encEtu != null)
-                    {
-                        foreach (var item in encEtu)
+                        var encEtu = _context.PFEs.Where(p => p.EncadrantId == id).ToList();
+                        if (encEtu != null)
                         {
-                            item.EncadrantId = null;
+                            foreach (var item in encEtu)
+                            {
+                                item.EncadrantId = null;
+                            }
                         }
-                    }
-                    _context.Encadrants.Remove(encadrant);
-                    _context.Users.Remove(us);
-                    await _context.SaveChangesAsync();
+                        _context.Encadrants.Remove(encadrant);
+                        await _context.SaveChangesAsync();
+
+                        if (!role.Contains(UserRoles.Admin))
+                        {       
+                            _context.Users.Remove(us);
+                            await _context.SaveChangesAsync();
+                        }
                 }
 
             }
@@ -550,20 +561,17 @@ namespace PFE.Controllers
                     var us = _context.Users.Where(u => u.Id == etudiant.UserId).FirstOrDefault();
                     if (us != null)
                     {
-                        _context.PFEs.Remove(pfe);
-                        _context.Etudiants.Remove(etudiant);
-                        _context.Users.Remove(us);
-
-                        var stc = _context.Soutenance.Where(s => s.PFE.EtudiantId == id).FirstOrDefault();
+                        var stc = _context.Soutenance.Where(s => s.PFE.Id == id).FirstOrDefault();
                         if (stc != null)
                         {
                             _context.Soutenance.Remove(stc);
-                        }
-
-                        await _context.SaveChangesAsync();
+                            _context.PFEs.Remove(pfe);
+                            _context.Etudiants.Remove(etudiant);
+                            _context.Users.Remove(us);
+                            await _context.SaveChangesAsync();
+                        }                       
                     }
                 }
-
             }
             return NoContent();
         }
@@ -571,16 +579,20 @@ namespace PFE.Controllers
         [Route("AffecterEncadrant")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<PFEModel>>> AffecterEncadrant(int id, int idEncadrant)
+        public async Task<ActionResult> AffecterEncadrant(int id, int idEncadrant)
         {
             var pf = _context.PFEs.Include(e => e.Etudiant).Include(e => e.Encadrant).Where(e => e.Id == id).First();
             if (pf == null) return BadRequest();
+           /*else if(pf.EncadrantId != null)
+            {
+                return Ok(new Response { Status = "Error", Message = "Cet étudiant a déjà un encadrant" });
+            }*/
             else
             {
                 pf.EncadrantId = idEncadrant;
                 await _context.SaveChangesAsync();
+                return Ok(new Response { Status = "Success", Message = "Affectation réussite!" });
             }
-            return await _context.PFEs.ToArrayAsync();
         }
 
         
@@ -764,5 +776,58 @@ namespace PFE.Controllers
             }
             return false;
         }
+
+
+
+
+
+
+        /////////////////////////////export////////////////
+        ///
+        [HttpGet]
+        [Route("UploadFileSoutenance")]
+        [AllowAnonymous]
+        public IWorkbook ExportFile()
+        {
+            var newFile = @"newbook.core.xlsx";
+
+            using (var fs = new FileStream(newFile, FileMode.Create, FileAccess.Write)) 
+            {
+
+            IWorkbook workbook = new XSSFWorkbook();
+
+            ISheet sheet1 = workbook.CreateSheet("Sheet1");
+
+            sheet1.AddMergedRegion(new CellRangeAddress(0, 0, 0, 10));
+            var rowIndex = 0;
+            IRow row = sheet1.CreateRow(rowIndex);
+            row.Height = 30 * 80;
+            row.CreateCell(0).SetCellValue("this is content");
+            sheet1.AutoSizeColumn(0);
+            rowIndex++;
+
+            var sheet2 = workbook.CreateSheet("Sheet2");
+            var style1 = workbook.CreateCellStyle();
+            style1.FillForegroundColor = HSSFColor.Blue.Index2;
+            style1.FillPattern = FillPattern.SolidForeground;
+
+            var style2 = workbook.CreateCellStyle();
+            style2.FillForegroundColor = HSSFColor.Yellow.Index2;
+            style2.FillPattern = FillPattern.SolidForeground;
+
+            var cell2 = sheet2.CreateRow(0).CreateCell(0);
+            cell2.CellStyle = style1;
+            cell2.SetCellValue(0);
+
+            cell2 = sheet2.CreateRow(1).CreateCell(0);
+            cell2.CellStyle = style2;
+            cell2.SetCellValue(1);
+
+            workbook.Write(fs);
+                return workbook;
+            }
+            //return Ok(new Response { Status = "success", Message = "uploaded" });
+        }   
+        ///////////////////////////////////////////////////
     }
 }

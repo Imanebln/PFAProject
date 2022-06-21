@@ -42,7 +42,8 @@ function SoutenanceDetails (){
                     className="form-control" disabled/>
             </div>
     <div className="row"> 
-        {stcjson.jury.map(jr =>(
+        {stcjson.jury.map(jr => 
+        {return  jr.id != stcjson.pfe.encadrant.id ?
             <div className="col">
                 <div  className="form-group">
                 <label>Jury </label>
@@ -52,7 +53,9 @@ function SoutenanceDetails (){
                     className="form-control" disabled/>
                 </div>
             </div>
-                ))}
+            :
+           <></> 
+        })}
     </div>
         <div className="row"> 
             <div className="col">

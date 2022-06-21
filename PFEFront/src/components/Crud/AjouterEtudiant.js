@@ -43,18 +43,16 @@ function AjouterEtudiant() {
 					timer:2000,
 					buttons:false
 				  })
+				  navigate("/EtudiantsListe");
 				
 			} catch (error) {
 				swal({
-					text:"Nom d'utilisateur deja existant",
+					text:"Nom d'utilisateur déjà existe",
 					icon: "error",
 					timer:2000,
 					buttons:false
-				  })
+				})
 			}
-            finally{
-                navigate("/EtudiantsListe");
-            }
 		}
 		postCrud();
 	}
@@ -82,9 +80,7 @@ function AjouterEtudiant() {
 						type="text"
 						required
 						value={etudiant.username}
-						onChange={handleChange}
-						className="form-control"
-					/>
+						onChange={handleChange}/>
 				</div>	
 				</div>
 				<div className="row">
@@ -97,8 +93,7 @@ function AjouterEtudiant() {
 							required
 							value={etudiant.nom}
 							onChange={handleChange}
-							className="form-control"
-						/>
+							className="form-control"/>
 						</div>
 					</div>
 					<div className="column">
@@ -110,8 +105,7 @@ function AjouterEtudiant() {
 						required
 						value={etudiant.prenom}
 						onChange={handleChange}
-						className="form-control"
-					/>
+						className="form-control"/>
 					</div>
 					</div>
 				</div>
@@ -125,8 +119,7 @@ function AjouterEtudiant() {
 						required
 						value={etudiant.email}
 						onChange={handleChange}
-						className="form-control"
-					/>
+						className="form-control"/>
 					</div>
 				</div>
 				<br></br>
@@ -140,8 +133,7 @@ function AjouterEtudiant() {
 						required
 						value={etudiant.emailEncadrant}
 						onChange={handleChange}
-						className="form-control"
-					/>
+						className="form-control"/>
 				</div>
 				</div>
 				
@@ -153,8 +145,7 @@ function AjouterEtudiant() {
 						required
 						value={etudiant.sujet}
 						onChange={handleChange}
-						className="form-control"
-					/>
+						className="form-control"/>
 				</div>
 				<br/>
 				<div className="row">
@@ -167,8 +158,7 @@ function AjouterEtudiant() {
 							required
 							value={etudiant.nomSociete}
 							onChange={handleChange}
-							className="form-control"
-						/>
+							className="form-control"/>
 						</div>
 					</div>
 					<div className="column">
@@ -180,8 +170,7 @@ function AjouterEtudiant() {
 							required
 							value={etudiant.ville}
 							onChange={handleChange}
-							className="form-control"
-						/>
+							className="form-control"/>
 						</div>
 					</div>
 				</div>
@@ -200,8 +189,7 @@ function AjouterEtudiant() {
 						required
 						value={etudiant.technologiesUtilisees}
 						onChange={handleChange}
-						className="form-control"
-					/>
+						className="form-control"/>
 				</div>
 					</div>
 					<div className="column">
@@ -213,8 +201,7 @@ function AjouterEtudiant() {
 						required
 						value={etudiant.annee}
 						onChange={handleChange}
-						className="form-control"
-					/>
+						className="form-control"/>
 				</div>
 					</div>
 				</div>
@@ -227,14 +214,9 @@ function AjouterEtudiant() {
 					<button
 						type="button"
 						onClick={handleCancel}						
-                        className="btn btn-secondary"
-					>
-						Annuler
-					</button>
+                        className="btn btn-secondary">Annuler</button>
 				</div>
-				
 			</form>
-			
 		</div>
 	);
 }

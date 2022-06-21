@@ -53,14 +53,9 @@ const handleItemClick = (id,item) => {
      const pfe = localStorage.getItem('pfe');
      const pfejson = JSON.parse(pfe);
 
-
-    
-    console.log({Etud});
-
     const [dateStc, setDateStc] = useState(new Date());
     const [heureDebut, setHeureDebut] = useState("14:00");
     const [heureFin, setHeureFin] = useState("16:00");
-
 
     function confirmerSoutenance(){
          function postStc(){
@@ -83,12 +78,12 @@ const handleItemClick = (id,item) => {
                 );
             } 
             catch (error) {
-                swal({
-                    text:'Soutenance non ajoutée',
-                    icon: "error",
-                    timer:2000,
-                    buttons:false
-                  })
+              swal({
+                text:'Soutenance non ajoutée',
+                icon: "error",
+                timer:2000,
+                buttons:false
+              })
             }
       }
     postStc();
@@ -264,7 +259,7 @@ const handleItemClick = (id,item) => {
                         <div className="col">
                         <div className="form-group">
                         <label>Date de Soutenance</label>
-                        <DatePicker  dateFormat="dd-MM-yyyy" selected={dateStc} onChange={(date) => {setDateStc(date)}}/>
+                        <DatePicker  dateFormat="dd/MM/yyyy" selected={dateStc} onChange={(date) => {setDateStc(date)}}/>
                         </div>
 
                         </div>
@@ -292,13 +287,9 @@ const handleItemClick = (id,item) => {
                         </div>
                         </div>
                     </div>
-               
             </form>
-          
           </p>
-            </div>
-
-			
+      </div>
 		</div>
 	);
 }

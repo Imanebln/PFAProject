@@ -36,19 +36,17 @@ function AjouterEncadrant() {
 					timer:2000,
 					buttons:false
 				  })
+				  navigate("/EncadrantsListe");
 				
 			} catch (error) {
 				
 				swal({
-					text:"Nom d'utilisateur deja existant",
+					text:"Nom d'utilisateur déjà existe",
 					icon: "error",
 					timer:2000,
 					buttons:false
-				  })
+				})
 			}
-            finally{
-                navigate("/EncadrantsListe");
-            }
 		}
 		postCrud();
 	}
@@ -61,9 +59,6 @@ function AjouterEncadrant() {
         navigate("/EncadrantsListe");
         
     }
-
-	
-
 	return (
 		<div className="ajoutEncadrant">
 			<h2>Ajouter un encadrant</h2>
@@ -120,10 +115,7 @@ function AjouterEncadrant() {
 					<button
 						type="button"
 						onClick={handleCancel}						
-                        className="btn btn-secondary"
-					>
-						Cancel
-					</button>
+                        className="btn btn-secondary">Annuler</button>
 				</div>
 			</form>
 			

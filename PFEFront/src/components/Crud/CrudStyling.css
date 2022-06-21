@@ -68,3 +68,6 @@
     padding: 2%;
     overflow-y: scroll;
 }
+.dropdown.nonaffecte{
+    visibility: hidden;
+}

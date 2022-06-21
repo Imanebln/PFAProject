@@ -174,17 +174,24 @@ function EtudiantsListe(props) {
  
   async function postaffect(){
       try {
-			 await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`);
-        setHasEnc(true);
-        console.log("has confirm "+ hasEnc);
+			 await post(`https://localhost:7004/api/Authenticate/AffecterEncadrant?id=${e.id}&idEncadrant=${Encadjson.id}`).then(
+        res =>
+        {
         swal({
           text: "Affectation réussite!",
           icon: "success",
           button:false,
           timer:2000
         });
-			} catch (error) {
-				console.log("error", error);
+        })
+      }
+      catch(error){
+				swal({
+          text: "Error durant l'affectation",
+          icon: "error",
+          button:false,
+          timer:2000
+        });
 			}
 }
 postaffect();
@@ -234,14 +241,16 @@ const [hasEnc, setHasEnc] = useState(false);
             <th>Nom et Prénom</th>
             <th>Email</th>
             <th>Filière</th>
-            <th></th>
+            <th>Encadrant</th>
             <th></th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
         
-        {etudiants.map(etudiant => (
+        {etudiants.map(etudiant => {
+          //HasEncadrant(etudiant);
+          return etudiant.encadrant == null ?
           <><tr>
             <td key={etudiant.id}>
               {etudiant.etudiant.nom} {etudiant.etudiant.prenom}
@@ -252,11 +261,12 @@ const [hasEnc, setHasEnc] = useState(false);
             <td>
               {etudiant.etudiant.filiere}
             </td>
-
+          
             <td>
               <Dropdown>
-              </Dropdown>
+              </Dropdown>                       
             </td>
+
             <td>
             <button key={etudiant.id}  className="btn btn-success" onClick={() => { HasEncadrant(etudiant);
                 confirmerAffectation(etudiant)
@@ -278,8 +288,45 @@ const [hasEnc, setHasEnc] = useState(false);
             <td>
               <Button className="btn btn-danger" onClick={() => handleDelete(etudiant)}><FaTrash /></Button>
             </td>
-          </tr></>         
-          ) )}
+          </tr></> 
+          :
+<><tr>
+            <td key={etudiant.id}>
+              {etudiant.etudiant.nom} {etudiant.etudiant.prenom}
+            </td>
+            <td>
+              {etudiant.etudiant.email}
+            </td>
+            <td>
+              {etudiant.etudiant.filiere}
+            </td>
+          
+            <td>
+              {etudiant.encadrant.nom} {etudiant.encadrant.prenom}
+            </td>
+
+            <td>
+            <button key={etudiant.id} disabled={true} className="btn btn-success" onClick={() => { HasEncadrant(etudiant);
+                confirmerAffectation(etudiant)
+              } }><FaCheck /></button>
+            </td>
+
+            <td>
+              <Link to={{ pathname: "/EtudiantDetails" }}>
+                <Button color="primary" variant="primary" onClick={() => { 
+                  setEtud(etudiant.etudiant);
+                  setPfe(etudiant);
+                  setEncAc(etudiant.encadrant)
+                  console.log("hello pfe "+ pfe); }}>
+                <FaEye />
+                </Button>
+              </Link>
+            </td>
+            <td>
+              <Button className="btn btn-danger" onClick={() => handleDelete(etudiant)}><FaTrash /></Button>
+            </td>
+          </tr></> 
+          })}
         </tbody>
       </Table>
 			

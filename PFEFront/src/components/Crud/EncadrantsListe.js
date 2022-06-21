@@ -60,8 +60,7 @@ function EncadrantsListe(props) {
 		} catch (error) {
       swal({
         icon: "error",
-        title:'Encadrant non supprimé',
-        text:'déjà affecté à un étudiant',
+        text:'Cet encadrant ne peut pas être supprimé',
         timer:2000,
         buttons:false
       })
