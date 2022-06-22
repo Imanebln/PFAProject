@@ -102,7 +102,8 @@ namespace PFE.Controllers
         
         [HttpPost]
         [Route("add-etudiant")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterEtudiant([FromBody] RegisterEtudiant model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
@@ -180,7 +181,7 @@ namespace PFE.Controllers
         //Upload excel file
         [HttpPost]
         [Route("UploadExcelFile")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Etudiant>>> UploadExcelFile(IFormFile file, int year)
         {
@@ -283,7 +284,8 @@ namespace PFE.Controllers
 
         [HttpPost]
         [Route("add-encadrant")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         public async Task<IActionResult> RegisterEncadrant([FromBody] RegisterUser model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
@@ -385,7 +387,19 @@ namespace PFE.Controllers
 
             };
 
+            var encadrant = new Encadrant()
+            {
+                Nom = model.Nom,
+                Prenom = model.Prenom,
+                Filiere = "GI",
+                Email = model.Email,
+                UserName = model.Username,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserId = user.Id
+            };
+
             _context.Admins.Add(admin);
+            _context.Encadrants.Add(encadrant);
 
             try
             {
@@ -437,7 +451,8 @@ namespace PFE.Controllers
         }
 
         //supprimer encadrant
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         [Route("SuppProf")]
         [HttpDelete]
         public async Task<IActionResult> SupprimerEncadrant(int id)
@@ -452,6 +467,7 @@ namespace PFE.Controllers
                
                 if (us != null)
                 {
+                    
                     var stc = _context.Soutenance.Where(s => s.PFE.EncadrantId == id || s.Jury.Any(j => j.Id == id)).ToList();
                     if (stc != null)
                     {
@@ -472,6 +488,7 @@ namespace PFE.Controllers
                     _context.Users.Remove(us);
                     await _context.SaveChangesAsync();
                 }
+
             }
             else
             {
@@ -555,7 +572,7 @@ namespace PFE.Controllers
 
         [Route("AffecterEncadrant")]
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult> AffecterEncadrant(int id, int idEncadrant)
         {
             var pf = _context.PFEs.Include(e => e.Etudiant).Include(e => e.Encadrant).Where(e => e.Id == id).First();
@@ -576,7 +593,7 @@ namespace PFE.Controllers
         //get encadrant by id pfe
         [Route("GetEncadrantByIdPFE")]
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<PFEModel>> GetEncadrantByIdPFE(int id)
         {
 
@@ -594,7 +611,8 @@ namespace PFE.Controllers
 
         /*Gestion soutenance*/
 
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         [Route("GererSoutenance")]
         [HttpPost]
         
@@ -698,7 +716,7 @@ namespace PFE.Controllers
 
         [Route("GetSoutenanceByDate")]
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceByDate(string date)
         {
             return await _context.Soutenance.Include(j => j.Jury).Include(e => e.PFE.Etudiant).Include(e => e.PFE.Encadrant).Where(s => s.Date == date).ToListAsync();
@@ -706,7 +724,8 @@ namespace PFE.Controllers
 
         [HttpGet]
         [Route("GetSoutenanceById")]
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Soutenance>>> GetSoutenanceById(int id)
         {
             return await _context.Soutenance.Include(j => j.Jury).Include(e => e.PFE.Etudiant).Include(e => e.PFE.Encadrant).Where(e => e.Id == id).ToListAsync();
@@ -731,12 +750,35 @@ namespace PFE.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("HasEncadrant")]
+        /*[Authorize(Roles = "Admin")]*/
+        [AllowAnonymous]
+        public bool HasEncadrant(int id)
+        {
+            var test = _context.PFEs.Where(e => e.Id == id).FirstOrDefault();
+            if(test != null)
+            {
+                if (test.EncadrantId == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
 
         /////////////////////////////export////////////////
         ///
        /* [HttpGet]
-        [Route("ExportFileSoutenance")]
-        [Authorize(Roles = "Admin")]
+        [Route("UploadFileSoutenance")]
+        [AllowAnonymous]
         public IWorkbook ExportFile()
         {
             var newFile = @"newbook.core.xlsx";

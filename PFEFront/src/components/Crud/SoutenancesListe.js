@@ -31,13 +31,24 @@ function SoutenancesListe(props) {
   async function getSoutenancesListe(){
     try {
       axios.get(`https://localhost:7004/api/Authenticate/GetSoutenanceByDate?date=${format(date,'dd/MM/yyyy')}`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
-      console.log(res);  
+      //console.log(res);  
       setSoutenances(res.data);
     })} 
     catch (ex) {
       console.log(ex);
     }
   }
+
+  // async function ExportFileSoutenance(){
+  //   try {
+  //     axios.get(`https://localhost:7004/api/Authenticate/ExportFileSoutenance`,{headers: {"Authorization" : `Bearer ${getToken()}`}}).then(res => {
+  //     console.log(res);  
+  //     //setSoutenances(res.data);
+  //   })} 
+  //   catch (ex) {
+  //     console.log(ex);
+  //   }
+  // }
 
   useEffect(
 		function () {
@@ -144,7 +155,7 @@ function SoutenancesListe(props) {
 
        </tbody>
       </Table>
-			
+			{/* <Button className="btn btn-success" onClick={() => ExportFileSoutenance()}>Download</Button> */}
 		</div>
 	);
 }

@@ -196,23 +196,6 @@ function EtudiantsListe(props) {
 }
 postaffect();
 }
-const [hasEnc, setHasEnc] = useState(false);
-
-    function HasEncadrant(e) {
-      async function postHasEnc(){
-      try {
-				axios.get(`https://localhost:7004/api/Authenticate/HasEncadrant?id=${e.id}`).then(res =>{
-          console.log("res : " + res.data);
-          setHasEnc(res.data);
-          console.log("has get "+hasEnc);
-        });
-			}catch (error) 
-      {
-				console.log("error", error);
-			}
-    }
-    postHasEnc();
-    }
 
 	return (
     
@@ -249,7 +232,6 @@ const [hasEnc, setHasEnc] = useState(false);
         <tbody>
         
         {etudiants.map(etudiant => {
-          //HasEncadrant(etudiant);
           return etudiant.encadrant == null ?
           <><tr>
             <td key={etudiant.id}>
@@ -268,9 +250,9 @@ const [hasEnc, setHasEnc] = useState(false);
             </td>
 
             <td>
-            <button key={etudiant.id}  className="btn btn-success" onClick={() => { HasEncadrant(etudiant);
-                confirmerAffectation(etudiant)
-              } }><FaCheck /></button>
+            <button key={etudiant.id}  className="btn btn-success" onClick={() => {confirmerAffectation(etudiant)} }>
+                  <FaCheck />
+            </button>
             </td>
 
             <td>
@@ -306,9 +288,9 @@ const [hasEnc, setHasEnc] = useState(false);
             </td>
 
             <td>
-            <button key={etudiant.id} disabled={true} className="btn btn-success" onClick={() => { HasEncadrant(etudiant);
-                confirmerAffectation(etudiant)
-              } }><FaCheck /></button>
+            <button key={etudiant.id} disabled={true} className="btn btn-success" onClick={() => { confirmerAffectation(etudiant) }}>
+              <FaCheck />
+            </button>
             </td>
 
             <td>
