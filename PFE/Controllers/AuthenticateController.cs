@@ -539,6 +539,7 @@ namespace PFE.Controllers
         [Authorize(Roles = "Admin")]
         [Route("SuppEtudiant")]
         [HttpDelete]
+        //[AllowAnonymous]
         public async Task<IActionResult> SupprimerEtudiant(int id)
         {
 
@@ -546,7 +547,6 @@ namespace PFE.Controllers
             //delete from pfe first
 
             var pfe = _context.PFEs.Where(p => p.Id == id).FirstOrDefault();
-
             if (pfe != null)
             {
                 var etudiant = _context.Etudiants.Where(e => e.Id == pfe.EtudiantId).FirstOrDefault();
@@ -555,18 +555,18 @@ namespace PFE.Controllers
                     var us = _context.Users.Where(u => u.Id == etudiant.UserId).FirstOrDefault();
                     if (us != null)
                     {
+                        _context.PFEs.Remove(pfe);
+                        _context.Etudiants.Remove(etudiant);
+                        _context.Users.Remove(us);
                         var stc = _context.Soutenance.Where(s => s.PFE.Id == id).FirstOrDefault();
                         if (stc != null)
                         {
                             _context.Soutenance.Remove(stc);
-                            _context.PFEs.Remove(pfe);
-                            _context.Etudiants.Remove(etudiant);
-                            _context.Users.Remove(us);
-                            await _context.SaveChangesAsync();
                         }                       
                     }
                 }
             }
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
